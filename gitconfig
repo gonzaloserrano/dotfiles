@@ -1,0 +1,41 @@
+[user]
+	name = gonzalo
+	email = gonzalo@trovit.com
+
+[color]
+    ui = auto
+[color "branch"]
+    current = yellow bold
+    local = yellow
+    remote = green
+[color "diff"]
+    meta = yellow
+    frag = yellow bold
+    old = red bold
+    new = blue bold
+[color "status"]
+    added = green
+    changed = red
+    untracked = cyan
+
+[alias]
+    st = status
+    ci = commit
+    br = branch
+    co = checkout
+    df = diff --no-ext-diff
+    lg = log -p
+    lol = log --graph --decorate --pretty=oneline --abbrev-commit
+    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+    lolo = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    ls = ls-files
+    d1 = show --pretty="format:" --name-only
+    d2 = diff --name-only
+    graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
+[core]
+	editor = /usr/bin/vim
+[diff]
+	external = opendiff-git
+[github]
+	user = gonzaloserrano
+	token = 9904d65638ca051795102906c925cbfe

@@ -1,0 +1,51 @@
+set activate=quickmark,paste
+set visualbell
+set complete=sbfh
+set defsearch=google
+" set guioptions=mT
+" set preload
+set showmode
+"set showstatuslinks
+set showtabline=2
+" set titlestring=Vimperator Dev
+set verbose=9
+set wildmode=list:full
+
+let mapleader=","
+
+" start MozRepl
+js <<EOF
+  if ('@hyperstruct.net/mozlab/mozrepl;1' in Components.classes)
+  {
+      Components
+          .classes['@hyperstruct.net/mozlab/mozrepl;1']
+          .getService(Components.interfaces.nsIMozRepl)
+          .start(4242);
+  }
+EOF
+
+" restart Vimperator
+" map <C-r>   :restart<CR>
+
+" select next/previous tab
+map <Right> gt
+map <Left>  gT
+map <C-l>   gt
+map <C-h>   gT
+
+" move current tab left/right
+map <S-Right> :tabmove! +1<CR>
+map <S-Left>  :tabmove! -1<CR>
+" map <C-L>     :tabmove! +1<CR>
+" map <C-H>     :tabmove! -1<CR>
+
+" barra de direcciones si/no
+map <C-1> :set guioptions+=mT<CR>
+map <C-2> :set guioptions-=mT<CR>
+
+command! sendlink :emenu File.Send Link…
+command! sourcerc :source ~/.vimperatorrc
+
+echo ".vimperatorrc sourced"
+
+" vim: ft=vimperator sw=2 sts=2

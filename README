@@ -1,0 +1,6 @@
+Config files for a Mac OS X environment.
+
+Install:
+    git clone git://github.com/gonzaloserrano/configs.git ~/configs
+    backup your current config files
+    softlink config files to the ones at ~/configs
