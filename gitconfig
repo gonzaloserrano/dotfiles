@@ -25,16 +25,17 @@
     co = checkout
     df = diff --no-ext-diff
     lg = log -p
-    lol = log --graph --decorate --pretty=oneline --abbrev-commit
-    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-    lolo = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    lgg = log --oneline --decorate
+    lg2 = log --graph --decorate --pretty=oneline --abbrev-commit
+    lg3 = log --graph --decorate --pretty=oneline --abbrev-commit --all
+    lg4 = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
     ls = ls-files
     d1 = show --pretty="format:" --name-only
     d2 = diff --name-only
     graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
 [core]
 	editor = /usr/bin/vim
-	excludesfile = /Users/gon/.gitignore_global
+	excludesfile = ~/.gitignore_global
 [diff]
 	external = opendiff-git
 [github]
