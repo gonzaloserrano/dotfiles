@@ -57,15 +57,12 @@ bindkey "^n" history-search-forward
 bindkey -v
 
 # brew custom aliases
-brew_prefix=`brew --prefix`
-source /usr/local/Cellar/coreutils/8.7/aliases
-alias l="$brew_prefix/bin/gls -l"
-alias ls="$brew_prefix/bin/gls --color=auto $LS_OPTIONS"
-
-# PEAR
-alias pear="$brew_prefix/bin/pear"
-alias peardev="$brew_prefix/bin/peardev"
-alias pecl="$brew_prefix/bin/pecl"
+#brew_prefix=`brew --prefix`
+#source /usr/local/Cellar/coreutils/8.7/aliases
+#alias l="$brew_prefix/bin/gls -l"
+#alias ls="$brew_prefix/bin/gls --color=auto $LS_OPTIONS"
+alias l="/usr/local/bin/gls -l"
+alias ls="/usr/local/bin/gls --color=auto $LS_OPTIONS"
 
 alias less='less -R'
 alias ..='cd ..'
@@ -89,9 +86,11 @@ alias vip='vi -p'
 alias gdiff='GIT_PAGER='' git diff --no-ext-diff'
 alias gdiffa='GIT_PAGER='' git diff --no-ext-diff | grep -E "^\+.*"'
 
-eval `dircolors ~/.dir_colors`
+#eval `dircolors ~/.dir_colors`
 
-export PATH="$PATH:/Users/gonzalo/bin/"
+export PATH="$PATH:/Users/gonzalo/bin/:/Users/gonzalo/pear/bin"
+export NODE_PATH="/usr/local/lib/node"
+
 function precmd {
 
     local TERMWIDTH
@@ -240,31 +239,71 @@ setprompt
 
 export SVN_EDITOR="vim --noplugin"
 
+#git branch info in prompt
+typeset -ga preexec_functions
+typeset -ga precmd_functions
+typeset -ga chpwd_functions
+
+export __CURRENT_GIT_BRANCH=
+export __CURRENT_GIT_VARS_INVALID=1
+
+zsh_git_invalidate_vars() {
+    export __CURRENT_GIT_VARS_INVALID=1
+}
+zsh_git_compute_vars() {
+    export __CURRENT_GIT_BRANCH="$(parse_git_branch)"
+    export __CURRENT_GIT_VARS_INVALID=
+}
+
+parse_git_branch() {
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+}
+
+chpwd_functions+='zsh_git_chpwd_update_vars'
+zsh_git_chpwd_update_vars() {
+    zsh_git_invalidate_vars
+}
+
+preexec_functions+='zsh_git_preexec_update_vars'
+zsh_git_preexec_update_vars() {
+    case "$(history $HISTCMD)" in 
+            *git*) zsh_git_invalidate_vars ;;
+    esac
+}
+
+get_git_prompt_info() {
+    test -n "$__CURRENT_GIT_VARS_INVALID" && zsh_git_compute_vars
+    echo "<$__CURRENT_GIT_BRANCH>"
+}
+
 # echo -e "#brew_aliases\n\n" >> ~/.zshrc; for i in `ls /usr/local/bin | grep -v brew`; do echo "alias $i=\"\$brew_prefix/bin/$i\"" >> ~/.zshrc; done;
 brew_prefix=`brew --prefix`
-
 #brew_aliases
-
-alias Magick-config="$brew_prefix/bin/Magick-config"
-alias MagickCore-config="$brew_prefix/bin/MagickCore-config"
-alias MagickWand-config="$brew_prefix/bin/MagickWand-config"
-alias Wand-config="$brew_prefix/bin/Wand-config"
-alias animate="$brew_prefix/bin/animate"
-alias bmp2tiff="$brew_prefix/bin/bmp2tiff"
+alias cake="$brew_prefix/bin/cake"
+alias cake@1.0.1="$brew_prefix/bin/cake@1.0.1"
 alias cdiff="$brew_prefix/bin/cdiff"
 alias cjpeg="$brew_prefix/bin/cjpeg"
+alias coffee="$brew_prefix/bin/coffee"
+alias coffee@1.0.1="$brew_prefix/bin/coffee@1.0.1"
 alias colordiff="$brew_prefix/bin/colordiff"
-alias compare="$brew_prefix/bin/compare"
-alias composite="$brew_prefix/bin/composite"
-alias conjure="$brew_prefix/bin/conjure"
-alias convert="$brew_prefix/bin/convert"
-alias csshX="$brew_prefix/bin/csshX"
+alias csstidy="$brew_prefix/bin/csstidy"
 alias ctags="$brew_prefix/bin/ctags"
-alias display="$brew_prefix/bin/display"
 alias djpeg="$brew_prefix/bin/djpeg"
+alias dos2unix="$brew_prefix/bin/dos2unix"
 alias erb="$brew_prefix/bin/erb"
-alias fax2ps="$brew_prefix/bin/fax2ps"
-alias fax2tiff="$brew_prefix/bin/fax2tiff"
+alias faac="$brew_prefix/bin/faac"
+alias faad="$brew_prefix/bin/faad"
+alias ffmpeg="$brew_prefix/bin/ffmpeg"
+alias ffplay="$brew_prefix/bin/ffplay"
+alias ffprobe="$brew_prefix/bin/ffprobe"
+alias ffserver="$brew_prefix/bin/ffserver"
+alias fuse-ext2="$brew_prefix/bin/fuse-ext2"
+alias fuse-ext2.e2label="$brew_prefix/bin/fuse-ext2.e2label"
+alias fuse-ext2.install="$brew_prefix/bin/fuse-ext2.install"
+alias fuse-ext2.mke2fs="$brew_prefix/bin/fuse-ext2.mke2fs"
+alias fuse-ext2.probe="$brew_prefix/bin/fuse-ext2.probe"
+alias fuse-ext2.uninstall="$brew_prefix/bin/fuse-ext2.uninstall"
+alias fuse-ext2.wait="$brew_prefix/bin/fuse-ext2.wait"
 alias gbase64="$brew_prefix/bin/gbase64"
 alias gbasename="$brew_prefix/bin/gbasename"
 alias gcat="$brew_prefix/bin/gcat"
@@ -298,7 +337,6 @@ alias ggroups="$brew_prefix/bin/ggroups"
 alias ghead="$brew_prefix/bin/ghead"
 alias ghostid="$brew_prefix/bin/ghostid"
 alias gid="$brew_prefix/bin/gid"
-alias gif2tiff="$brew_prefix/bin/gif2tiff"
 alias ginstall="$brew_prefix/bin/ginstall"
 alias git="$brew_prefix/bin/git"
 alias git-cvsserver="$brew_prefix/bin/git-cvsserver"
@@ -310,6 +348,7 @@ alias git-upload-pack="$brew_prefix/bin/git-upload-pack"
 alias gitk="$brew_prefix/bin/gitk"
 alias gjoin="$brew_prefix/bin/gjoin"
 alias gkill="$brew_prefix/bin/gkill"
+alias glewinfo="$brew_prefix/bin/glewinfo"
 alias glink="$brew_prefix/bin/glink"
 alias gln="$brew_prefix/bin/gln"
 alias glogname="$brew_prefix/bin/glogname"
@@ -325,6 +364,7 @@ alias gnl="$brew_prefix/bin/gnl"
 alias gnohup="$brew_prefix/bin/gnohup"
 alias gnproc="$brew_prefix/bin/gnproc"
 alias god="$brew_prefix/bin/god"
+alias gource="$brew_prefix/bin/gource"
 alias gpaste="$brew_prefix/bin/gpaste"
 alias gpathchk="$brew_prefix/bin/gpathchk"
 alias gpinky="$brew_prefix/bin/gpinky"
@@ -375,84 +415,50 @@ alias gwho="$brew_prefix/bin/gwho"
 alias gwhoami="$brew_prefix/bin/gwhoami"
 alias gyes="$brew_prefix/bin/gyes"
 alias highlight="$brew_prefix/bin/highlight"
-alias icc2ps="$brew_prefix/bin/icc2ps"
-alias icclink="$brew_prefix/bin/icclink"
-alias icctrans="$brew_prefix/bin/icctrans"
-alias identify="$brew_prefix/bin/identify"
-alias imgcmp="$brew_prefix/bin/imgcmp"
-alias imginfo="$brew_prefix/bin/imginfo"
-alias import="$brew_prefix/bin/import"
+alias io="$brew_prefix/bin/io"
+alias io@0.2.5-5="$brew_prefix/bin/io@0.2.5-5"
 alias irb="$brew_prefix/bin/irb"
-alias jasper="$brew_prefix/bin/jasper"
 alias jpegtran="$brew_prefix/bin/jpegtran"
-alias links="$brew_prefix/bin/links"
-alias mogrify="$brew_prefix/bin/mogrify"
-alias montage="$brew_prefix/bin/montage"
-alias pal2rgb="$brew_prefix/bin/pal2rgb"
-alias pear="$brew_prefix/bin/pear"
-alias peardev="$brew_prefix/bin/peardev"
-alias pecl="$brew_prefix/bin/pecl"
-alias ppm2tiff="$brew_prefix/bin/ppm2tiff"
+alias lame="$brew_prefix/bin/lame"
+alias lua="$brew_prefix/bin/lua"
+alias luac="$brew_prefix/bin/luac"
+alias mac2unix="$brew_prefix/bin/mac2unix"
+alias node="$brew_prefix/bin/node"
+alias node-waf="$brew_prefix/bin/node-waf"
+alias node.io="$brew_prefix/bin/node.io"
+alias node.io-web="$brew_prefix/bin/node.io-web"
+alias node.io-web@0.2.5-5="$brew_prefix/bin/node.io-web@0.2.5-5"
+alias node.io@0.2.5-5="$brew_prefix/bin/node.io@0.2.5-5"
+alias npm="$brew_prefix/bin/npm"
+alias npm-get-uid-gid="$brew_prefix/bin/npm-get-uid-gid"
+alias npm-get-uid-gid@0.3.17="$brew_prefix/bin/npm-get-uid-gid@0.3.17"
+alias npm@0.3.17="$brew_prefix/bin/npm@0.3.17"
+alias pcre-config="$brew_prefix/bin/pcre-config"
+alias pcregrep="$brew_prefix/bin/pcregrep"
+alias pcretest="$brew_prefix/bin/pcretest"
+alias pdftohtml="$brew_prefix/bin/pdftohtml"
+alias pkg-config="$brew_prefix/bin/pkg-config"
 alias rake="$brew_prefix/bin/rake"
-alias ras2tiff="$brew_prefix/bin/ras2tiff"
-alias raw2tiff="$brew_prefix/bin/raw2tiff"
 alias rdjpgcom="$brew_prefix/bin/rdjpgcom"
 alias rdoc="$brew_prefix/bin/rdoc"
-alias rgb2ycbcr="$brew_prefix/bin/rgb2ycbcr"
+alias read-package-json="$brew_prefix/bin/read-package-json"
+alias read-package-json@0.3.17="$brew_prefix/bin/read-package-json@0.3.17"
 alias ri="$brew_prefix/bin/ri"
 alias ruby="$brew_prefix/bin/ruby"
-alias stream="$brew_prefix/bin/stream"
+alias scons="$brew_prefix/bin/scons"
+alias scons-time="$brew_prefix/bin/scons-time"
+alias sconsign="$brew_prefix/bin/sconsign"
+alias sdl-config="$brew_prefix/bin/sdl-config"
 alias testrb="$brew_prefix/bin/testrb"
-alias thumbnail="$brew_prefix/bin/thumbnail"
-alias tiff2bw="$brew_prefix/bin/tiff2bw"
-alias tiff2pdf="$brew_prefix/bin/tiff2pdf"
-alias tiff2ps="$brew_prefix/bin/tiff2ps"
-alias tiff2rgba="$brew_prefix/bin/tiff2rgba"
-alias tiffcmp="$brew_prefix/bin/tiffcmp"
-alias tiffcp="$brew_prefix/bin/tiffcp"
-alias tiffcrop="$brew_prefix/bin/tiffcrop"
-alias tiffdither="$brew_prefix/bin/tiffdither"
-alias tiffdump="$brew_prefix/bin/tiffdump"
-alias tiffinfo="$brew_prefix/bin/tiffinfo"
-alias tiffmedian="$brew_prefix/bin/tiffmedian"
-alias tiffset="$brew_prefix/bin/tiffset"
-alias tiffsplit="$brew_prefix/bin/tiffsplit"
-alias tmrdemo="$brew_prefix/bin/tmrdemo"
+alias unix2dos="$brew_prefix/bin/unix2dos"
+alias unix2mac="$brew_prefix/bin/unix2mac"
+alias visualinfo="$brew_prefix/bin/visualinfo"
+alias vpxdec="$brew_prefix/bin/vpxdec"
+alias vpxenc="$brew_prefix/bin/vpxenc"
+alias vsyasm="$brew_prefix/bin/vsyasm"
+alias wget="$brew_prefix/bin/wget"
 alias wrjpgcom="$brew_prefix/bin/wrjpgcom"
-alias wtpt="$brew_prefix/bin/wtpt"
-
-typeset -ga preexec_functions
-typeset -ga precmd_functions
-typeset -ga chpwd_functions
-
-export __CURRENT_GIT_BRANCH=
-export __CURRENT_GIT_VARS_INVALID=1
-
-zsh_git_invalidate_vars() {
-    export __CURRENT_GIT_VARS_INVALID=1
-}
-zsh_git_compute_vars() {
-    export __CURRENT_GIT_BRANCH="$(parse_git_branch)"
-    export __CURRENT_GIT_VARS_INVALID=
-}
-
-parse_git_branch() {
-    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
-}
-
-chpwd_functions+='zsh_git_chpwd_update_vars'
-zsh_git_chpwd_update_vars() {
-    zsh_git_invalidate_vars
-}
-
-preexec_functions+='zsh_git_preexec_update_vars'
-zsh_git_preexec_update_vars() {
-    case "$(history $HISTCMD)" in 
-            *git*) zsh_git_invalidate_vars ;;
-    esac
-}
-
-get_git_prompt_info() {
-    test -n "$__CURRENT_GIT_VARS_INVALID" && zsh_git_compute_vars
-    echo "<$__CURRENT_GIT_BRANCH>"
-}
+alias x264="$brew_prefix/bin/x264"
+alias xmlformat="$brew_prefix/bin/xmlformat"
+alias yasm="$brew_prefix/bin/yasm"
+alias ytasm="$brew_prefix/bin/ytasm"
