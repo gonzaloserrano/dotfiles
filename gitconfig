@@ -24,6 +24,7 @@
     br = branch
     co = checkout
     df = diff --no-ext-diff
+    dff = diff --no-ext-diff --color-words
     lg = log -p
     lgg = log --oneline --decorate
     lg2 = log --graph --decorate --pretty=oneline --abbrev-commit
