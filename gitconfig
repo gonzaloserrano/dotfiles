@@ -26,7 +26,7 @@
     df = diff --no-ext-diff
     dff = diff --no-ext-diff --color-words
     lg = log -p
-    lgg = log --oneline --decorate
+    lggg = log --oneline --decorate
     lg2 = log --graph --decorate --pretty=oneline --abbrev-commit
     lg3 = log --graph --decorate --pretty=oneline --abbrev-commit --all
     lg4 = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
