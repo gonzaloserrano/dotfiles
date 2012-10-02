@@ -60,14 +60,8 @@ bindkey "^p" history-search-backward
 bindkey "^n" history-search-forward
 
 bindkey -v
-
-# brew custom aliases
-#brew_prefix=`brew --prefix`
-#source /usr/local/Cellar/coreutils/8.7/aliases
-#alias l="$brew_prefix/bin/gls -l"
-#alias ls="$brew_prefix/bin/gls --color=auto $LS_OPTIONS"
-alias l="/usr/local/bin/gls -l"
 alias ls="/usr/local/bin/gls --color=auto $LS_OPTIONS"
+alias l="ls -l"
 alias hl="highlight --syntax php -A --style desert"
 
 alias less='less -R'
@@ -94,8 +88,11 @@ alias gdiffa='GIT_PAGER='' git diff --no-ext-diff | grep -E "^\+.*"'
 
 #eval `dircolors ~/.dir_colors`
 
-export PATH="$PATH:/Users/gonzalo/bin:/Users/gonzalo/pear/bin"
-export NODE_PATH="/usr/local/lib/node"
+export PATH="/usr/local/mysql/bin:/usr/local/opt/php54/bin:/Users/gonzalo/bin:$PATH"
+
+# node & nvm
+# https://github.com/creationix/nvm/
+. ~/Development/other/nvm/nvm.sh
 
 function precmd {
 
