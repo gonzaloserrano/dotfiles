@@ -88,7 +88,7 @@ alias gdiffa='GIT_PAGER='' git diff --no-ext-diff | grep -E "^\+.*"'
 
 #eval `dircolors ~/.dir_colors`
 
-export PATH="/usr/local/mysql/bin:/usr/local/opt/php54/bin:/Users/gonzalo/bin:$PATH"
+export PATH="/usr/local/opt/php54/bin:/Users/gonzalo/bin:$PATH"
 
 # node & nvm
 # https://github.com/creationix/nvm/
