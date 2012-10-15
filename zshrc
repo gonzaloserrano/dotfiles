@@ -283,3 +283,5 @@ get_git_prompt_info() {
     test -n "$__CURRENT_GIT_VARS_INVALID" && zsh_git_compute_vars
     echo "<$__CURRENT_GIT_BRANCH>"
 }
+
+test -f $HOME/.zshrc.local && source $HOME/.zshrc.local
