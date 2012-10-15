@@ -1,3 +1,8 @@
+alias vimb="vim +BundleInstall! +BundleClean +q"
+
+# support ack colors
+export LESS=-RFX
+
 # i want to map <c-s> in vim
 stty -ixon -ixoff
 # testing fasd
@@ -92,7 +97,7 @@ export PATH="/usr/local/opt/php54/bin:/Users/gonzalo/bin:$PATH"
 
 # node & nvm
 # https://github.com/creationix/nvm/
-. ~/Development/other/nvm/nvm.sh
+#. ~/Development/other/nvm/nvm.sh
 
 function precmd {
 

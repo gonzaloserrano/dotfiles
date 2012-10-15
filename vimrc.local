@@ -1,0 +1,108 @@
+let g:autoclose_loaded = 1
+
+nmap <unique> <silent> <Leader>, <Plug>MarkSet
+vmap <unique> <silent> <Leader>, <Plug>MarkSet </Plug></Leader></silent></unique>
+
+""" override vim distrib
+set background=light
+colorscheme molokai
+let g:indent_guides_enable_on_vim_startup = 0
+set iskeyword-=$,- " none of these are word dividers
+set iskeyword+=_,@,%,# " none of these are word dividers
+set undodir=/Users/gonzalo/.vim/undo
+
+" phpunit compilation
+com! -nargs=* Phpunit make -c app <q-args> | cw"
+
+map <C-l> :TagbarToggle<CR>
+ab brr . "<br/>"
+
+nmap <C-j> :tabprevious<CR>
+nmap <C-k> :tabnext<CR>
+
+" file upload
+nmap <C-a> :w<CR>:!upload2prod %:p gonzalo<CR><CR>
+nmap <C-s> :w<CR>:!upload2prod %:p gonzalo<CR><CR>
+nmap <c-x> :w<CR>:!upload2prod %:p gonzalo && ffrefresh<CR><CR>
+
+" vim diff
+map <c-d> :!diffwrapper %:p<cr>
+map <c-g> :!GIT_PAGER='' git diff %<cr>
+map <c-h> :!git lg %<cr>
+
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in.
+map N Nzz
+map n nzz
+
+" fill current line with previus line word by word
+imap <expr> <c-u> matchstr(getline(line('.')-1), '\%' . virtcol('.') . 'v\%(\k\+\s\=\\|.\)')
+
+map <C-n> :set synmaxcol=2048<CR>:set filetype=php<CR>
+
+set makeprg=php\ -l\ %
+set errorformat=%m\ in\ %f\ on\ line\ %l
+autocmd QuickFixCmdPre make w
+
+vmap <C-w> :Tabularize /=<CR>
+vmap <C-e> :Tabularize /,\zs<CR>
+" el flag 'e' es para omitir los warnings si no se encuentra el string a buscar
+vmap <C-r> :s/"/'/ge<CR>gv:s/\s\+\(\S\)(/\1 (/ge<CR>gv:s/)\(\S\)/) \1/ge<CR>gv:s/ ;/;/ge<CR>
+" vmap <C-q> :s/\v([^, ]+)(\s*,\s*)([^, ]+)/\3\2\1/<CR>
+
+" Make BS/DEL work as expected in visual modes (i.e. delete elected)...
+vmap <BS> x
+
+" Visual Block mode is far more useful that Visual mode (so swap the commands)...
+nnoremap v <C-V>
+nnoremap <C-V> v
+
+"Delete in normal mode to switch off highlighting till next search and clear messages...
+nmap <silent> <BS> :nohlsearch <BAR> call Toggle_CursorColumn('off')<CR>
+
+" replace
+nmap S  :%s//g<LEFT><LEFT>
+vmap S  :s//g<LEFT><LEFT>
+
+" Use space to jump down a page (like browsers do)...
+nnoremap <Space> <PageDown>
+
+" make Y behave like D or C
+nnoremap Y y$
+
+" free block select
+set virtualedit=block
+
+" replace all ocurrences
+set gdefault
+"
+"Ever notice a slight lag after typing the leader key + command? This lowers the timeout.
+set timeoutlen=250
+
+
+
+""" jump to a twig view in symfony
+" first set path
+set path+=**
+" func
+function! s:SfJumpToView()
+    mark C
+    normal! ]M
+    let end = line(".")
+    normal! [m
+    try
+        call search('\v[^.:]+\.html\.twig', '', end)
+        normal! gf
+    catch
+        normal! g`C
+        echohl WarningMsg | echomsg "Template file not found" | echohl None
+    endtry
+endfunction
+com! SfJumpToView call s:SfJumpToView()
+
+" create a mapping only in a Controller file
+autocmd BufEnter *Controller.php nmap <buffer><leader>v :SfJumpToView<CR>
+
+
+" phpdoc now is ,o - C-o is move to previous change :-)
+nnoremap <leader>o :set paste<CR>:exe PhpDoc()<CR>:set nopaste<CR>

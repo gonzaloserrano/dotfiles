@@ -1,0 +1,7 @@
+Bundle "tagbar-phpctags"
+Bundle "Mark"
+Bundle "docteurklein/vim-symfony"
+Bundle "docteurklein/vim-phpunit"
+Bundle "kien/tabman.vim"
+Bundle "adinapoli/vim-markmultiple"
+Bundle "othree/html5-syntax.vim"

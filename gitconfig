@@ -1,6 +1,6 @@
 [user]
 	name = gonzalo
-	email = gonzalo@trovit.com
+	email = gonzalo.serrano@socialpoint.es
 
 [color]
     ui = auto
@@ -42,3 +42,5 @@
 [github]
 	user = gonzaloserrano
 	token = 9904d65638ca051795102906c925cbfe
+[credential]
+	helper = osxkeychain
