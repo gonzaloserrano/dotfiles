@@ -1,18 +1,20 @@
-[user]
-	name = gonzalo
-	email = gonzalo.serrano@socialpoint.es
+[include]
+    path = ~/.gitconfig.local
 
 [color]
     ui = auto
+
 [color "branch"]
     current = yellow bold
     local = yellow
     remote = green
+
 [color "diff"]
     meta = yellow
     frag = yellow bold
     old = red bold
     new = blue bold
+
 [color "status"]
     added = green
     changed = red
@@ -24,8 +26,12 @@
     br = branch
     co = checkout
     df = diff --no-ext-diff
+    dfs = diff --no-ext-diff --staged
     dff = diff --no-ext-diff --color-words
+    dffs = diff --no-ext-diff --color-words --staged
     lg = log -p
+    lgs = log -git whatchanged -n 1
+    lgss = log --stat --pretty=oneline
     lggg = log --oneline --decorate
     lg2 = log --graph --decorate --pretty=oneline --abbrev-commit
     lg3 = log --graph --decorate --pretty=oneline --abbrev-commit --all
@@ -34,13 +40,4 @@
     d1 = show --pretty="format:" --name-only
     d2 = diff --name-only
     graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
-[core]
-	editor = /usr/bin/vim
-	excludesfile = ~/.gitignore_global
-[diff]
-	external = opendiff-git
-[github]
-	user = gonzaloserrano
-	token = 9904d65638ca051795102906c925cbfe
-[credential]
-	helper = osxkeychain
+    stl = stash list

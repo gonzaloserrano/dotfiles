@@ -1,3 +1,29 @@
+" Stops me from entering ex mode on accident
+nnoremap Q <nop>
+
+" yank current buffer's filepath
+nnoremap \f :call setreg(v:register, substitute(expand('%:p'),'\','/','g'))<CR>
+
+" simulate emacs' transpose feature, including its inverse, from this thread:
+" http://www.reddit.com/r/emacs/comments/wd5ak/grokking_emacs/c5cehm0?context=2
+nnoremap <Leader><Leader>l /\<<CR>yiw?\<<CR>viwp/\<<CR>viwp:noh<CR>
+nnoremap <Leader><Leader>h ?\w\><CR>yiw/\<<CR>viwp?\w\><CR>viwp:noh<CR>" pretty up JSON data
+
+" match indent of next line to beginning of current word
+nnoremap <Leader><Tab> yiwy0o""pVr J
+
+" clear normal/visual mode highlighting
+noremap <Space> :<c-u>noh<CR>:echo<CR>
+
+" copy current line sans leading/trailing whitespace
+nnoremap gy m`^yg_``"
+
+" next/previous word under cursor in same column
+nnoremap g* yiw/^.*\%<C-r>=col('.')<CR>c\zs<C-r>"<CR>
+nnoremap g# yiw?^.*\%<C-r>=col('.')<CR>c\zs<C-r>"<CR>" * and # without moving the cursor
+
+set t_ut=
+
 """ FocusMode
 function! ToggleFocusMode()
   if (&foldcolumn != 12)
@@ -131,9 +157,6 @@ nmap <silent> <BS> :nohlsearch<CR>
 " replace
 nmap S  :%s//g<LEFT><LEFT>
 vmap S  :s//g<LEFT><LEFT>
-
-" Use space to jump down a page (like browsers do)...
-nnoremap <Space> <PageDown>
 
 " make Y behave like D or C
 nnoremap Y y$

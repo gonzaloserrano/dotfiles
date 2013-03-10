@@ -1,7 +1,38 @@
-alias vimb="vim +BundleInstall! +BundleClean +q"
+alias cu="composer.phar update --dev"
+alias err="tail -f /var/log/apache2/error_log | sed 's/\\\n//g'"
+alias ack="ack -i"
+alias ackj="ack -i --js"
+alias ackp="ack -i --php"
+alias ag="ag -S -p ~/.agignore --pager less -f"
+alias agj="ag -S -p ~/.agignore --pager less -f -G '\.js'"
+alias agp="ag -S -p ~/.agignore --pager less -f -G '\.php'"
+alias cc="app/console cache:clear"
+alias dir='. ~/bin/dir'
+alias history="history -1000"
+alias mysql_start='sudo launchctl start com.mysql.mysql-server'
+alias mysql_stop='sudo launchctl stop com.mysql.mysql-server'
+alias phpu="./phpunit -c app --stop-on-failure"
+alias redis_start='sudo launchctl start io.redis.redis-server'
+alias redis_status='redis-cli ping'
+alias redis_stop='sudo launchctl stop io.redis.redis-server'
+alias services="php app/console container:debug"
+alias t='t.py --task-dir ~/Dropbox/tasks --list tasks'
+alias tm='t.py --task-dir ~/Dropbox/tasks --list music'
+alias tt='t.py --task-dir ~/Dropbox/tasks --list tech'
 
-# support ack colors
+alias vimb="vi +BundleInstall! +BundleClean +q"
+alias bi='vi'
+alias ci='vi'
+alias vi='vi -p'
+alias vip='vi -p'
+
+export MYSQL_PS1="local/\d > "
+
+# support colors
 export LESS=-RFX
+
+export JAVA_HOME=$(/usr/libexec/java_home)
+export WORK_HOME=/Users/gonzalo/wrk
 
 # i want to map <c-s> in vim
 stty -ixon -ixoff
@@ -84,9 +115,6 @@ alias svnr='svn revert'
 alias go='. go'
 alias lsd='ls -ltr'
 alias diff='colordiff'
-alias bi='vi'
-alias ci='vi'
-alias vip='vi -p'
 
 alias gdiff='GIT_PAGER='' git diff --no-ext-diff'
 alias gdiffa='GIT_PAGER='' git diff --no-ext-diff | grep -E "^\+.*"'
