@@ -1,4 +1,5 @@
-alias cu="composer.phar update --dev"
+alias phpu='php -d xdebug.profiler_enable=0 ./phpunit -c app --stop-on-failure --stop-on-error'
+alias cu="composer.phar update"
 alias err="tail -f /var/log/apache2/error_log | sed 's/\\\n//g'"
 alias ack="ack -i"
 alias ackj="ack -i --js"
@@ -11,7 +12,6 @@ alias dir='. ~/bin/dir'
 alias history="history -1000"
 alias mysql_start='sudo launchctl start com.mysql.mysql-server'
 alias mysql_stop='sudo launchctl stop com.mysql.mysql-server'
-alias phpu="./phpunit -c app --stop-on-failure"
 alias redis_start='sudo launchctl start io.redis.redis-server'
 alias redis_status='redis-cli ping'
 alias redis_stop='sudo launchctl stop io.redis.redis-server'
@@ -121,7 +121,7 @@ alias gdiffa='GIT_PAGER='' git diff --no-ext-diff | grep -E "^\+.*"'
 
 #eval `dircolors ~/.dir_colors`
 
-export PATH="/usr/local/opt/php54/bin:/Users/gonzalo/bin:$PATH"
+export PATH="/usr/local/opt/php54/bin:/Users/gonzalo/bin:/usr/local/share/python:$PATH"
 
 # node & nvm
 # https://github.com/creationix/nvm/

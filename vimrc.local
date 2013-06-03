@@ -1,3 +1,13 @@
+inoremap <silent> <C-C> <Esc>
+
+let g:symfony_app_console_path= "/Users/gonzalo/Development/socialpoint/sp-platform-dragoncity/app/console"
+" UnBundle 'Shougo/neocomplcache'
+let g:neocomplcache_max_list = 10
+let g:neocomplcache_manual_completion_start_length = 100
+let g:neocomplcache_auto_completion_start_length = 5
+
+iab errl error_log(date('Y-m-d H:i:s') . . "\n", 3, '/tmp/gonzalo.log');
+
 " Stops me from entering ex mode on accident
 nnoremap Q <nop>
 
@@ -60,8 +70,6 @@ nnoremap <unique> <silent> <Leader>f :call ToggleFocusMode()<cr>" CTags
   "\ ]
 "\ }
 
-UnBundle 'Shougo/neocomplcache'
-
 autocmd BufEnter * :syntax sync fromstart
 
 let g:acp_enableAtStartup = 0
@@ -86,7 +94,7 @@ set nospell " fuck spell check
 set nocursorline
 set clipboard=unnamed " aint working
 
-map <C-n> :set filetype=php<CR>:set syn=php<CR>:set iskeyword-=$<CR>:set iskeyword-=-<CR>
+" map <C-n> :set filetype=php<CR>:set syn=php<CR>:set iskeyword-=$<CR>:set iskeyword-=-<CR>
 
 " let g:autoclose_loaded = 1
 
@@ -100,7 +108,6 @@ set background=light
 "colorscheme herald
 colorscheme gonzalo
 let g:indent_guides_enable_on_vim_startup = 0
-" let g:Powerline_stl_path_style = "full"
 set iskeyword-=$
 set iskeyword-=-
 set undodir=/Users/gonzalo/.vim/undo
@@ -114,7 +121,7 @@ nmap <C-j> :tabprevious<CR>
 nmap <C-k> :tabnext<CR>
 
 " file upload
-nmap <C-a> :w<CR>:!upload2prod %:p gonzalo<CR><CR>
+nmap <C-a> :w<CR>:!up2prod %:p gonzalo<CR>
 nmap <c-x> :w<CR>:!ffrefresh<CR><CR>
 nmap <c-f> :execute 'iterm2newtab ' . getcwd()<CR>
 

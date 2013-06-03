@@ -29,15 +29,22 @@
     dfs = diff --no-ext-diff --staged
     dff = diff --no-ext-diff --color-words
     dffs = diff --no-ext-diff --color-words --staged
-    lg = log -p
-    lgs = log -git whatchanged -n 1
-    lgss = log --stat --pretty=oneline
-    lggg = log --oneline --decorate
-    lg2 = log --graph --decorate --pretty=oneline --abbrev-commit
-    lg3 = log --graph --decorate --pretty=oneline --abbrev-commit --all
-    lg4 = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    lg = log -p --no-prefix
+    lgs = log -git whatchanged -n 1 --no-prefix
+    lgss = log --stat --pretty=oneline --no-prefix
+    lggg = log --oneline --decorate --no-prefix
+    lg2 = log --graph --decorate --pretty=oneline --abbrev-commit --no-prefix
+    lg3 = log --graph --decorate --pretty=oneline --abbrev-commit --all --no-prefix
+    lg4 = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --no-prefix
     ls = ls-files
     d1 = show --pretty="format:" --name-only
     d2 = diff --name-only
     graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
     stl = stash list
+    pom = pull origin master
+    pod = pull origin develop
+    snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
+    sub = submodule update --init --recursive
+    fo = fetch origin
+[diff]
+	algorithm = patience
