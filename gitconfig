@@ -21,14 +21,16 @@
     untracked = cyan
 
 [alias]
+    tl = log --tags --simplify-by-decoration --pretty=format:"%C(green)%h\\ %C(yellow)[%ai]\\ %C(red)%d"
     st = status
+    stp = status --porcelain
     ci = commit
     br = branch
     co = checkout
     df = diff --no-ext-diff
     dfs = diff --no-ext-diff --staged
-    dff = diff --no-ext-diff --color-words
-    dffs = diff --no-ext-diff --color-words --staged
+    dff = diff --no-ext-diff --word-diff --color-words
+    dffs = diff --no-ext-diff --word-diff --color-words --staged
     lg = log -p --no-prefix
     lgs = log -git whatchanged -n 1 --no-prefix
     lgss = log --stat --pretty=oneline --no-prefix
@@ -46,5 +48,18 @@
     snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
     sub = submodule update --init --recursive
     fo = fetch origin
+    rc = rebase --continue
+    rs = rebase --skip
+    ri2 = rebase -i head~2
+    ri3 = rebase -i head~3
+    ri4 = rebase -i head~4
+    ri5 = rebase -i head~5
+    ria = rebase --interactive --autosquash
+    fixup = !sh -c 'git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $@)\"' -
+    squash = !sh -c 'git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $@)\"' -
 [diff]
 	algorithm = patience
+[push]
+	default = current
+[core]
+	editor = vim -u NONEclear

@@ -1,209 +1,141 @@
-inoremap <silent> <C-C> <Esc>
+" general options {
+    colorscheme gonzalo
+    set background=light
+    set gdefault " don't need to add /g in search/replace
+    set iskeyword-=$
+    set iskeyword-=-
+    set nocursorline
+    set nofoldenable " disable code folding
+    set nospell " fuck spell check
+    set timeoutlen=250 " lower leader key timeout
+    set ttyfast
+    set undodir=~/.vim/undo
+    set virtualedit=block "free block select
+    set wrap " don't cut lines
 
-let g:symfony_app_console_path= "/Users/gonzalo/Development/socialpoint/sp-platform-dragoncity/app/console"
-" UnBundle 'Shougo/neocomplcache'
-let g:neocomplcache_max_list = 10
-let g:neocomplcache_manual_completion_start_length = 100
-let g:neocomplcache_auto_completion_start_length = 5
+    " use ag over grep
+    if executable('ag')
+      set grepprg=ag\ --nogroup\ --nocolor
+    endif
+"}
 
-iab errl error_log(date('Y-m-d H:i:s') . . "\n", 3, '/tmp/gonzalo.log');
+" plugin options {
+    " neocomplcache {
+        autocmd FileType php setlocal omnifunc=phpcomplete_extended#CompletePHP
+        let g:phpcomplete_index_composer_command="composer.phar"
+        let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+        "let g:symfony_app_console_path= "/Users/gonzalo/Development/socialpoint/sp-platform-dragoncity/app/console"
+        let g:acp_enableAtStartup = 0
+    "}
 
-" Stops me from entering ex mode on accident
-nnoremap Q <nop>
+    " tagbar {
+        let g:tagbar_compact = 1
+        let g:tagbar_type_php  = { 'ctagstype' : 'php', 'kinds' : [ 'i:interfaces', 'c:classes', 'd:constant definitions', 'f:functions', 'j:javascript functions:1' ] }
+        map <C-l> :TagbarToggle<CR>
+    "}
 
-" yank current buffer's filepath
-nnoremap \f :call setreg(v:register, substitute(expand('%:p'),'\','/','g'))<CR>
+    "others {
+        let g:DisableAutoPHPFolding=1 " disable PIV's folding
+        let g:indent_guides_enable_on_vim_startup = 0
+    "}
+"}
 
-" simulate emacs' transpose feature, including its inverse, from this thread:
-" http://www.reddit.com/r/emacs/comments/wd5ak/grokking_emacs/c5cehm0?context=2
-nnoremap <Leader><Leader>l /\<<CR>yiw?\<<CR>viwp/\<<CR>viwp:noh<CR>
-nnoremap <Leader><Leader>h ?\w\><CR>yiw/\<<CR>viwp?\w\><CR>viwp:noh<CR>" pretty up JSON data
+" abbreviations {
+    " erlang {
+        iab iof io:format("~n------~n~p~n------~n", []),
+        iab ioff io:format("~n------~n~p~n~p~n------~n", []),
+        iab iofff io:format("~n------~n~p~n~p~n~p~n------~n", []),
+    "}
 
-" match indent of next line to beginning of current word
-nnoremap <Leader><Tab> yiwy0o""pVr J
+    " php {
+        iab errl error_log(date('Y-m-d H:i:s') . " " . "\n", 3, '/tmp/gonzalo.log');
+        iab ymd date('Y-m-d H:i:s',
+    "}
 
-" clear normal/visual mode highlighting
-noremap <Space> :<c-u>noh<CR>:echo<CR>
+    " others {
+        ab brr . "<br/>"
+    "}
+"}
 
-" copy current line sans leading/trailing whitespace
-nnoremap gy m`^yg_``"
+" mappings {
+    " custom {
+        " tab movement {
+            nmap <C-j> :tabprevious<CR>
+            nmap <C-k> :tabnext<CR>
+        "}
 
-" next/previous word under cursor in same column
-nnoremap g* yiw/^.*\%<C-r>=col('.')<CR>c\zs<C-r>"<CR>
-nnoremap g# yiw?^.*\%<C-r>=col('.')<CR>c\zs<C-r>"<CR>" * and # without moving the cursor
+        " file upload {
+            nmap <C-a> :w<CR>:!up2prod %:p gonzalo<CR>
+            nmap <c-x> :w<CR>:!ffrefresh<CR><CR>
+            "nmap <C-s> :w<CR>:!upload2prod %:p gonzalo<CR><CR>
+            "nmap <c-x> :w<CR>:!upload2prod %:p gonzalo && ffrefresh<CR><CR>
+        "}
 
-set t_ut=
+        " git diff {
+            map <c-d> :!diffwrapper %:p<cr>
+            map <c-g> :!GIT_PAGER='' git diff %<cr>
+            map <c-h> :!git lg %<cr>
+        "}
 
-""" FocusMode
-function! ToggleFocusMode()
-  if (&foldcolumn != 12)
-    set laststatus=0
-    set numberwidth=10
-    set foldcolumn=12
-    set noruler
-    hi FoldColumn ctermbg=none
-    hi LineNr ctermfg=0 ctermbg=none
-    hi NonText ctermfg=0
-  else
-    set laststatus=2
-    set numberwidth=4
-    set foldcolumn=0
-    set ruler
-    execute 'colorscheme ' . g:colors_name
-  endif
-endfunc
-nnoremap <unique> <silent> <Leader>f :call ToggleFocusMode()<cr>" CTags
-"let g:tagbar_width=26
-"let g:tagbar_compact = 1
-"let g:tagbar_type_php  = {'ctagstype' : 'php', 'kinds' : [ 'i:interfaces', 'c:classes', 'd:constant definitions', 'f:functions' ] }
-""autocmd FileType php nested :TagbarOpen
+        " tag jumping {
+            nnoremap <c-]> g<c-]>
+            vnoremap <c-]> g<c-]>
+            nnoremap g<c-]> <c-]>
+            vnoremap g<c-]> <c-]>
+            nnoremap t g<c-]>
+            vnoremap t g<c-]>
+        "}
+    "}
 
-"let g:tagbar_type_php  = {
-  "\ 'ctagstype' : 'php',
-  "\ 'kinds'     : [
-      "\ 'i:interfaces',
-      "\ 'c:classes',
-      "\ 'd:constant definitions',
-      "\ 'f:functions',
-      "\ 'j:javascript functions:1',
-      "\ 'v:variables:0:0'
-  "\ ]
-"\ }
+    " plugins {
+        vnoremap <silent> <Enter> :EasyAlign<Enter>
+        nmap <c-f> :CtrlPMRU<CR>
+    "}
 
-autocmd BufEnter * :syntax sync fromstart
+    " general {
+        " make C-c behave like Esc
+        inoremap <silent> <C-C> <Esc>
+        nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR> " bind K to grep word under cursor
 
-let g:acp_enableAtStartup = 0
+        " stop from entering ex mode on accident
+        nnoremap Q <nop>
 
-" swap jump to tag / multiple tag
-nnoremap <c-]> g<c-]>
-vnoremap <c-]> g<c-]>
-nnoremap g<c-]> <c-]>
-vnoremap g<c-]> <c-]>
-nnoremap t g<c-]>
-vnoremap t g<c-]>
+        " simulate emacs' transpose feature
+        nnoremap <Leader><Leader>l /\<<CR>yiw?\<<CR>viwp/\<<CR>viwp:noh<CR>
+        nnoremap <Leader><Leader>h ?\w\><CR>yiw/\<<CR>viwp?\w\><CR>viwp:noh<CR>a
 
-" disable syntax check for php files when saving
-let syntastic_mode_map={ 'mode': 'active',
-                     \ 'active_filetypes': [],
-                     \ 'passive_filetypes': ['php'] }
-nmap <c-s> :SyntasticCheck<CR>
+        " match indent of next line to beginning of current word
+        nnoremap <Leader><Tab> yiwy0o""pVr J
 
+        " clear normal/visual mode highlighting
+        noremap <Space> :<c-u>noh<CR>:echo<CR>
 
-" set foldlevelstart=20
-set nospell " fuck spell check
-set nocursorline
-set clipboard=unnamed " aint working
+        " copy current line sans leading/trailing whitespace
+        nnoremap gy m`^yg_``"
 
-" map <C-n> :set filetype=php<CR>:set syn=php<CR>:set iskeyword-=$<CR>:set iskeyword-=-<CR>
+        " next/previous word under cursor in same column
+        nnoremap g* yiw/^.*\%<C-r>=col('.')<CR>c\zs<C-r>"<CR>
+        nnoremap g# yiw?^.*\%<C-r>=col('.')<CR>c\zs<C-r>"<CR>" * and # without moving the cursor
 
-" let g:autoclose_loaded = 1
+        " marks
+        nmap <unique> <silent> <Leader>, <Plug>MarkSet
+        vmap <unique> <silent> <Leader>, <Plug>MarkSet </Plug></Leader></silent></unique>
+        nmap <unique> <silent> <leader>x <Plug>MarkClear</Plug></leader></silent></unique>
 
-nmap <unique> <silent> <Leader>, <Plug>MarkSet
-vmap <unique> <silent> <Leader>, <Plug>MarkSet </Plug></Leader></silent></unique>
-nmap <unique> <silent> <leader>x <Plug>MarkClear</Plug></leader></silent></unique>
+        " searches will center on the line it's found in.
+        map N Nzz
+        map n nzz
 
-""" override vim distrib
-set background=light
-"colorscheme molokai
-"colorscheme herald
-colorscheme gonzalo
-let g:indent_guides_enable_on_vim_startup = 0
-set iskeyword-=$
-set iskeyword-=-
-set undodir=/Users/gonzalo/.vim/undo
+        " fill current line with previus line word by word
+        imap <expr> <c-u> matchstr(getline(line('.')-1), '\%' . virtcol('.') . 'v\%(\k\+\s\=\\|.\)')
 
-" phpunit compilation
-" com! -nargs=* Phpunit make -c app <q-args> | cw"
-ab brr . "<br/>"
+        " make BS/DEL work as expected in visual modes
+        vmap <BS> x
 
-map <C-l> :TagbarToggle<CR>
-nmap <C-j> :tabprevious<CR>
-nmap <C-k> :tabnext<CR>
+        " delete in normal mode to switch off highlighting till next search and clear messages
+        nmap <silent> <BS> :nohlsearch<CR>
 
-" file upload
-nmap <C-a> :w<CR>:!up2prod %:p gonzalo<CR>
-nmap <c-x> :w<CR>:!ffrefresh<CR><CR>
-nmap <c-f> :execute 'iterm2newtab ' . getcwd()<CR>
-
-"nmap <C-s> :w<CR>:!upload2prod %:p gonzalo<CR><CR>
-"nmap <c-x> :w<CR>:!upload2prod %:p gonzalo && ffrefresh<CR><CR>
-
-" vim diff
-map <c-d> :!diffwrapper %:p<cr>
-map <c-g> :!GIT_PAGER='' git diff %<cr>
-map <c-h> :!git lg %<cr>
-
-" Search mappings: These will make it so that going to the next one in a
-" search will center on the line it's found in.
-map N Nzz
-map n nzz
-
-" fill current line with previus line word by word
-imap <expr> <c-u> matchstr(getline(line('.')-1), '\%' . virtcol('.') . 'v\%(\k\+\s\=\\|.\)')
-
-set makeprg=php\ -l\ %
-set errorformat=%m\ in\ %f\ on\ line\ %l
-autocmd QuickFixCmdPre make w
-
-vmap <C-w> :Tabularize /=<CR>
-vmap <C-e> :Tabularize /,\zs<CR>
-" el flag 'e' es para omitir los warnings si no se encuentra el string a buscar
-vmap <C-r> :s/"/'/e<CR>gv:s/\s\+\(\S\)(/\1 (/e<CR>gv:s/)\(\S\)/) \1/e<CR>gv:s/ ;/;/e<CR>
-" vmap <C-q> :s/\v([^, ]+)(\s*,\s*)([^, ]+)/\3\2\1/<CR>
-
-" Make BS/DEL work as expected in visual modes (i.e. delete elected)...
-vmap <BS> x
-
-" Visual Block mode is far more useful that Visual mode (so swap the commands)...
-nnoremap v <C-V>
-nnoremap <C-V> v
-
-"Delete in normal mode to switch off highlighting till next search and clear messages...
-nmap <silent> <BS> :nohlsearch<CR>
-
-" replace
-nmap S  :%s//g<LEFT><LEFT>
-vmap S  :s//g<LEFT><LEFT>
-
-" make Y behave like D or C
-nnoremap Y y$
-
-" free block select
-set virtualedit=block
-
-" replace all ocurrences
-set gdefault
-"
-"Ever notice a slight lag after typing the leader key + command? This lowers the timeout.
-set timeoutlen=250
-
-
-
-""" jump to a twig view in symfony
-" first set path
-set path+=**
-" func
-function! s:SfJumpToView()
-    mark C
-    normal! ]M
-    let end = line(".")
-    normal! [m
-    try
-        call search('\v[^.:]+\.html\.twig', '', end)
-        normal! gf
-    catch
-        normal! g`C
-        echohl WarningMsg | echomsg "Template file not found" | echohl None
-    endtry
-endfunction
-com! SfJumpToView call s:SfJumpToView()
-
-" create a mapping only in a Controller file
-autocmd BufEnter *Controller.php nmap <buffer><leader>v :SfJumpToView<CR>
-
-
-" phpdoc now is ,o - C-o is move to previous change :-)
-nnoremap <leader>o :set paste<CR>:exe PhpDoc()<CR>:set nopaste<CR>
-
-" don't cut lines
-set wrap
+        " make Y behave like D or C
+        nnoremap Y y$
+    "}
+"}

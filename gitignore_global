@@ -1,4 +1,4 @@
 .gitignore
 .DS_Store
 tags
-crossdomain.xml
+.phpcomplete_extended

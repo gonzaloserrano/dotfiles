@@ -1,4 +1,27 @@
-alias phpu='php -d xdebug.profiler_enable=0 ./phpunit -c app --stop-on-failure --stop-on-error'
+# https://github.com/mathiasbynens/dotfiles/blob/master/.aliases
+
+bindkey -e
+bindkey '^[[1;9C' forward-word
+bindkey '^[[1;9D' backward-word
+
+# IP addresses
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ipconfig getifaddr en1"
+alias ips="ifconfig -a | grep -o 'inet6\? \(\([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\)\|[a-fA-F0-9:]\+\)' | sed -e 's/inet6* //'"
+
+# Enhanced WHOIS lookups
+alias whois="whois -h whois-servers.net"
+
+alias g='grep'
+alias gv='grep -v'
+alias gi='grep -i'
+alias giv='grep -iv'
+alias gi='grep -i'
+alias h='history'
+alias xdebug_restore='mv /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini > /dev/null 2>&1'
+alias phpu='mv /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini.2 > /dev/null 2>&1; ./phpunit -c app --stop-on-failure --stop-on-error; mv /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini > /dev/null 2>&1'
+#alias phpu='mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2; ./phpunit -c app --stop-on-failure --stop-on-error; mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini'
+alias ssh="ssh -C"
 alias cu="composer.phar update"
 alias err="tail -f /var/log/apache2/error_log | sed 's/\\\n//g'"
 alias ack="ack -i"
@@ -29,7 +52,15 @@ alias vip='vi -p'
 export MYSQL_PS1="local/\d > "
 
 # support colors
-export LESS=-RFX
+export PAGER="less"
+export LESS="-R"
+# nicer highlighting
+#if [ -f "/usr/local/bin/src-hilite-lesspipe.sh" ]; then
+    # brew install source-highlight
+    #export LESSOPEN="| /usr/local/bin/src-hilite-lesspipe.sh %s"
+#fi
+#alias less='less -x4RFsX | source-highlight --failsafe --infer-lang -f esc --style-file=esc.style'
+alias less='less -x4RFsX'
 
 export JAVA_HOME=$(/usr/libexec/java_home)
 export WORK_HOME=/Users/gonzalo/wrk
@@ -100,7 +131,6 @@ alias ls="/usr/local/bin/gls --color=auto $LS_OPTIONS"
 alias l="ls -l"
 alias hl="highlight --syntax php -A --style desert"
 
-alias less='less -R'
 alias ..='cd ..'
 alias ...='cd ../../'
 alias ....='cd ../../../'
@@ -115,13 +145,16 @@ alias svnr='svn revert'
 alias go='. go'
 alias lsd='ls -ltr'
 alias diff='colordiff'
+alias t10='tail -10'
+alias t5='tail -10'
 
 alias gdiff='GIT_PAGER='' git diff --no-ext-diff'
 alias gdiffa='GIT_PAGER='' git diff --no-ext-diff | grep -E "^\+.*"'
 
 #eval `dircolors ~/.dir_colors`
 
-export PATH="/usr/local/opt/php54/bin:/Users/gonzalo/bin:/usr/local/share/python:$PATH"
+export PATH="/usr/local/sbin:/usr/local/opt/php54/bin:/Users/gonzalo/bin:$PATH"
+#export PATH="/usr/local/sbin:/usr/local/opt/php55/bin:/Users/gonzalo/bin:$PATH"
 
 # node & nvm
 # https://github.com/creationix/nvm/
@@ -313,3 +346,14 @@ get_git_prompt_info() {
 }
 
 test -f $HOME/.zshrc.local && source $HOME/.zshrc.local
+
+growl() {
+      local msg="\\e]9;\n\n${*}\\007"
+      case $TERM in
+        screen*)
+          echo -ne '\eP'${msg}'\e\\' ;;
+        *)
+          echo -ne ${msg} ;;
+      esac
+      return
+}
