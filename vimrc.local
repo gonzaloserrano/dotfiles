@@ -1,12 +1,11 @@
 " general options {
-    colorscheme gonzalo
-    set background=light
+    "colorscheme gonzalo
+    "set background=light
     set gdefault " don't need to add /g in search/replace
     set iskeyword-=$
     set iskeyword-=-
-    set nocursorline
     set nofoldenable " disable code folding
-    set nospell " fuck spell check
+    set nospell " disable spell check
     set timeoutlen=250 " lower leader key timeout
     set ttyfast
     set undodir=~/.vim/undo
@@ -48,7 +47,7 @@
     "}
 
     " php {
-        iab errl error_log(date('Y-m-d H:i:s') . " " . "\n", 3, '/tmp/gonzalo.log');
+        iab errl error_log(date('Y-m-d H:i:s') . " " . "\n", 3, '/tmp/my_error.log');
         iab ymd date('Y-m-d H:i:s',
     "}
 
