@@ -1,25 +1,6 @@
 [include]
     path = ~/.gitconfig.local
 
-[color]
-    ui = auto
-
-[color "branch"]
-    current = yellow bold
-    local = yellow
-    remote = green
-
-[color "diff"]
-    meta = yellow
-    frag = yellow bold
-    old = red bold
-    new = blue bold
-
-[color "status"]
-    added = green
-    changed = red
-    untracked = cyan
-
 [alias]
     tl = log --tags --simplify-by-decoration --pretty=format:"%C(green)%h\\ %C(yellow)[%ai]\\ %C(red)%d"
     st = status
@@ -62,4 +43,4 @@
 [push]
 	default = current
 [core]
-	editor = vim -u NONEclear
+	editor = vim
