@@ -38,9 +38,13 @@
     ria = rebase --interactive --autosquash
     fixup = !sh -c 'git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $@)\"' -
     squash = !sh -c 'git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $@)\"' -
+	g = grep --break --heading --line-number
 [diff]
 	algorithm = patience
-[push]
-	default = current
 [core]
 	editor = vim
+[grep]
+	extendRegexp = true
+	lineNumber = true
+[push]
+	default = simple

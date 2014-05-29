@@ -2,8 +2,6 @@
     "colorscheme gonzalo
     "set background=light
     set gdefault " don't need to add /g in search/replace
-    set iskeyword-=$
-    set iskeyword-=-
     set nofoldenable " disable code folding
     set nospell " disable spell check
     set timeoutlen=250 " lower leader key timeout
@@ -12,9 +10,15 @@
     set virtualedit=block "free block select
     set wrap " don't cut lines
     set nocursorline
+    set tabpagemax=25
 
     set t_ts=]2;
     set t_fs=
+    set iskeyword-=$
+    set iskeyword-=-
+
+    " symfony autocomplete
+    let g:spf13_no_autochdir = 1
 
     " use ag over grep
     if executable('ag')
@@ -23,6 +27,9 @@
 "}
 
 " plugin options {
+    " Vundle {
+        UnBundle 'gorodinskiy/vim-coloresque'
+    "}
     " neocomplcache {
         autocmd FileType php setlocal omnifunc=phpcomplete_extended#CompletePHP
         let g:phpcomplete_index_composer_command="composer.phar"
@@ -99,9 +106,16 @@
             nnoremap t g<c-]>
             vnoremap t g<c-]>
         "}
+        " keep blocks selected when indenting {
+            vnoremap < <gv
+            vnoremap > >gv
+        "}
     "}
 
     " general {
+        " convert encrypted save :X in plain save :x
+        cnoremap <expr> X (getcmdtype() is# ':' && empty(getcmdline())) ? 'x' : 'X'
+
         " make C-c behave like Esc
         inoremap <silent> <C-C> <Esc>
         nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR> " bind K to grep word under cursor

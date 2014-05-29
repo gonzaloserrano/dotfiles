@@ -1,3 +1,5 @@
+" file search
+Bundle "junegunn/fzf"
 " move function arguments left-right
 Bundle "AndrewRadev/sideways.vim"
 " for the lulz
@@ -8,6 +10,11 @@ Bundle "Mark"
 Bundle "junegunn/vim-easy-align"
 " erlang goodness
 Bundle 'jimenezrick/vimerl'
+
+Bundle 'wellle/targets.vim'
+" Bundle 'gonzaloserrano/vim-coloresque'
+Bundle 'kien/rainbow_parentheses.vim'
+Bundle 'tommcdo/vim-exchange'
 
 " need to try
 " PHP {
