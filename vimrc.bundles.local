@@ -15,11 +15,16 @@ Bundle 'wellle/targets.vim'
 " Bundle 'gonzaloserrano/vim-coloresque'
 Bundle 'kien/rainbow_parentheses.vim'
 Bundle 'tommcdo/vim-exchange'
+Bundle 'AndrewRadev/gapply.vim'
 
-" need to try
 " PHP {
+    Bundle "StanAngeloff/php.vim"
+    " need to try
     " also check out https://github.com/vim-php
-    "Bundle "stephpy/vim-php-cs-fixer"
+    "Bundle 'Shougo/vimproc'
+    "Bundle 'Shougo/unite.vim'
+    "Bundle "m2mdas/phpcomplete-extended"
+    Bundle "stephpy/vim-php-cs-fixer"
     "Bundle "joonty/vdebug"
     "Bundle "docteurklein/vim-phpunit"
     "Bundle "tagbar-phpctags"

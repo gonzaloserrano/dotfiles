@@ -1,0 +1,6 @@
+let g:airline_powerline_fonts = 1
+"let g:spf13_noninvasive_completion = 1
+
+if !exists('g:spf13_bundle_groups')
+    let g:spf13_bundle_groups=['general', 'writing', 'neocomplete', 'programming', 'php', 'python', 'twig', 'javascript', 'html', 'misc']
+endif

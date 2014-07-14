@@ -1,3 +1,9 @@
+" from instanly better vim {
+    " highlight column 121 (too long line)
+    highlight ColorColumn ctermbg=magenta
+    call matchadd('ColorColumn', '\%121v', 100)
+" }
+
 " general options {
     "colorscheme gonzalo
     "set background=light
@@ -27,16 +33,21 @@
 "}
 
 " plugin options {
+    " enabled groups is in .before file
     " Vundle {
         UnBundle 'gorodinskiy/vim-coloresque'
+        UnBundle 'spf13/PIV'
     "}
-    " neocomplcache {
+    " phpcomplete-extended {
         autocmd FileType php setlocal omnifunc=phpcomplete_extended#CompletePHP
         let g:phpcomplete_index_composer_command="composer.phar"
-        let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+    "}
+
+    " neocomplete {
+        "let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
         "let g:symfony_app_console_path= "/Users/gonzalo/Development/socialpoint/sp-platform-dragoncity/app/console"
-        let g:acp_enableAtStartup = 0
-        let g:neosnippet#disable_runtime_snippets = { "_": 1, }
+        "let g:acp_enableAtStartup = 0
+        "let g:neosnippet#disable_runtime_snippets = { "_": 1, }
     "}
 
     " tagbar {
@@ -63,9 +74,10 @@
 
 " abbreviations {
     " erlang {
-        iab iof io:format("~n------~n~p~n------~n", []),
-        iab ioff io:format("~n------~n~p~n~p~n------~n", []),
-        iab iofff io:format("~n------~n~p~n~p~n~p~n------~n", []),
+        iab iof io:format("~n~p~n", []),
+        iab ioff io:format("~n------~n~p~n------~n", []),
+        iab iofff io:format("~n------~n~p~n~p~n------~n", []),
+        iab ioffff io:format("~n------~n~p~n~p~n~p~n------~n", []),
     "}
 
     " php {
@@ -86,8 +98,8 @@
         "}
 
         " file upload {
-            nmap <C-a> :w<CR>:!up2prod %:p gonzalo<CR>
-            nmap <c-x> :w<CR>:!ffrefresh<CR><CR>
+            "nmap <C-a> :w<CR>:!up2prod %:p gonzalo<CR>
+            "nmap <c-x> :w<CR>:!ffrefresh<CR><CR>
             "nmap <C-s> :w<CR>:!upload2prod %:p gonzalo<CR><CR>
             "nmap <c-x> :w<CR>:!upload2prod %:p gonzalo && ffrefresh<CR><CR>
         "}
@@ -95,7 +107,7 @@
         " git diff {
             map <c-d> :!diffwrapper %:p<cr>
             map <c-g> :!GIT_PAGER='' git diff %<cr>
-            map <c-h> :!git lg %<cr>
+            map <c-h> :!git lp %<cr>
         "}
 
         " tag jumping {

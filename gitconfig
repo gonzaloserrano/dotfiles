@@ -12,17 +12,13 @@
     dfs = diff --no-ext-diff --staged
     dff = diff --no-ext-diff --word-diff --color-words
     dffs = diff --no-ext-diff --word-diff --color-words --staged
-    lg = log -p --no-prefix
+    lp = log -p --no-prefix
+    lgg = log --graph --all --decorate --oneline
+    lggg2 = log --pretty=format:"%ad%x09%h%x09%an%x09%x09%s" --date=short
     lgs = log -git whatchanged -n 1 --no-prefix
-    lgss = log --stat --pretty=oneline --no-prefix
-    lggg = log --oneline --decorate --no-prefix
-    lg2 = log --graph --decorate --pretty=oneline --abbrev-commit --no-prefix
-    lg3 = log --graph --decorate --pretty=oneline --abbrev-commit --all --no-prefix
-    lg4 = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --no-prefix
     ls = ls-files
     d1 = show --pretty="format:" --name-only
     d2 = diff --name-only
-    graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
     stl = stash list
     pom = pull origin master
     pod = pull origin develop
@@ -38,13 +34,17 @@
     ria = rebase --interactive --autosquash
     fixup = !sh -c 'git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $@)\"' -
     squash = !sh -c 'git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $@)\"' -
-	g = grep --break --heading --line-number
+    g = grep --break --heading --line-number
 [diff]
-	algorithm = patience
+    algorithm = patience
+    external = opendiff-git
 [core]
-	editor = vim
+    editor = vim
+    excludesfile = ~/.gitignore_global
 [grep]
-	extendRegexp = true
-	lineNumber = true
+    extendRegexp = true
+    lineNumber = true
 [push]
-	default = simple
+    default = simple
+[branch]
+    autosetuprebase = always
