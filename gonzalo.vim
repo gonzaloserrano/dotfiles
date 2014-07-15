@@ -107,13 +107,13 @@ if has("gui_running")
 elseif &t_Co == 256
 
     " -> Text; Miscellaneous
-    hi Normal         ctermbg=234  ctermfg=252   cterm=none
-    hi SpecialKey     ctermbg=234  ctermfg=176   cterm=none
-    hi VertSplit      ctermbg=234  ctermfg=227   cterm=none
-    hi SignColumn     ctermbg=234  ctermfg=141   cterm=none
-    hi NonText        ctermbg=234  ctermfg=204   cterm=none
-    hi Directory      ctermbg=234  ctermfg=227   cterm=none 
-    hi Title          ctermbg=234  ctermfg=84    cterm=bold
+    hi Normal         ctermbg=none  ctermfg=252   cterm=none
+    hi SpecialKey     ctermbg=none  ctermfg=176   cterm=none
+    hi VertSplit      ctermbg=none  ctermfg=227   cterm=none
+    hi SignColumn     ctermbg=none  ctermfg=141   cterm=none
+    hi NonText        ctermbg=none  ctermfg=204   cterm=none
+    hi Directory      ctermbg=none  ctermfg=227   cterm=none 
+    hi Title          ctermbg=none  ctermfg=84    cterm=bold
 
     " -> Cursor 
     hi Cursor         ctermbg=227  ctermfg=234   cterm=none
@@ -122,8 +122,8 @@ elseif &t_Co == 256
     hi CursorLine     ctermbg=0                  cterm=none
 
     " -> Folding
-    hi FoldColumn     ctermbg=234  ctermfg=25    cterm=none
-    hi Folded         ctermbg=234  ctermfg=25    cterm=none
+    hi FoldColumn     ctermbg=none  ctermfg=25    cterm=none
+    hi Folded         ctermbg=none  ctermfg=25    cterm=none
 
     " -> Line info  
     hi LineNr         ctermbg=0    ctermfg=241   cterm=none
@@ -132,10 +132,10 @@ elseif &t_Co == 256
 
     " -> Messages
     hi ErrorMsg       ctermbg=124  ctermfg=252   cterm=none
-    hi Question       ctermbg=234  ctermfg=214   cterm=none
+    hi Question       ctermbg=none  ctermfg=214   cterm=none
     hi WarningMsg     ctermbg=214  ctermfg=0     cterm=none
-    hi MoreMsg        ctermbg=234  ctermfg=214   cterm=none
-    hi ModeMsg        ctermbg=234  ctermfg=214   cterm=none
+    hi MoreMsg        ctermbg=none  ctermfg=214   cterm=none
+    hi ModeMsg        ctermbg=none  ctermfg=214   cterm=none
 
     " -> Search 
     hi Search         ctermbg=241  ctermfg=227   cterm=none 
@@ -144,7 +144,7 @@ elseif &t_Co == 256
     " -> Diff
     hi DiffAdd        ctermbg=22   ctermfg=208   cterm=none
     hi DiffChange     ctermbg=235  ctermfg=130   cterm=none
-    hi DiffDelete     ctermbg=234  ctermfg=208   cterm=none
+    hi DiffDelete     ctermbg=none  ctermfg=208   cterm=none
     hi DiffText       ctermbg=24   ctermfg=208   cterm=underline
 
     " -> Menu
@@ -164,32 +164,32 @@ elseif &t_Co == 256
     hi VisualNOS      ctermbg=0    ctermfg=241   cterm=none
 
     " -> Code
-    hi Comment        ctermbg=234  ctermfg=241   cterm=none
-    hi Constant       ctermbg=234  ctermfg=84    cterm=none
-    hi String         ctermbg=234  ctermfg=215   cterm=none
-    hi Error          ctermbg=234  ctermfg=203   cterm=none
-    hi Identifier     ctermbg=234  ctermfg=75    cterm=none
-    hi Function       ctermbg=234  ctermfg=117   cterm=none
-    hi Ignore         ctermbg=234  ctermfg=234   cterm=none
-    hi MatchParen     ctermbg=214  ctermfg=234   cterm=none
-    hi PreProc        ctermbg=234  ctermfg=141   cterm=none
-    hi Special        ctermbg=234  ctermfg=227   cterm=none
-    hi Todo           ctermbg=234  ctermfg=203   cterm=bold
-    hi Underlined     ctermbg=234  ctermfg=203   cterm=underline
-    hi Statement      ctermbg=234  ctermfg=176   cterm=none
-    hi Operator       ctermbg=234  ctermfg=204   cterm=none
-    hi Delimiter      ctermbg=234  ctermfg=204   cterm=none
-    hi Type           ctermbg=234  ctermfg=227   cterm=none
-    hi Exception      ctermbg=234  ctermfg=203   cterm=none 
+    hi Comment        ctermbg=none  ctermfg=241   cterm=none
+    hi Constant       ctermbg=none  ctermfg=208   cterm=none
+    hi String         ctermbg=none  ctermfg=215   cterm=none
+    hi Error          ctermbg=none  ctermfg=203   cterm=none
+    hi Identifier     ctermbg=none  ctermfg=75    cterm=none
+    hi Function       ctermbg=none  ctermfg=117   cterm=none
+    hi Ignore         ctermbg=none  ctermfg=234   cterm=none
+    hi MatchParen     ctermbg=214   ctermfg=134   cterm=none
+    hi PreProc        ctermbg=none  ctermfg=141   cterm=none
+    hi Special        ctermbg=none  ctermfg=40    cterm=none
+    hi Todo           ctermbg=none  ctermfg=203   cterm=bold
+    hi Underlined     ctermbg=none  ctermfg=203   cterm=underline
+    hi Statement      ctermbg=none  ctermfg=176   cterm=none
+    hi Operator       ctermbg=none  ctermfg=204   cterm=none
+    hi Delimiter      ctermbg=none  ctermfg=204   cterm=none
+    hi Type           ctermbg=none  ctermfg=227   cterm=none
+    hi Exception      ctermbg=none  ctermfg=203   cterm=none 
 
     " -> HTML-specific
-    hi htmlBold                 ctermbg=234  ctermfg=252   cterm=bold
-    hi htmlBoldItalic           ctermbg=234  ctermfg=252   cterm=bold,italic
-    hi htmlBoldUnderline        ctermbg=234  ctermfg=252   cterm=bold,underline
-    hi htmlBoldUnderlineItalic  ctermbg=234  ctermfg=252   cterm=bold,underline,italic
-    hi htmlItalic               ctermbg=234  ctermfg=252   cterm=italic
-    hi htmlUnderline            ctermbg=234  ctermfg=252   cterm=underline
-    hi htmlUnderlineItalic      ctermbg=234  ctermfg=252   cterm=underline,italic
+    hi htmlBold                 ctermbg=none  ctermfg=252   cterm=bold
+    hi htmlBoldItalic           ctermbg=none  ctermfg=252   cterm=bold,italic
+    hi htmlBoldUnderline        ctermbg=none  ctermfg=252   cterm=bold,underline
+    hi htmlBoldUnderlineItalic  ctermbg=none  ctermfg=252   cterm=bold,underline,italic
+    hi htmlItalic               ctermbg=none  ctermfg=252   cterm=italic
+    hi htmlUnderline            ctermbg=none  ctermfg=252   cterm=underline
+    hi htmlUnderlineItalic      ctermbg=none  ctermfg=252   cterm=underline,italic
 
 elseif &t_Co == 16
 

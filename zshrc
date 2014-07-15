@@ -1,28 +1,15 @@
-# https://github.com/mathiasbynens/dotfiles/blob/master/.aliases
+alias v="vagrant"
+alias h="history"
+alias c="pbcopy"
+alias g="grep"
+alias gi="grep -i"
+alias gv="grep -v"
+alias gvi="grep -vi"
+alias t="tail"
+alias t1="tail -n 10"
+alias t2="tail -n 25"
 
-bindkey -e
-bindkey '^[[1;9C' forward-word
-bindkey '^[[1;9D' backward-word
-
-# IP addresses
-alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
-alias localip="ipconfig getifaddr en1"
-alias ips="ifconfig -a | grep -o 'inet6\? \(\([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\)\|[a-fA-F0-9:]\+\)' | sed -e 's/inet6* //'"
-
-# Enhanced WHOIS lookups
-alias whois="whois -h whois-servers.net"
-
-alias g='grep'
-alias gv='grep -v'
-alias gi='grep -i'
-alias giv='grep -iv'
-alias gi='grep -i'
-alias h='history'
-alias xdebug_restore='mv /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini > /dev/null 2>&1'
-alias phpu='mv /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini.2 > /dev/null 2>&1; ./phpunit -c app --stop-on-failure --stop-on-error; mv /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini > /dev/null 2>&1'
-#alias phpu='mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2; ./phpunit -c app --stop-on-failure --stop-on-error; mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini'
-alias ssh="ssh -C"
-alias cu="composer.phar update"
+alias cu="composer.phar update --dev"
 alias err="tail -f /var/log/apache2/error_log | sed 's/\\\n//g'"
 alias ack="ack -i"
 alias ackj="ack -i --js"
@@ -30,37 +17,27 @@ alias ackp="ack -i --php"
 alias ag="ag -S -p ~/.agignore --pager less -f"
 alias agj="ag -S -p ~/.agignore --pager less -f -G '\.js'"
 alias agp="ag -S -p ~/.agignore --pager less -f -G '\.php'"
+alias age="ag -S -p ~/.agignore --pager less -f -G '\.erl'"
+alias agc="ag -S -p ~/.agignore --pager less -f -G '\.yml' -G '\.xml'"
 alias cc="app/console cache:clear"
 alias dir='. ~/bin/dir'
-alias history="history -1000"
+alias history="history -10000"
 alias mysql_start='sudo launchctl start com.mysql.mysql-server'
 alias mysql_stop='sudo launchctl stop com.mysql.mysql-server'
 alias redis_start='sudo launchctl start io.redis.redis-server'
 alias redis_status='redis-cli ping'
 alias redis_stop='sudo launchctl stop io.redis.redis-server'
 alias services="php app/console container:debug"
-alias t='t.py --task-dir ~/Dropbox/tasks --list tasks'
-alias tm='t.py --task-dir ~/Dropbox/tasks --list music'
-alias tt='t.py --task-dir ~/Dropbox/tasks --list tech'
 
-alias vimb="vi +BundleInstall! +BundleClean +q"
 alias bi='vi'
 alias ci='vi'
-alias vi='vi -p'
-alias vip='vi -p'
+alias vi='vim -p'
+alias vin='vim -u NONE -N'
 
 export MYSQL_PS1="local/\d > "
 
 # support colors
-export PAGER="less"
-export LESS="-R"
-# nicer highlighting
-#if [ -f "/usr/local/bin/src-hilite-lesspipe.sh" ]; then
-    # brew install source-highlight
-    #export LESSOPEN="| /usr/local/bin/src-hilite-lesspipe.sh %s"
-#fi
-#alias less='less -x4RFsX | source-highlight --failsafe --infer-lang -f esc --style-file=esc.style'
-alias less='less -x4RFsX'
+export LESS=-RFX
 
 export JAVA_HOME=$(/usr/libexec/java_home)
 export WORK_HOME=/Users/gonzalo/wrk
@@ -122,15 +99,17 @@ setopt HIST_FIND_NO_DUPS
 
 #}}}
 
-
+bindkey "f" forward-word
+bindkey "b" backward-word
 bindkey "^p" history-search-backward
 bindkey "^n" history-search-forward
 
 bindkey -v
 alias ls="/usr/local/bin/gls --color=auto $LS_OPTIONS"
-alias l="ls -l"
+alias l="ls -AFGhl"
 alias hl="highlight --syntax php -A --style desert"
 
+alias less='less -R'
 alias ..='cd ..'
 alias ...='cd ../../'
 alias ....='cd ../../../'
@@ -142,218 +121,24 @@ alias svnl='svn log | less'
 alias svnu='svn update'
 alias svnc='svn commit'
 alias svnr='svn revert'
-alias go='. go'
 alias lsd='ls -ltr'
 alias diff='colordiff'
-alias t10='tail -10'
-alias t5='tail -10'
 
 alias gdiff='GIT_PAGER='' git diff --no-ext-diff'
 alias gdiffa='GIT_PAGER='' git diff --no-ext-diff | grep -E "^\+.*"'
 
-#eval `dircolors ~/.dir_colors`
+#export PATH="/usr/local/opt/php54/bin:/Users/gonzalo/bin:$PATH"
+#alias phpu='mv /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini.2 > /dev/null 2>&1; ./phpunit -c app --stop-on-failure --stop-on-error; mv /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini > /dev/null 2>&1'
+#alias phpuu='mv /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini.2 > /dev/null 2>&1; phpunit -c app --stop-on-failure --stop-on-error; mv /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini > /dev/null 2>&1'
 
-export PATH="/usr/local/sbin:/usr/local/opt/php54/bin:/Users/gonzalo/bin:$PATH"
-#export PATH="/usr/local/sbin:/usr/local/opt/php55/bin:/Users/gonzalo/bin:$PATH"
-
-# node & nvm
-# https://github.com/creationix/nvm/
-#. ~/Development/other/nvm/nvm.sh
-
-function precmd {
-
-    local TERMWIDTH
-    (( TERMWIDTH = ${COLUMNS} - 1 ))
-
-    ###
-    # Truncate the path if it's too long.
-    
-    PR_FILLBAR=""
-    PR_PWDLEN=""
-    
-    local promptsize=${#${(%):---(%n@%m:%l)---()--}}
-    local pwdsize=${#${(%):-%~}}
-    local mygit=$(get_git_prompt_info)
-    local gitsize=${#${mygit}}+1
-    
-    if [[ "$promptsize + $pwdsize + $gitsize" -gt $TERMWIDTH ]]; then
-	    ((PR_PWDLEN=$TERMWIDTH - $promptsize - $gitsize))
-    else
-    PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize + $gitsize)))..${PR_HBAR}.)}"
-    fi
-
-
-    ###
-    # Get APM info.
-
-    #if which ibam > /dev/null; then
-	#PR_APM_RESULT=`ibam --percentbattery`
-    #elif which apm > /dev/null; then
-	#PR_APM_RESULT=`apm`
-    #fi
-}
-
-
-setopt extended_glob
-preexec () {
-    if [[ "$TERM" == "screen" ]]; then
-	local CMD=${1[(wr)^(*=*|sudo|-*)]}
-	echo -n "\ek$CMD\e\\"
-    fi
-}
-
-
-setprompt () {
-    ###
-    # Need this so the prompt will work.
-
-    setopt prompt_subst
-
-
-    ###
-    # See if we can use colors.
-
-    autoload colors zsh/terminfo
-    if [[ "$terminfo[colors]" -ge 8 ]]; then
-	colors
-    fi
-    for color in RED GREEN YELLOW BLACK MAGENTA CYAN WHITE; do
-	eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
-	eval PR_LIGHT_$color='%{$fg[${(L)color}]%}'
-	(( count = $count + 1 ))
-    done
-    PR_NO_COLOUR="%{$terminfo[sgr0]%}"
-
-
-    ###
-    # See if we can use extended characters to look nicer.
-    
-    typeset -A altchar
-    set -A altchar ${(s..)terminfo[acsc]}
-    PR_SET_CHARSET="%{$terminfo[enacs]%}"
-    PR_SHIFT_IN="%{$terminfo[smacs]%}"
-    PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
-    PR_HBAR=${altchar[q]:--}
-    PR_ULCORNER=${altchar[l]:--}
-    PR_LLCORNER=${altchar[m]:--}
-    PR_LRCORNER=${altchar[j]:--}
-    PR_URCORNER=${altchar[k]:--}
-
-    
-    ###
-    # Decide if we need to set titlebar text.
-    
-    case $TERM in
-	xterm*)
-	    PR_TITLEBAR=$'%{\e]0;%(!.-=*[ROOT]*=- | .)%n@%m:%~ | ${COLUMNS}x${LINES} | %y\a%}'
-	    ;;
-	screen)
-	    PR_TITLEBAR=$'%{\e_screen \005 (\005t) | %(!.-=[ROOT]=- | .)%n@%m:%~ | ${COLUMNS}x${LINES} | %y\e\\%}'
-	    ;;
-	*)
-	    PR_TITLEBAR=''
-	    ;;
-    esac
-    
-    
-    ###
-    # Decide whether to set a screen title
-    if [[ "$TERM" == "screen" ]]; then
-	PR_STITLE=$'%{\ekzsh\e\\%}'
-    else
-	PR_STITLE=''
-    fi
-    
-    
-    ###
-    # APM detection
-    
-    if which ibam > /dev/null; then
-	PR_APM='$PR_RED${${PR_APM_RESULT[(f)1]}[(w)-2]}%%(${${PR_APM_RESULT[(f)3]}[(w)-1]})$PR_LIGHT_BLACK:'
-    elif which apm > /dev/null; then
-	PR_APM='$PR_RED${PR_APM_RESULT[(w)5,(w)6]/\% /%%}$PR_LIGHT_BLACK:'
-    else
-	PR_APM=''
-    fi
-    
-    
-    ###
-    # Finally, the prompt.
-
-    PROMPT='$PR_SET_CHARSET$PR_STITLE${(e)PR_TITLEBAR}\
-$PR_WHITE$PR_SHIFT_IN$PR_ULCORNER$PR_WHITE$PR_HBAR$PR_SHIFT_OUT(\
-$PR_MAGENTA%$PR_PWDLEN<...<%~%<<$PR_WHITE)\
-$(get_git_prompt_info)\
-:$PR_SHIFT_IN$PR_HBAR$PR_WHITE$PR_HBAR${(e)PR_FILLBAR}$PR_WHITE$PR_HBAR$PR_SHIFT_OUT(\
-$PR_GREEN%(!.%SROOT%s.%n)$PR_GREEN@%m:%l\
-$PR_WHITE)$PR_SHIFT_IN$PR_HBAR$PR_WHITE$PR_URCORNER$PR_SHIFT_OUT\
-
-$PR_WHITE$PR_SHIFT_IN$PR_LLCORNER$PR_WHITE$PR_HBAR$PR_SHIFT_OUT(\
-%(?..$PR_LIGHT_RED%?$PR_WHITE:)\
-${(e)PR_APM}$PR_YELLOW%D{%H:%M}\
-$PR_LIGHT_WHITE:%(!.$PR_RED.$PR_WHITE)%#$PR_WHITE)$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
-$PR_WHITE$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
-$PR_NO_COLOUR '
-
-    RPROMPT=' $PR_WHITE$PR_SHIFT_IN$PR_HBAR$PR_WHITE$PR_HBAR$PR_SHIFT_OUT\
-($PR_YELLOW%D{%a, %d %b}$PR_WHITE)$PR_SHIFT_IN$PR_HBAR$PR_WHITE$PR_LRCORNER$PR_SHIFT_OUT$PR_NO_COLOUR'
-
-    PS2='$PR_WHITE$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
-$PR_WHITE$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT(\
-$PR_LIGHT_GREEN%_$PR_WHITE)$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
-$PR_WHITE$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT$PR_NO_COLOUR '
-}
-
-setprompt
+#export PATH="/usr/local/opt/php55/bin:/Users/gonzalo/bin:$PATH:/Users/gonzalo/erlang/bin"
+export PATH="/usr/local/opt/php55/bin:/Users/gonzalo/bin:$PATH"
+alias phpu='mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2 > /dev/null 2>&1; ./phpunit -c app --stop-on-failure --stop-on-error; mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini > /dev/null 2>&1'
+alias phpuu='mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2 > /dev/null 2>&1; phpunit -c app --stop-on-failure --stop-on-error; mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini > /dev/null 2>&1'
 
 export SVN_EDITOR="vim --noplugin"
+export HOMEBREW_GITHUB_API_TOKEN=1778cd697fd9ec80ff0ac7e4b02cdfefd77a3e84
+export GOPATH="/usr/local/go"
 
-#git branch info in prompt
-typeset -ga preexec_functions
-typeset -ga precmd_functions
-typeset -ga chpwd_functions
-
-export __CURRENT_GIT_BRANCH=
-export __CURRENT_GIT_VARS_INVALID=1
-
-zsh_git_invalidate_vars() {
-    export __CURRENT_GIT_VARS_INVALID=1
-}
-zsh_git_compute_vars() {
-    export __CURRENT_GIT_BRANCH="$(parse_git_branch)"
-    export __CURRENT_GIT_VARS_INVALID=
-}
-
-parse_git_branch() {
-    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
-}
-
-chpwd_functions+='zsh_git_chpwd_update_vars'
-zsh_git_chpwd_update_vars() {
-    zsh_git_invalidate_vars
-}
-
-preexec_functions+='zsh_git_preexec_update_vars'
-zsh_git_preexec_update_vars() {
-    case "$(history $HISTCMD)" in 
-            *git*) zsh_git_invalidate_vars ;;
-    esac
-}
-
-get_git_prompt_info() {
-    test -n "$__CURRENT_GIT_VARS_INVALID" && zsh_git_compute_vars
-    echo "<$__CURRENT_GIT_BRANCH>"
-}
-
-test -f $HOME/.zshrc.local && source $HOME/.zshrc.local
-
-growl() {
-      local msg="\\e]9;\n\n${*}\\007"
-      case $TERM in
-        screen*)
-          echo -ne '\eP'${msg}'\e\\' ;;
-        *)
-          echo -ne ${msg} ;;
-      esac
-      return
-}
+source /Users/gonzalo/erlang/17.0/activate
+alias obs='erl -sname observer -run observer -detached'
