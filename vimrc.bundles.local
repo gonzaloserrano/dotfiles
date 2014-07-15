@@ -1,5 +1,5 @@
-" file search
-Bundle "junegunn/fzf"
+Bundle "zweifisch/pipe2eval"
+
 " move function arguments left-right
 Bundle "AndrewRadev/sideways.vim"
 " for the lulz
@@ -10,21 +10,21 @@ Bundle "Mark"
 Bundle "junegunn/vim-easy-align"
 " erlang goodness
 Bundle 'jimenezrick/vimerl'
-
-Bundle 'wellle/targets.vim'
-" Bundle 'gonzaloserrano/vim-coloresque'
-Bundle 'kien/rainbow_parentheses.vim'
+" swap 2 words: cxiw , then '.'
 Bundle 'tommcdo/vim-exchange'
+" vim +Gapply to apply git changes to the index
 Bundle 'AndrewRadev/gapply.vim'
+" increase ctrlp speed with python
+Bundle 'FelikZ/ctrlp-py-matcher'
 
 " PHP {
     Bundle "StanAngeloff/php.vim"
+    Bundle "stephpy/vim-php-cs-fixer"
     " need to try
     " also check out https://github.com/vim-php
     "Bundle 'Shougo/vimproc'
     "Bundle 'Shougo/unite.vim'
     "Bundle "m2mdas/phpcomplete-extended"
-    Bundle "stephpy/vim-php-cs-fixer"
     "Bundle "joonty/vdebug"
     "Bundle "docteurklein/vim-phpunit"
     "Bundle "tagbar-phpctags"
@@ -34,11 +34,12 @@ Bundle 'AndrewRadev/gapply.vim'
     "Bundle "docteurklein/vim-symfony"
 "}
 
-"Bundle 'itchyny/calendar.vim'
-"Bundle "yate"
-Bundle "coderifous/textobj-word-column.vim"
-
 " not needed / don't like
+"Bundle 'kien/rainbow_parentheses.vim'
+"Bundle 'wellle/targets.vim'
+"Bundle "coderifous/textobj-word-column.vim"
+"Bundle "yate"
+"Bundle 'itchyny/calendar.vim'
 "Bundle 'junegunn/seoul256.vim'
 "Bundle "vim-scripts/taglist.vim"
 "Bundle "osyo-manga/vim-over"
