@@ -1,3 +1,5 @@
+Bundle "a_pair"
+Bundle "othree/javascript-libraries-syntax.vim"
 Bundle "zweifisch/pipe2eval"
 
 " move function arguments left-right
@@ -20,6 +22,8 @@ Bundle 'FelikZ/ctrlp-py-matcher'
 " PHP {
     Bundle "StanAngeloff/php.vim"
     Bundle "stephpy/vim-php-cs-fixer"
+    Bundle 'vim-php/vim-php-refactoring'
+    Bundle 'tomphp/vim-phpdoc'
     " need to try
     " also check out https://github.com/vim-php
     "Bundle 'Shougo/vimproc'
@@ -57,7 +61,6 @@ Bundle 'FelikZ/ctrlp-py-matcher'
 "Bundle "docunext/closetag.vim"
 "Bundle "SuperTab"
 "Bundle "goldfeld/vim-seek"
-"Bundle "othree/javascript-libraries-syntax.vim"
 "Bundle "vim-scripts/Align"
 "Bundle "terryma/vim-multiple-cursors"
 "Bundle "mhinz/vim-startify"
