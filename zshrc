@@ -1,144 +1,80 @@
-alias v="vagrant"
-alias h="history"
-alias c="pbcopy"
-alias g="grep"
-alias gi="grep -i"
-alias gv="grep -v"
-alias gvi="grep -vi"
-alias t="tail"
-alias t1="tail -n 10"
-alias t2="tail -n 25"
+# Path to your oh-my-zsh installation.
+export ZSH=$HOME/.oh-my-zsh
 
-alias cu="composer.phar update --dev"
-alias err="tail -f /var/log/apache2/error_log | sed 's/\\\n//g'"
-alias ack="ack -i"
-alias ackj="ack -i --js"
-alias ackp="ack -i --php"
-alias ag="ag -S -p ~/.agignore --pager less -f"
-alias agj="ag -S -p ~/.agignore --pager less -f -G '\.js'"
-alias agp="ag -S -p ~/.agignore --pager less -f -G '\.php'"
-alias age="ag -S -p ~/.agignore --pager less -f -G '\.erl'"
-alias agc="ag -S -p ~/.agignore --pager less -f -G '\.yml' -G '\.xml'"
-alias cc="app/console cache:clear"
-alias dir='. ~/bin/dir'
-alias history="history -10000"
-alias mysql_start='sudo launchctl start com.mysql.mysql-server'
-alias mysql_stop='sudo launchctl stop com.mysql.mysql-server'
-alias redis_start='sudo launchctl start io.redis.redis-server'
-alias redis_status='redis-cli ping'
-alias redis_stop='sudo launchctl stop io.redis.redis-server'
-alias services="php app/console container:debug"
+# Set name of the theme to load.
+# Look in ~/.oh-my-zsh/themes/
+# Optionally, if you set this to "random", it'll load a random theme each
+# time that oh-my-zsh is loaded.
+ZSH_THEME="agnoster"
 
-alias bi='vi'
-alias ci='vi'
-alias vi='vim -p'
-alias vin='vim -u NONE -N'
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
 
-export MYSQL_PS1="local/\d > "
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
 
-# support colors
-export LESS=-RFX
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
 
-export JAVA_HOME=$(/usr/libexec/java_home)
-export WORK_HOME=/Users/gonzalo/wrk
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
 
-# i want to map <c-s> in vim
-stty -ixon -ixoff
-# testing fasd
-eval "$(fasd --init auto)"
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
 
-# The following lines were added by compinstall
-zstyle ':completion:*' completer _complete _ignored _approximate
-zstyle :compinstall filename '/Users/gonzalo/.zshrc'
-autoload -Uz compinit
-compinit
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
 
-# 10 second wait if you do something that will delete everything.  I wish I'd had this before...
-setopt RM_STAR_WAIT
+# Uncomment the following line to display red dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS="true"
 
-#{{{ History Stuff
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# Where it gets saved
-HISTFILE=~/.history
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# HIST_STAMPS="mm/dd/yyyy"
 
-# Remember about a years worth of history (AWESOME)
-SAVEHIST=10000
-HISTSIZE=10000
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Don't overwrite, append!
-setopt APPEND_HISTORY
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(git)
 
-# Write after each command
-# setopt INC_APPEND_HISTORY
+source $ZSH/oh-my-zsh.sh
 
-# Killer: share history between multiple shells
-setopt SHARE_HISTORY
+# User configuration
 
-# If I type cd and then cd again, only save the last one
-setopt HIST_IGNORE_DUPS
+export PATH="/Users/gonzalo/bin:$PATH"
+# export MANPATH="/usr/local/man:$MANPATH"
 
-# Even if there are commands inbetween commands that are the same, still only save the last one
-setopt HIST_IGNORE_ALL_DUPS
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
 
-# Pretty    Obvious.  Right?
-setopt HIST_REDUCE_BLANKS
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
 
-# If a line starts with a space, don't save it.
-setopt HIST_IGNORE_SPACE
-setopt HIST_NO_STORE
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
 
-# When using a hist thing, make a newline show the change before executing it.
-setopt HIST_VERIFY
+# ssh
+# export SSH_KEY_PATH="~/.ssh/dsa_id"
 
-# Save the time and how long a command ran
-setopt EXTENDED_HISTORY
-
-setopt HIST_SAVE_NO_DUPS
-setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_FIND_NO_DUPS
-
-#}}}
-
-bindkey "f" forward-word
-bindkey "b" backward-word
-bindkey "^p" history-search-backward
-bindkey "^n" history-search-forward
-
-bindkey -v
-alias ls="/usr/local/bin/gls --color=auto $LS_OPTIONS"
-alias l="ls -AFGhl"
-alias hl="highlight --syntax php -A --style desert"
-
-alias less='less -R'
-alias ..='cd ..'
-alias ...='cd ../../'
-alias ....='cd ../../../'
-alias .....='cd ../../../../'
-alias svns='svn status'
-alias svnd='svn diff | colordiff'
-alias svndi='svn diff --diff-cmd diff -x -uw | colordiff'
-alias svnl='svn log | less'
-alias svnu='svn update'
-alias svnc='svn commit'
-alias svnr='svn revert'
-alias lsd='ls -ltr'
-alias diff='colordiff'
-
-alias gdiff='GIT_PAGER='' git diff --no-ext-diff'
-alias gdiffa='GIT_PAGER='' git diff --no-ext-diff | grep -E "^\+.*"'
-
-#export PATH="/usr/local/opt/php54/bin:/Users/gonzalo/bin:$PATH"
-#alias phpu='mv /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini.2 > /dev/null 2>&1; ./phpunit -c app --stop-on-failure --stop-on-error; mv /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini > /dev/null 2>&1'
-#alias phpuu='mv /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini.2 > /dev/null 2>&1; phpunit -c app --stop-on-failure --stop-on-error; mv /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.4/conf.d/ext-xdebug.ini > /dev/null 2>&1'
-
-#export PATH="/usr/local/opt/php55/bin:/Users/gonzalo/bin:$PATH:/Users/gonzalo/erlang/bin"
-export PATH="/usr/local/opt/php55/bin:/Users/gonzalo/bin:$PATH"
-alias phpu='mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2 > /dev/null 2>&1; ./phpunit -c app --stop-on-failure --stop-on-error; mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini > /dev/null 2>&1'
-alias phpuu='mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2 > /dev/null 2>&1; phpunit -c app --stop-on-failure --stop-on-error; mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini > /dev/null 2>&1'
-
-export SVN_EDITOR="vim --noplugin"
-export HOMEBREW_GITHUB_API_TOKEN=1778cd697fd9ec80ff0ac7e4b02cdfefd77a3e84
-export GOPATH="/usr/local/go"
-
-source /Users/gonzalo/erlang/17.0/activate
-alias obs='erl -sname observer -run observer -detached'
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
