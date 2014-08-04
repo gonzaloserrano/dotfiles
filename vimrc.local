@@ -37,7 +37,7 @@
         UnBundle 'gorodinskiy/vim-coloresque'
         UnBundle 'spf13/PIV'
     "}
-    "
+
     " Syntastic {
         " play with angularJS
         let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
@@ -179,7 +179,8 @@
     "}
 
     " plugins {
-        vnoremap <silent> <Enter> :EasyAlign<Enter>
+        vnoremap <leader>d :call PhpDocRange()<CR>
+        vnoremap <leader>a :EasyAlign<Enter>
         nmap <c-f> :CtrlPMRU<CR>
 
         " marks
