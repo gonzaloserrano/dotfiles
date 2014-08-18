@@ -1,7 +1,7 @@
+Bundle "terryma/vim-expand-region"
 Bundle 'joonty/vdebug.git'
 Bundle "a_pair"
 Bundle "othree/javascript-libraries-syntax.vim"
-Bundle "zweifisch/pipe2eval"
 
 " move function arguments left-right
 Bundle "AndrewRadev/sideways.vim"

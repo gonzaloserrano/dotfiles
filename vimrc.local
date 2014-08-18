@@ -1,6 +1,4 @@
 " general options {
-    "colorscheme gonzalo
-    "set background=light
     set gdefault " don't need to add /g in search/replace
     set nofoldenable " disable code folding
     set nospell " disable spell check
@@ -11,6 +9,7 @@
     set wrap " don't cut lines
     set nocursorline
     set tabpagemax=25
+    set viewoptions=folds,cursor,unix,slash
 
     set t_ts=]2;
     set t_fs=
@@ -63,7 +62,7 @@
         let g:tagbar_compact = 1
         let g:tagbar_width = 30
         let g:tagbar_type_php  = { 'ctagstype' : 'php', 'kinds' : [ 'i:interfaces', 'c:classes', 'd:constant definitions', 'f:functions', 'j:javascript functions:1' ] }
-        map <C-l> :TagbarToggle<CR>
+        map <c-l> :TagbarToggle<CR>
     "}
 
     " mark {
@@ -148,12 +147,6 @@
         nnoremap <Leader><Leader>l /\<<CR>yiw?\<<CR>viwp/\<<CR>viwp:noh<CR>
         nnoremap <Leader><Leader>h ?\w\><CR>yiw/\<<CR>viwp?\w\><CR>viwp:noh<CR>a
 
-        " match indent of next line to beginning of current word
-        nnoremap <Leader><Tab> yiwy0o""pVr J
-
-        " clear normal/visual mode highlighting
-        noremap <Space> :<c-u>noh<CR>:echo<CR>
-
         " copy current line sans leading/trailing whitespace
         nnoremap gy m`^yg_``"
 
@@ -179,14 +172,13 @@
     "}
 
     " plugins {
-        vnoremap <leader>d :call PhpDocRange()<CR>
-        vnoremap <leader>a :EasyAlign<Enter>
+        vnoremap <c-d> :call PhpDocRange()<CR>
+        vnoremap <c-a> :EasyAlign<Enter>
         nmap <c-f> :CtrlPMRU<CR>
 
         " marks
-        nmap <unique> <silent> <Leader>, <Plug>MarkSet </Plug></Leader></silent></unique>
-        vmap <unique> <silent> <Leader>, <Plug>MarkSet </Plug></Leader></silent></unique>
-        nmap <unique> <silent> <leader>x <Plug>MarkClear </Plug></leader></silent></unique>
+        nmap <c-m> <Plug>MarkSet
+        nmap <c-x> <Plug>MarkClear </Plug></leader></silent></unique>
     "}
 "}
 
