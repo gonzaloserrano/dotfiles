@@ -78,3 +78,8 @@ export PATH="/Users/gonzalo/bin:$PATH"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+bindkey '\eOA' history-beginning-search-backward
+bindkey '\e[A' history-beginning-search-backward
+bindkey '\eOB' history-beginning-search-forward
+bindkey '\e[B' history-beginning-search-forward
