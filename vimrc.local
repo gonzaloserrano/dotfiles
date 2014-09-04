@@ -2,14 +2,17 @@
     set gdefault " don't need to add /g in search/replace
     set nofoldenable " disable code folding
     set nospell " disable spell check
-    set timeoutlen=250 " lower leader key timeout
-    set ttyfast
     set undodir=~/.vim/undo
     set virtualedit=block "free block select
     set wrap " don't cut lines
     set nocursorline
     set tabpagemax=25
     set viewoptions=folds,cursor,unix,slash
+
+    set timeoutlen=250 " lower leader key timeout
+    set ttyfast
+    set synmaxcol=320
+    set lazyredraw " to avoid scrolling problems
 
     set t_ts=]2;
     set t_fs=
@@ -35,6 +38,8 @@
     " Vundle {
         UnBundle 'gorodinskiy/vim-coloresque'
         UnBundle 'spf13/PIV'
+        " use my fork
+        UnBundle 'tpope/vim-markdown'
     "}
 
     " Syntastic {
@@ -175,10 +180,18 @@
         vnoremap <c-d> :call PhpDocRange()<CR>
         vnoremap <c-a> :EasyAlign<Enter>
         nmap <c-f> :CtrlPMRU<CR>
+        nmap <c-b> :CtrlPBuffer<CR>
 
         " marks
         nmap <c-m> <Plug>MarkSet
         nmap <c-x> <Plug>MarkClear </Plug></leader></silent></unique>
+
+        " expand region
+        vmap v <Plug>(expand_region_expand)
+        vmap <C-v> <Plug>(expand_region_shrink)
+
+        " git heatmap
+        let g:smeargle_colouring_scheme = ''
     "}
 "}
 
