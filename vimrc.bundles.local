@@ -1,8 +1,14 @@
-Bundle "terryma/vim-expand-region"
-Bundle 'joonty/vdebug.git'
-Bundle "a_pair"
-Bundle "othree/javascript-libraries-syntax.vim"
+" testing  {
+    Bundle 'joonty/vdebug.git'
+" }
 
+Bundle "terryma/vim-expand-region"
+" angularJS stuff
+Bundle "othree/javascript-libraries-syntax.vim"
+" markdown + todo list integration
+Bundle "gonzaloserrano/vim-markdown-todo"
+" git history heatmap
+Bundle "FriedSock/smeargle"
 " move function arguments left-right
 Bundle "AndrewRadev/sideways.vim"
 " for the lulz
