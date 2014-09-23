@@ -1,4 +1,5 @@
 " general options {
+    set foldmethod=syntax
     set gdefault " don't need to add /g in search/replace
     set nofoldenable " disable code folding
     set nospell " disable spell check
@@ -9,6 +10,7 @@
     set tabpagemax=25
     set viewoptions=folds,cursor,unix,slash
 
+    let loaded_matchparen=1 " this makes vim epic fast with long lines
     set timeoutlen=250 " lower leader key timeout
     set ttyfast
     set synmaxcol=320
@@ -78,6 +80,16 @@
         hi MarkWord5  ctermbg=Cyan     ctermfg=Black  guibg=#8CCBEA    guifg=Black
         hi MarkWord6  ctermbg=Yellow   ctermfg=Black  guibg=#FFDB72    guifg=Black
     " }
+    " PHP folder {
+        let b:phpfold_use = 1 " Fold groups of use statements in the global scope.
+        let b:phpfold_group_iftry = 0 " Fold if/elseif/else and try/catch/finally blocks as a group, rather than each part separate.
+        let b:phpfold_group_args = 1 " Group function arguments split across multiple lines into their own fold.
+        let b:phpfold_group_case = 1 " Fold case and default blocks inside switches.
+        let b:phpfold_heredocs = 1 " Fold HEREDOCs and NOWDOCs.
+        let b:phpfold_docblocks = 1 " Fold DocBlocks.
+        let b:phpfold_doc_with_funcs = 1 " Fold DocBlocks. Overrides b:phpfold_docblocks.
+        let b:phpfold_text = 1 " Enable the custom foldtext option.
+    "}
 
     "others {
         let g:DisableAutoPHPFolding=1 " disable PIV's folding
@@ -179,8 +191,11 @@
     " plugins {
         vnoremap <c-d> :call PhpDocRange()<CR>
         vnoremap <c-a> :EasyAlign<Enter>
+
+        " ctrlp
         nmap <c-f> :CtrlPMRU<CR>
         nmap <c-b> :CtrlPBuffer<CR>
+        "let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
         " marks
         nmap <c-m> <Plug>MarkSet
@@ -189,6 +204,16 @@
         " expand region
         vmap v <Plug>(expand_region_expand)
         vmap <C-v> <Plug>(expand_region_shrink)
+
+        " php cs fixer"
+        let g:php_cs_fixer_path = "~/bin/php-cs-fixer.phar" " define the path to the php-cs-fixer.phar
+        let g:php_cs_fixer_level = "psr0"                   " which level ?
+        let g:php_cs_fixer_config = "sf23"                  " configuration
+        " If you want to define specific fixers:
+        let g:php_cs_fixer_fixers_list = "phpdoc_params"
+        let g:php_cs_fixer_enable_default_mapping = 1     " Enable the mapping by default (<leader>pcd)
+        let g:php_cs_fixer_dry_run = 1                    " Call command with dry-run option
+        let g:php_cs_fixer_verbose = 1                    " Return the output of command if 1, else an inline information.
 
         " git heatmap
         let g:smeargle_colouring_scheme = ''
@@ -244,3 +269,10 @@
         endfunction
         map <leader>u :call HandleURI()<CR>
 " }
+
+"function FoldArgumentsOntoMultipleLines()
+    "substitute@,\s*@,\r@ge
+    "normal v``="
+"endfunction
+
+"map <c-q> :call FoldArgumentsOntoMultipleLines()<CR>

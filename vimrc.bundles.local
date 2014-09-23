@@ -1,7 +1,13 @@
 " testing  {
     Bundle 'joonty/vdebug.git'
+    Bundle 'vasconcelloslf/vim-interestingwords'
+    Bundle 'swekaj/php-foldexpr.vim'
 " }
 
+" for phpspec to write while you edit
+Bundle 'djoshea/vim-autoread'
+" with this you don't need to :set paste
+Bundle 'ConradIrwin/vim-bracketed-paste'
 Bundle "terryma/vim-expand-region"
 " angularJS stuff
 Bundle "othree/javascript-libraries-syntax.vim"
