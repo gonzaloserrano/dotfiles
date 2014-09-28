@@ -66,18 +66,11 @@ alias svnc='svn commit'
 alias svnr='svn revert'
 alias lsd='ls -ltr'
 alias diff='colordiff'
-
 alias gdiff='GIT_PAGER='' git diff --no-ext-diff'
 alias gdiffa='GIT_PAGER='' git diff --no-ext-diff | grep -E "^\+.*"'
-
-#export PATH="/usr/local/opt/php55/bin:/Users/gonzalo/bin:$PATH:/Users/gonzalo/erlang/bin"
-#export PATH="/usr/local/opt/php55/bin:/Users/gonzalo/bin:$PATH"
-alias phpu='mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2 > /dev/null 2>&1; ./phpunit -c app --stop-on-failure --stop-on-error; mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini > /dev/null 2>&1'
-alias phpuu='mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2 > /dev/null 2>&1; phpunit -c app --stop-on-failure --stop-on-error; mv /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini.2 /usr/local/etc/php/5.5/conf.d/ext-xdebug.ini > /dev/null 2>&1'
 
 export SVN_EDITOR="vim --noplugin"
 export HOMEBREW_GITHUB_API_TOKEN=1778cd697fd9ec80ff0ac7e4b02cdfefd77a3e84
 export GOPATH="/usr/local/go"
 
-source /Users/gonzalo/dev/erlang/releases/r16b03/activate
 alias obs='erl -sname observer -run observer -detached'
