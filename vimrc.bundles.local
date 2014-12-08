@@ -1,9 +1,18 @@
 " testing  {
     Bundle 'joonty/vdebug.git'
     Bundle 'vasconcelloslf/vim-interestingwords'
-    Bundle 'swekaj/php-foldexpr.vim'
+    Bundle 'Konfekt/FastFold'
+    Bundle 'cohama/lexima.vim'
+    Bundle "docunext/closetag.vim"
+    Bundle 'xolox/vim-misc'
+    Bundle 'xolox/vim-easytags'
+    Bundle 'derekwyatt/vim-scala'
 " }
 
+" use pman to find manual page for php func
+Bundle 'powerman/vim-plugin-viewdoc'
+" highlight multiple search matches
+Bundle 'haya14busa/incsearch.vim'
 " for phpspec to write while you edit
 Bundle 'djoshea/vim-autoread'
 " with this you don't need to :set paste
@@ -13,8 +22,6 @@ Bundle "terryma/vim-expand-region"
 Bundle "othree/javascript-libraries-syntax.vim"
 " markdown + todo list integration
 Bundle "gonzaloserrano/vim-markdown-todo"
-" git history heatmap
-Bundle "FriedSock/smeargle"
 " move function arguments left-right
 Bundle "AndrewRadev/sideways.vim"
 " for the lulz
@@ -33,9 +40,12 @@ Bundle 'AndrewRadev/gapply.vim'
 Bundle 'FelikZ/ctrlp-py-matcher'
 
 " PHP {
+    Bundle 'shawncplus/phpcomplete.vim'
+    "Bundle 'swekaj/php-foldexpr.vim'
     Bundle "StanAngeloff/php.vim"
     Bundle "stephpy/vim-php-cs-fixer"
-    Bundle 'vim-php/vim-php-refactoring'
+    "Bundle 'vim-php/vim-php-refactoring'
+    Bundle 'adoy/vim-php-refactoring-toolbox'
     Bundle 'tomphp/vim-phpdoc'
     " need to try
     " also check out https://github.com/vim-php
@@ -71,7 +81,6 @@ Bundle 'FelikZ/ctrlp-py-matcher'
 "Bundle "adinapoli/vim-markmultiple"
 "Bundle "othree/html5-syntax.vim"
 "Bundle "gregsexton/MatchTag"
-"Bundle "docunext/closetag.vim"
 "Bundle "SuperTab"
 "Bundle "goldfeld/vim-seek"
 "Bundle "vim-scripts/Align"
