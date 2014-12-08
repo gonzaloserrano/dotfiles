@@ -13,6 +13,7 @@
     dff = diff --no-ext-diff --word-diff --color-words
     dffs = diff --no-ext-diff --word-diff --color-words --staged
     lp = log -p --no-prefix
+    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     lgg = log --graph --all --decorate --oneline
     lggg2 = log --pretty=format:"%ad%x09%h%x09%an%x09%x09%s" --date=short
     lgs = log -git whatchanged -n 1 --no-prefix
@@ -38,7 +39,10 @@
     loc = log --pretty=format:"-\\ (%h)\\ %s"
     lt = describe --tags --abbrev=0
     td  = "!f() { git loc $1.."`git lt`" --no-merges; }; f"
+    release = "!f() { git log $1...$2 --pretty=format:\"(%h) %s\" --reverse --no-merges; }; f"
     tagg = tag --sort="version:refname"
+    brr = for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads
+    ca = commit --amend
 [diff]
     algorithm = patience
     external = opendiff-git
