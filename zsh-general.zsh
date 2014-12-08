@@ -74,3 +74,4 @@ export HOMEBREW_GITHUB_API_TOKEN=1778cd697fd9ec80ff0ac7e4b02cdfefd77a3e84
 export GOPATH="/usr/local/go"
 
 alias obs='erl -sname observer -run observer -detached'
+alias pom='thyme'
