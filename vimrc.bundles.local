@@ -1,11 +1,7 @@
 " testing  {
     Bundle 'joonty/vdebug.git'
     Bundle 'vasconcelloslf/vim-interestingwords'
-    Bundle 'Konfekt/FastFold'
-    Bundle 'cohama/lexima.vim'
     Bundle "docunext/closetag.vim"
-    Bundle 'xolox/vim-misc'
-    Bundle 'xolox/vim-easytags'
     Bundle 'derekwyatt/vim-scala'
 " }
 
@@ -26,8 +22,6 @@ Bundle "gonzaloserrano/vim-markdown-todo"
 Bundle "AndrewRadev/sideways.vim"
 " for the lulz
 Bundle "uguu-org/vim-matrix-screensaver"
-" multiple higlight
-Bundle "Mark"
 " align lines by character
 Bundle "junegunn/vim-easy-align"
 " erlang goodness
@@ -62,6 +56,11 @@ Bundle 'FelikZ/ctrlp-py-matcher'
 "}
 
 " not needed / don't like
+"Bundle "Mark"
+"Bundle 'cohama/lexima.vim'
+"Bundle 'Konfekt/FastFold'
+"Bundle 'xolox/vim-easytags'
+"Bundle 'xolox/vim-misc'
 "Bundle 'kien/rainbow_parentheses.vim'
 "Bundle 'wellle/targets.vim'
 "Bundle "coderifous/textobj-word-column.vim"
