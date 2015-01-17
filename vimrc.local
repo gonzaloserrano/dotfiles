@@ -1,4 +1,5 @@
 " general options {
+    let g:brightest#highlight = {"group": "BrightestUnderline"}
     imap <ESC>oA <ESC>ki
     set foldmethod=syntax
     set gdefault " don't need to add /g in search/replace
@@ -48,9 +49,9 @@
     " }
 
     " interestingwords {
-        nnoremap <silent> <leader>, :call InterestingWords()<cr>
+        nnoremap <silent> <leader>, :call InterestingWords('n')<cr>
         nnoremap <silent> <leader>. :call UncolorAllWords()<cr>
-        let g:interestingWordsTermColors = ['211', '137', '154', '121', '215', '222', '159', '126']
+        let g:interestingWordsTermColors = ['137', '211', '154', '121', '215', '159', '222', '126']
     " }
 
     " youcompleteme + ultisnips {
@@ -196,15 +197,19 @@
         " ctrlp
         nmap <c-f> :CtrlPMRU<CR>
         nmap <c-b> :CtrlPBuffer<CR>
-
-        unlet g:ctrlp_custom_ignore
-        let g:ctrlp_custom_ignore = {
-            \ 'dir':  '\.git$\|\.hg$\|\.svn$',
-            \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc\|\.json$' }
-
         map <c-g> :CtrlPFunky<CR>
         let g:ctrlp_funky_matchtype = 'path'
         let g:ctrlp_funky_syntax_highlight = 1
+        let g:ctrlp_custom_ignore = {
+            \ 'dir':  '\.git$\|\.hg$\|\.svn$',
+            \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc\|\.json$' }
+        let g:ctrlp_root_markers = ['.ctrlp_sp']
+        let g:ctrlp_user_command = {
+          \ 'types': {
+            \ 0: ['.ctrlp_sp', 'cd %s && find . -type f \( -path ./app/config/\* -o -path ./src/\* -o -path ./vendor/socialpoint/\* -o -path ./vendor/symfony/\* -o -path ./web/\* \) -not -path "*/.git/*" -not -path "*/vendor/*/vendor/*" -not -path "*/Resources/public/*"'],
+            \ 1: ['.git/', 'cd %s && git ls-files . -co --exclude-standard'],
+          \ }
+        \ }
 
         " marks
         nmap <c-m> <Plug>MarkSet
