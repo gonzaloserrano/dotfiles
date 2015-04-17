@@ -1,7 +1,8 @@
 " general options {
+    "autocmd  FileType  php setlocal omnifunc=phpcomplete_extended#CompletePHP
+    let g:rainbow_active = 1 
     let g:brightest#highlight = {"group": "BrightestUnderline"}
     imap <ESC>oA <ESC>ki
-    set foldmethod=syntax
     set gdefault " don't need to add /g in search/replace
     set nofoldenable " disable code folding
     set nospell " disable spell check
@@ -56,6 +57,8 @@
 
     " youcompleteme + ultisnips {
         let g:ycm_min_num_of_chars_for_completion = 3
+        autocmd FileType html let g:ycm_min_num_of_chars_for_completion = 1
+        "let g:ycm_auto_trigger = 0
         let g:UltiSnipsExpandTrigger = "<C-k>"
         let g:UltiSnipsJumpForwardTrigger = "<C-k>"
         let g:UltiSnipsJumpBackwardTrigger = "<C-j>"
@@ -75,6 +78,7 @@
     " }
 
     " tagbar {
+        let g:tagbar_autofocus = 1
         let g:tagbar_compact = 1
         let g:tagbar_width = 30
         let g:tagbar_type_php  = { 'ctagstype' : 'php', 'kinds' : [ 'i:interfaces', 'c:classes', 'd:constant definitions', 'f:functions', 'j:javascript functions:1' ] }
@@ -105,6 +109,22 @@
         let g:DisableAutoPHPFolding=1 " disable PIV's folding
         let g:indent_guides_enable_on_vim_startup = 0
     "}
+
+    " golang {
+        " vim-go
+        let g:go_fmt_fail_silently = 1
+        let g:go_highlight_functions = 1
+        let g:go_highlight_methods = 1
+        let g:go_highlight_structs = 1
+        let g:go_highlight_operators = 1
+        let g:go_highlight_build_constraints = 1
+        " autoimport ftw
+        "let g:go_fmt_command = "goimports"
+
+        " go-def
+        let g:godef_split=2 " open in new tab
+        let g:godef_same_file_in_same_window=1
+    " }
 "}
 
 " abbreviations {
@@ -198,6 +218,7 @@
         nmap <c-f> :CtrlPMRU<CR>
         nmap <c-b> :CtrlPBuffer<CR>
         map <c-g> :CtrlPFunky<CR>
+        "let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
         let g:ctrlp_funky_matchtype = 'path'
         let g:ctrlp_funky_syntax_highlight = 1
         let g:ctrlp_custom_ignore = {
@@ -206,7 +227,7 @@
         let g:ctrlp_root_markers = ['.ctrlp_sp']
         let g:ctrlp_user_command = {
           \ 'types': {
-            \ 0: ['.ctrlp_sp', 'cd %s && find . -type f \( -path ./app/config/\* -o -path ./src/\* -o -path ./vendor/socialpoint/\* -o -path ./vendor/symfony/\* -o -path ./web/\* \) -not -path "*/.git/*" -not -path "*/vendor/*/vendor/*" -not -path "*/Resources/public/*"'],
+            \ 0: ['.ctrlp_sp', 'cd %s && find . -type f \( -path ./app/config/\* -o -path ./src/\* -o -path ./vendor/socialpoint/\* -o -path ./vendor/symfony/\* -o -path ./web/\* -o -path ./tests/\* -o -path ./spec/\* \) -not -path "*/.git/*" -not -path "*/vendor/*/vendor/*" -not -path "*/Resources/public/*"'],
             \ 1: ['.git/', 'cd %s && git ls-files . -co --exclude-standard'],
           \ }
         \ }
@@ -231,6 +252,24 @@
 
         " git heatmap
         let g:smeargle_colouring_scheme = ''
+
+
+        "\   'ctermfgs': [160, 124, 88, 52],
+        "\   'ctermfgs': [124, 125, 126, 127],
+        "\   'ctermfgs': [124, 130, 136, 142],
+        let g:rainbow_conf = {
+        \   'ctermfgs': [160, 162, 160, 162],
+        \   'php': {
+        \       'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody'],
+        \   },
+        \}
+    "}
+    " netdtree {
+        " open if no files specified
+        autocmd StdinReadPre * let s:std_in=1
+        autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+        " dont quit when opening file
+        let NERDTreeQuitOnOpen=0
     "}
 "}
 
@@ -283,3 +322,18 @@
         endfunction
         map <leader>u :call HandleURI()<CR>
 " }
+
+" Put at the very end of your .vimrc file.
+let php_var_selector_is_identifier = 0
+function! PhpSyntaxOverride()
+  hi! def link phpDocTags  phpDefine
+  hi! def link phpDocParam phpType
+  hi! phpFunctions ctermfg=172 ctermbg=NONE cterm=NONE
+  hi! phpVarSelector ctermfg=69 ctermbg=NONE cterm=NONE
+  hi! phpMemberSelector ctermfg=136 ctermbg=NONE cterm=NONE
+endfunction
+
+augroup phpSyntaxOverride
+  autocmd!
+  autocmd FileType php call PhpSyntaxOverride()
+augroup END

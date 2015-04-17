@@ -3,8 +3,15 @@
     Bundle 'vasconcelloslf/vim-interestingwords'
     Bundle "docunext/closetag.vim"
     Bundle 'derekwyatt/vim-scala'
+    Bundle 'AndrewRadev/splitjoin.vim'
+    Bundle 'chrisbra/Recover.vim'
+    Bundle 'gabesoft/vim-ags'
+    Bundle 'fatih/vim-go'
+    Bundle 'dgryski/vim-godef'
 " }
 
+" alternate colors for parethesis, claudators etc
+Bundle 'luochen1990/rainbow'
 " use pman to find manual page for php func
 Bundle 'powerman/vim-plugin-viewdoc'
 " highlight multiple search matches
@@ -30,11 +37,9 @@ Bundle 'jimenezrick/vimerl'
 Bundle 'tommcdo/vim-exchange'
 " vim +Gapply to apply git changes to the index
 Bundle 'AndrewRadev/gapply.vim'
-" increase ctrlp speed with python
-Bundle 'FelikZ/ctrlp-py-matcher'
+Bundle 'bronson/vim-visual-star-search'
 
 " PHP {
-    Bundle 'shawncplus/phpcomplete.vim'
     "Bundle 'swekaj/php-foldexpr.vim'
     Bundle "StanAngeloff/php.vim"
     Bundle "stephpy/vim-php-cs-fixer"
@@ -43,9 +48,7 @@ Bundle 'FelikZ/ctrlp-py-matcher'
     Bundle 'tomphp/vim-phpdoc'
     " need to try
     " also check out https://github.com/vim-php
-    "Bundle 'Shougo/vimproc'
     "Bundle 'Shougo/unite.vim'
-    "Bundle "m2mdas/phpcomplete-extended"
     "Bundle "joonty/vdebug"
     "Bundle "docteurklein/vim-phpunit"
     "Bundle "tagbar-phpctags"
@@ -88,3 +91,11 @@ Bundle 'FelikZ/ctrlp-py-matcher'
 "Bundle "dhruvasagar/vim-table-mode"
 "Bundle "mivok/vimtodo"
 "Bundle "austintaylor/vim-commaobject"
+"Bundle 'violetyk/neocomplete-php.vim'
+"Bundle 'shawncplus/phpcomplete.vim'
+"Bundle 'FelikZ/ctrlp-py-matcher'
+"Bundle 'pelodelfuego/vim-swoop'
+"Bundle 'Shougo/vimproc'
+"Bundle "m2mdas/phpcomplete-extended"
+"Bundle 'jceb/vim-orgmode'
+"Bundle 'tpope/vim-speeddating'
