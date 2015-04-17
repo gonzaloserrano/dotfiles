@@ -16,6 +16,7 @@ alias ackj="ack -i --js"
 alias ackp="ack -i --php"
 alias ag="ag -S -p ~/.agignore --pager less -f"
 alias agj="ag -S -p ~/.agignore --pager less -f -G '\.js'"
+alias ago="ag -S -p ~/.agignore --pager less -f -G '\.go'"
 alias agp="ag -S -p ~/.agignore --pager less -f -G '\.php'"
 alias age="ag -S -p ~/.agignore --pager less -f -G '\.erl'"
 alias agc="ag -S -p ~/.agignore --pager less -f -G '\.yml' -G '\.xml'"
@@ -75,3 +76,8 @@ export GOPATH="/usr/local/go"
 
 alias obs='erl -sname observer -run observer -detached'
 alias pom='thyme'
+alias b2d='$(boot2docker shellinit)'
+alias vend='$(source ~/bin/git-vendor)'
+export GOPATH="/Users/gonzalo/dev/sp/go"
+export PATH=$PATH:$GOPATH/bin
+export GOROOT=`go env GOROOT`
