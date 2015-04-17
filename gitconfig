@@ -57,3 +57,7 @@
     default = simple
 [branch]
     autosetuprebase = always
+[url "git@github.com:socialpoint"]
+    insteadOf = https://github.com/socialpoint
+[credential]
+	helper = osxkeychain
