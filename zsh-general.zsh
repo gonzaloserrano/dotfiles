@@ -33,8 +33,8 @@ alias services="php app/console container:debug"
 
 alias bi='vi'
 alias ci='vi'
-# alias vi='nvim -p'
-alias vi='vim -p'
+alias vi='nvim -p'
+#alias vi='vim -p'
 alias vin='vim -u NONE -N'
 
 export MYSQL_PS1="local/\d > "
