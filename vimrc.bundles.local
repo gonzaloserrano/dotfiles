@@ -1,5 +1,6 @@
 " testing  {
-    Bundle 'joonty/vdebug.git'
+    Bundle 'junegunn/rainbow_parentheses.vim'
+    "Bundle 'joonty/vdebug.git'
     Bundle 'vasconcelloslf/vim-interestingwords'
     Bundle "docunext/closetag.vim"
     Bundle 'derekwyatt/vim-scala'
@@ -7,9 +8,14 @@
     Bundle 'chrisbra/Recover.vim'
     Bundle 'gabesoft/vim-ags'
     Bundle 'fatih/vim-go'
-    Bundle 'dgryski/vim-godef'
+    "Bundle 'dgryski/vim-godef'
+    Bundle "mhinz/vim-startify"
+    "Bundle 'nixprime/cpsm'
+    Bundle 'mxw/vim-jsx'
+    Bundle 'kristijanhusak/vim-hybrid-material'
 " }
 
+Bundle "jdkanani/vim-material-theme"
 " alternate colors for parethesis, claudators etc
 Bundle 'luochen1990/rainbow'
 " use pman to find manual page for php func
@@ -87,7 +93,6 @@ Bundle 'bronson/vim-visual-star-search'
 "Bundle "goldfeld/vim-seek"
 "Bundle "vim-scripts/Align"
 "Bundle "terryma/vim-multiple-cursors"
-"Bundle "mhinz/vim-startify"
 "Bundle "dhruvasagar/vim-table-mode"
 "Bundle "mivok/vimtodo"
 "Bundle "austintaylor/vim-commaobject"

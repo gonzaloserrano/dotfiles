@@ -1,7 +1,9 @@
 " general options {
+    if has('nvim')
+        colorscheme hybrid_material
+    endif
+    let g:jsx_ext_required = 0
     "autocmd  FileType  php setlocal omnifunc=phpcomplete_extended#CompletePHP
-    let g:rainbow_active = 1 
-    let g:brightest#highlight = {"group": "BrightestUnderline"}
     imap <ESC>oA <ESC>ki
     set gdefault " don't need to add /g in search/replace
     set nofoldenable " disable code folding
@@ -29,7 +31,8 @@
 
     " use ag over grep
     if executable('ag')
-      set grepprg=ag\ --nogroup\ --nocolor
+      set grepprg=ag\ --vimgrep\ $*
+      set grepformat=%f:%l:%c:%m
     endif
 
     " from https://bitbucket.org/sjl/dotfiles/src/1b6ffba66e9f/vim/.vimrc {
@@ -67,9 +70,9 @@
     let g:php_cs_fixer_path = get(g:, 'php_cs_fixer_path', '~/bin/php-cs-fixer.phar')
 
     " incsearch {
-        map /  <Plug>(incsearch-forward)
-        map ?  <Plug>(incsearch-backward)
-        map g/ <Plug>(incsearch-stay)
+        " map /  <Plug>(incsearch-forward)
+        " map ?  <Plug>(incsearch-backward)
+        " map g/ <Plug>(incsearch-stay)
     "}
 
     " Syntastic {
@@ -119,11 +122,18 @@
         let g:go_highlight_operators = 1
         let g:go_highlight_build_constraints = 1
         " autoimport ftw
-        "let g:go_fmt_command = "goimports"
-
+        let g:go_fmt_command = "goimports"
         " go-def
-        let g:godef_split=2 " open in new tab
-        let g:godef_same_file_in_same_window=1
+
+        au FileType go nmap <c-a> <Plug>(go-def-tab)
+        "au FileType go nmap <c-s> <Plug>(go-def-vertical)
+        "let g:godef_split=2 " open in new tab
+        "let g:godef_same_file_in_same_window=1
+        " go-code (autocomplete) needs built pkgs so for projects with
+        " multiple deps is better to do $ gocode set autobuild true
+        augroup golang
+            autocmd BufRead *.go set nolist
+        augroup END
     " }
 "}
 
@@ -154,7 +164,7 @@
 
         " git diff {
             map <c-d> :!diffwrapper %:p<cr>
-            map <c-y> :!GIT_PAGER='' git diff %<cr>
+            map <c-y> :!GIT_PAGER='opendiff' git diff %<cr>
             map <c-h> :!git lp %<cr>
         "}
 
@@ -219,16 +229,18 @@
         nmap <c-b> :CtrlPBuffer<CR>
         map <c-g> :CtrlPFunky<CR>
         "let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+        "let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
         let g:ctrlp_funky_matchtype = 'path'
         let g:ctrlp_funky_syntax_highlight = 1
         let g:ctrlp_custom_ignore = {
             \ 'dir':  '\.git$\|\.hg$\|\.svn$',
             \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc\|\.json$' }
-        let g:ctrlp_root_markers = ['.ctrlp_sp']
+        let g:ctrlp_root_markers = ['.ctrlp_sp', '.ctrlp_sp_go']
         let g:ctrlp_user_command = {
           \ 'types': {
             \ 0: ['.ctrlp_sp', 'cd %s && find . -type f \( -path ./app/config/\* -o -path ./src/\* -o -path ./vendor/socialpoint/\* -o -path ./vendor/symfony/\* -o -path ./web/\* -o -path ./tests/\* -o -path ./spec/\* \) -not -path "*/.git/*" -not -path "*/vendor/*/vendor/*" -not -path "*/Resources/public/*"'],
-            \ 1: ['.git/', 'cd %s && git ls-files . -co --exclude-standard'],
+            \ 1: ['.ctrlp_sp_go', 'cd %s && find ../ -type f -not -path "*/.git/*" -not -path "*/Godeps/*" -not -path "*/misc/package/dist_package/*"'],
+            \ 2: ['.git/', 'cd %s && git ls-files . -co --exclude-standard'],
           \ }
         \ }
 
@@ -252,24 +264,28 @@
 
         " git heatmap
         let g:smeargle_colouring_scheme = ''
-
-
-        "\   'ctermfgs': [160, 124, 88, 52],
-        "\   'ctermfgs': [124, 125, 126, 127],
-        "\   'ctermfgs': [124, 130, 136, 142],
-        let g:rainbow_conf = {
-        \   'ctermfgs': [160, 162, 160, 162],
-        \   'php': {
-        \       'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody'],
-        \   },
-        \}
     "}
     " netdtree {
         " open if no files specified
-        autocmd StdinReadPre * let s:std_in=1
-        autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+        "autocmd StdinReadPre * let s:std_in=1
+        "autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
         " dont quit when opening file
         let NERDTreeQuitOnOpen=0
+    "}
+    " rainbow {
+        autocmd VimEnter * RainbowParentheses
+        let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
+        "\   'ctermfgs': [160, 124, 88, 52],
+        "\   'ctermfgs': [124, 125, 126, 127],
+        "\   'ctermfgs': [124, 130, 136, 142],
+        "let g:rainbow_active = 1 
+        "let g:brightest#highlight = {"group": "BrightestUnderline"}
+        "let g:rainbow_conf = {
+        "\   'ctermfgs': [162, 162],
+        "\   'php': {
+        "\       'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody'],
+        "\   },
+        "\}
     "}
 "}
 
