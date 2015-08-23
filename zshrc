@@ -91,3 +91,6 @@ export GEM_HOME="$(brew --prefix)/opt/gems"
 export GEM_PATH="$(brew --prefix)/opt/gems"
 
 eval $( gdircolors -b ~/configs/LS_COLORS )
+export USERID=$(id -u)
+
+source /Users/gonzalo/.iterm2_shell_integration.zsh

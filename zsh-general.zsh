@@ -1,5 +1,5 @@
 alias v="vagrant"
-alias h="history"
+alias hi="history"
 alias c="pbcopy"
 alias g="grep"
 alias gi="grep -i"
@@ -17,6 +17,7 @@ alias ackp="ack -i --php"
 alias ag="ag -S -p ~/.agignore --pager less -f"
 alias agj="ag -S -p ~/.agignore --pager less -f -G '\.js'"
 alias ago="ag -S -p ~/.agignore --pager less -f -G '\.go'"
+alias agoo="ag -S -p ~/.agignore --ignore-dir Godeps --pager less -f -G '\.go'"
 alias agp="ag -S -p ~/.agignore --pager less -f -G '\.php'"
 alias age="ag -S -p ~/.agignore --pager less -f -G '\.erl'"
 alias agc="ag -S -p ~/.agignore --pager less -f -G '\.yml' -G '\.xml'"
@@ -32,6 +33,7 @@ alias services="php app/console container:debug"
 
 alias bi='vi'
 alias ci='vi'
+# alias vi='nvim -p'
 alias vi='vim -p'
 alias vin='vim -u NONE -N'
 
@@ -69,15 +71,33 @@ alias lsd='ls -ltr'
 alias diff='colordiff'
 alias gdiff='GIT_PAGER='' git diff --no-ext-diff'
 alias gdiffa='GIT_PAGER='' git diff --no-ext-diff | grep -E "^\+.*"'
+alias dev='git checkout develop'
+alias mas='git checkout master'
 
 export SVN_EDITOR="vim --noplugin"
 export HOMEBREW_GITHUB_API_TOKEN=1778cd697fd9ec80ff0ac7e4b02cdfefd77a3e84
-export GOPATH="/usr/local/go"
 
 alias obs='erl -sname observer -run observer -detached'
 alias pom='thyme'
 alias b2d='$(boot2docker shellinit)'
+alias awss='$(source ~/.aws/source-socialpoint)'
+alias awssd='$(source ~/.aws/source-socialpoint-dev)'
+
 alias vend='$(source ~/bin/git-vendor)'
+
 export GOPATH="/Users/gonzalo/dev/sp/go"
-export PATH=$PATH:$GOPATH/bin
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:$GOBIN
 export GOROOT=`go env GOROOT`
+export GOMAXPROCS=2
+
+export COLORTERM=xterm-256color
+export NVIM_TUI_ENABLE_TRUE_COLOR=1
+
+alias docker-app-bash='docker exec -ti `docker-compose ps -q app | head -n1` bash'
+alias docker-app-apache-log='docker exec -ti `docker-compose ps -q app` sh -c "tail -f /var/log/apache2/localhost/error.log"'
+alias docker-app-mysql-bash='docker exec -ti `docker-compose ps -q mysql | head -n1` bash'
+alias docker-app-redis-cli='docker exec -ti `docker-compose ps -q redis` sh -c "redis-cli"'
+
+. `brew --prefix`/etc/profile.d/z.sh
+. ~/.h
