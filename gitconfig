@@ -36,16 +36,13 @@
     fixup = !sh -c 'git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $@)\"' -
     squash = !sh -c 'git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $@)\"' -
     g = grep --break --heading --line-number
-    loc = log --pretty=format:"-\\ (%h)\\ %s"
     lt = describe --tags --abbrev=0
-    td  = "!f() { git loc $1.."`git lt`" --no-merges; }; f"
-    release = "!f() { git log $1...$2 --pretty=format:\"(%h) %s\" --reverse --no-merges; }; f"
     tagg = tag --sort="version:refname"
     brr = for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads
     ca = commit --amend
+    loc = log --pretty=format:"-\\ (%h)\\ %s" --no-merges
 [diff]
     algorithm = patience
-    external = opendiff-git
 	noprefix = true
 [core]
     editor = vim
@@ -54,9 +51,13 @@
     extendRegexp = true
     lineNumber = true
 [push]
-    default = simple
+    default = current
 [branch]
     autosetuprebase = always
+[filter "media"]
+	clean = git media clean %f
+	smudge = git media smudge %f
+	required = true
 [url "git@github.com:socialpoint"]
     insteadOf = https://github.com/socialpoint
 [credential]
