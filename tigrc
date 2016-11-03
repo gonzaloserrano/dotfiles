@@ -1,1 +1,4 @@
 set commit-order = topo
+set vertical-split = true
+set split-view-height = 75%
+set mouse = true
