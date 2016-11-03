@@ -1,23 +1,30 @@
 " testing  {
-    Bundle 'junegunn/rainbow_parentheses.vim'
-    "Bundle 'joonty/vdebug.git'
+    Bundle 'tpope/vim-dispatch'
+    Bundle 'OmniSharp/omnisharp-vim'
+    Bundle 'ElmCast/elm-vim'
+    Bundle 'hashivim/vim-vagrant'
+    Bundle 'mhartington/oceanic-next'
+    Bundle 'chriskempson/base16-vim'
+    Bundle 'b4b4r07/vim-hcl'
+    Bundle 'dcharbon/vim-flatbuffers'
+    Bundle 'burnettk/vim-angular'
+    Bundle 'slashmili/alchemist.vim'
+    Bundle 'elixir-lang/vim-elixir'
     Bundle 'vasconcelloslf/vim-interestingwords'
     Bundle "docunext/closetag.vim"
     Bundle 'derekwyatt/vim-scala'
     Bundle 'AndrewRadev/splitjoin.vim'
     Bundle 'chrisbra/Recover.vim'
     Bundle 'gabesoft/vim-ags'
-    Bundle 'fatih/vim-go'
-    "Bundle 'dgryski/vim-godef'
     Bundle "mhinz/vim-startify"
-    "Bundle 'nixprime/cpsm'
     Bundle 'mxw/vim-jsx'
     Bundle 'kristijanhusak/vim-hybrid-material'
+    Bundle 'jasoncodes/ctrlp-modified.vim'
+    Bundle 'hashivim/vim-terraform'
 " }
 
+" material colorscheme
 Bundle "jdkanani/vim-material-theme"
-" alternate colors for parethesis, claudators etc
-Bundle 'luochen1990/rainbow'
 " use pman to find manual page for php func
 Bundle 'powerman/vim-plugin-viewdoc'
 " highlight multiple search matches
@@ -26,7 +33,7 @@ Bundle 'haya14busa/incsearch.vim'
 Bundle 'djoshea/vim-autoread'
 " with this you don't need to :set paste
 Bundle 'ConradIrwin/vim-bracketed-paste'
-Bundle "terryma/vim-expand-region"
+"Bundle "terryma/vim-expand-region"
 " angularJS stuff
 Bundle "othree/javascript-libraries-syntax.vim"
 " markdown + todo list integration
@@ -44,24 +51,14 @@ Bundle 'tommcdo/vim-exchange'
 " vim +Gapply to apply git changes to the index
 Bundle 'AndrewRadev/gapply.vim'
 Bundle 'bronson/vim-visual-star-search'
+" replacement for airline
+Bundle 'itchyny/lightline.vim'
 
 " PHP {
-    "Bundle 'swekaj/php-foldexpr.vim'
     Bundle "StanAngeloff/php.vim"
     Bundle "stephpy/vim-php-cs-fixer"
-    "Bundle 'vim-php/vim-php-refactoring'
     Bundle 'adoy/vim-php-refactoring-toolbox'
     Bundle 'tomphp/vim-phpdoc'
-    " need to try
-    " also check out https://github.com/vim-php
-    "Bundle 'Shougo/unite.vim'
-    "Bundle "joonty/vdebug"
-    "Bundle "docteurklein/vim-phpunit"
-    "Bundle "tagbar-phpctags"
-    "Bundle "shawncplus/phpcomplete.vim"
-    "Bundle "beberlei/vim-php-refactor"
-    "Bundle "2072/PHP-Indenting-for-VIm"
-    "Bundle "docteurklein/vim-symfony"
 "}
 
 " not needed / don't like
@@ -81,7 +78,6 @@ Bundle 'bronson/vim-visual-star-search'
 "Bundle "dbakker/vim-paragraph-motion"
 "Bundle "chriskempson/base16-vim"
 "Bundle "shawncplus/skittles_berry"
-"Bundle "bling/vim-airline"
 "Bundle "wting/gitsessions.vim"
 "Bundle "Pychimp/vim-luna"
 "Bundle "jceb/vim-shootingstar"
@@ -104,3 +100,25 @@ Bundle 'bronson/vim-visual-star-search'
 "Bundle "m2mdas/phpcomplete-extended"
 "Bundle 'jceb/vim-orgmode'
 "Bundle 'tpope/vim-speeddating'
+"Bundle 'luochen1990/rainbow'
+"Bundle 'kien/rainbow_parentheses.vim'
+"Bundle 'eapache/rainbow_parentheses.vim'
+"Bundle 'nixprime/cpsm'
+"Bundle 'joonty/vdebug.git'
+"Bundle 'Shougo/unite.vim'
+"Bundle "joonty/vdebug"
+"Bundle "docteurklein/vim-phpunit"
+"Bundle "tagbar-phpctags"
+"Bundle "shawncplus/phpcomplete.vim"
+"Bundle "beberlei/vim-php-refactor"
+"Bundle "2072/PHP-Indenting-for-VIm"
+"Bundle "docteurklein/vim-symfony"
+"Bundle 'Shougo/deoplete.nvim'
+"Bundle 'zchee/deoplete-go'
+"Bundle 'Shougo/neopairs.vim'
+"Bundle 'Shougo/neosnippet.vim'
+"Bundle 'Shougo/neosnippet-snippets'
+"Bundle 'Shougo/vimproc'
+"Bundle 'vim-airline/vim-airline-themes'
+"Bundle 'swekaj/php-foldexpr.vim'
+"Bundle 'vim-php/vim-php-refactoring'
