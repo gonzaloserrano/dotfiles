@@ -5,3 +5,7 @@ tags
 globals2.json
 .ctrlp_sp
 .ctrlp_sp_go
+.ctrlp_sp_go_new
+.idea
+.vscode
+debug.text

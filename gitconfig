@@ -1,11 +1,8 @@
 [include]
     path = ~/.gitconfig.local
-
 [alias]
-    tl = log --tags --simplify-by-decoration --pretty=format:"%C(green)%h\\ %C(yellow)[%ai]\\ %C(red)%d"
     st = status
     stp = status --porcelain
-    ci = commit
     br = branch
     co = checkout
     df = diff --no-ext-diff
@@ -23,7 +20,6 @@
     stl = stash list
     pom = pull origin master
     pod = pull origin develop
-    snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
     sub = submodule update --init --recursive
     fo = fetch origin
     rc = rebase --continue
@@ -33,20 +29,21 @@
     ri4 = rebase -i head~4
     ri5 = rebase -i head~5
     ria = rebase --interactive --autosquash
-    fixup = !sh -c 'git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $@)\"' -
-    squash = !sh -c 'git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $@)\"' -
     g = grep --break --heading --line-number
     lt = describe --tags --abbrev=0
     tagg = tag --sort="version:refname"
+    tl = log --tags --simplify-by-decoration --pretty=format:"%C(green)%h\\ %C(yellow)[%ai]\\ %C(red)%d"
     brr = for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads
     ca = commit --amend
     loc = log --pretty=format:"-\\ (%h)\\ %s" --no-merges
 [diff]
     algorithm = patience
 	noprefix = true
+    compactionHeuristic = true
 [core]
     editor = vim
-    excludesfile = ~/.gitignore_global
+	excludesfile = /Users/gonzalo/.gitignore_global
+	pager = diff-highlight | diff-so-fancy | less --tabs=1,5 -R
 [grep]
     extendRegexp = true
     lineNumber = true
@@ -55,10 +52,23 @@
 [branch]
     autosetuprebase = always
 [filter "media"]
+	required = true
 	clean = git media clean %f
 	smudge = git media smudge %f
-	required = true
-[url "git@github.com:socialpoint"]
-    insteadOf = https://github.com/socialpoint
+[url "git@github-sp:socialpoint"]
+    insteadOf = "https://github.com/socialpoint"
+[url "git@github-sp:socialpoint"]
+    insteadOf = "git@github.com:socialpoint"
 [credential]
 	helper = osxkeychain
+[diff "json"]
+    textconv = python -m json.tool
+[rerere]
+	enabled = true
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[interactive]
+    diffFilter = diff-highlight
