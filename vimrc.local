@@ -126,14 +126,9 @@
     " golang {
         " vim-go
         let g:go_list_type = "quickfix"
-        "let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-        "let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
         " c-@ === c-space :-O
         au FileType go nmap <c-@> :GoCoverageToggle<CR>
-        "au FileType go nmap <c-b> :GoBuild<CR>
         autocmd FileType go nmap <c-b> :<C-u>call <SID>build_go_files()<CR>
-
-        " let g:go_metalinter_autosave = 1
         " syntastic shit on-save {}
             let g:go_fmt_command = "goimports"
             let g:go_fmt_fail_silently = 1
@@ -156,7 +151,6 @@
         " if 1, then godeps are included
         let g:go_autodetect_gopath = 1
         au FileType go nmap <c-]> <Plug>(go-def)
-        "au FileType go nmap <c-a> <Plug>(go-def-tab)
         au FileType go nmap <c-a> :GoAlternate<CR>
         autocmd FileType go set noexpandtab
         autocmd FileType go set nolist
@@ -175,6 +169,12 @@
             call go#cmd#Build(0)
           endif
         endfunction
+        " abbreviations {
+            iab ee err := 
+            iab asss assert := assert.New(t)
+            iab assse assert.NoError(err)
+            iab asssec assert.NoError(cmd.Error)
+        "}
     " }
     " youcompleteme + ultisnips {
         let g:ycm_server_python_interpreter = "/usr/bin/python"
