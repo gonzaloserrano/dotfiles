@@ -36,6 +36,7 @@
     brr = for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads
     ca = commit --amend
     loc = log --pretty=format:"-\\ (%h)\\ %s" --no-merges
+    tr = "!f() { git fetch origin && git checkout -t origin/$1; }; f"
 [diff]
     algorithm = patience
 	noprefix = true
