@@ -7,44 +7,43 @@
     co = checkout
     df = diff --no-ext-diff
     dfs = diff --no-ext-diff --staged
-    dff = diff --no-ext-diff --word-diff --color-words
-    dffs = diff --no-ext-diff --word-diff --color-words --staged
     lp = log -p --no-prefix
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-    lgg = log --graph --all --decorate --oneline
-    lggg2 = log --pretty=format:"%ad%x09%h%x09%an%x09%x09%s" --date=short
     lgs = log -git whatchanged -n 1 --no-prefix
     ls = ls-files
-    d1 = show --pretty="format:" --name-only
-    d2 = diff --name-only
     stl = stash list
+    stash-all = stash save --include-untracked
     pom = pull origin master
     pod = pull origin develop
     sub = submodule update --init --recursive
-    fo = fetch origin
     rc = rebase --continue
     rs = rebase --skip
     ri2 = rebase -i head~2
     ri3 = rebase -i head~3
     ri4 = rebase -i head~4
     ri5 = rebase -i head~5
+    ri6 = rebase -i head~6
+    ri7 = rebase -i head~7
+    ri8 = rebase -i head~8
+    ri9 = rebase -i head~9
     ria = rebase --interactive --autosquash
     g = grep --break --heading --line-number
     lt = describe --tags --abbrev=0
     tagg = tag --sort="version:refname"
     tl = log --tags --simplify-by-decoration --pretty=format:"%C(green)%h\\ %C(yellow)[%ai]\\ %C(red)%d"
-    brr = for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads
+    brrr = for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads
     ca = commit --amend
-    loc = log --pretty=format:"-\\ (%h)\\ %s" --no-merges
-    tr = "!f() { git fetch origin && git checkout -t origin/$1; }; f"
+    ch = log --pretty=format:"*\\ (%h)\\ %s" --no-merges
+    cot = "!f() { git fetch origin && git checkout -t origin/$1; }; f"
 [diff]
     algorithm = patience
 	noprefix = true
     compactionHeuristic = true
 [core]
     editor = vim
-	excludesfile = /Users/gonzalo/.gitignore_global
-	pager = diff-highlight | diff-so-fancy | less --tabs=1,5 -R
+	excludesfile = ~/.gitignore_global
+	pager = diff-so-fancy | less --tabs=1,5 -R
+    # pager = diff-highlight | diff-so-fancy | less --tabs=1,5 -R
 [grep]
     extendRegexp = true
     lineNumber = true
