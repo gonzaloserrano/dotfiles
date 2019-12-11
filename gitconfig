@@ -37,12 +37,11 @@
     cot = "!f() { git fetch origin && git checkout -t origin/$1; }; f"
 [diff]
     algorithm = patience
-	noprefix = true
     compactionHeuristic = true
 [core]
     editor = vim
 	excludesfile = ~/.gitignore_global
-	pager = diff-so-fancy | less --tabs=1,5 -R
+    # pager = diff-so-fancy | less --tabs=1,5 -R
     # pager = diff-highlight | diff-so-fancy | less --tabs=1,5 -R
 [grep]
     extendRegexp = true
@@ -55,10 +54,10 @@
 	required = true
 	clean = git media clean %f
 	smudge = git media smudge %f
-[url "git@github-sp:socialpoint"]
-    insteadOf = "https://github.com/socialpoint"
-[url "git@github-sp:socialpoint"]
-    insteadOf = "git@github.com:socialpoint"
+[url "git@github.com:bcneng"]
+    insteadOf = "https://github.com/bcneng"
+[url "git@github.com:gonzaloserrano"]
+    insteadOf = "https://github.com/gonzaloserrano"
 [credential]
 	helper = osxkeychain
 [diff "json"]
@@ -72,3 +71,13 @@
 	newHighlight = green bold 22
 [interactive]
     diffFilter = diff-highlight
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[user]
+	name = "Gonzalo Serrano"
+	email = boikot@gmail.com
+[http]
+	cookiefile = /Users/gonzalo/.gitcookies

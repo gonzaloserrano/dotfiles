@@ -1,7 +1,26 @@
 " testing  {
-    Bundle 'tpope/vim-dispatch'
-    Bundle 'OmniSharp/omnisharp-vim'
+    Bundle "dense-analysis/ale"
+    Bundle "andys8/vim-elm-syntax"
     Bundle 'ElmCast/elm-vim'
+    "Bundle 'govim/govim'
+    Bundle "vim-scripts/auto-pairs-gentle"
+    Bundle "SirVer/ultisnips"
+    Bundle "machakann/vim-swap"
+    Bundle "ervandew/supertab"
+    Bundle 'dart-lang/dart-vim-plugin'
+    Bundle 'kburdett/vim-nuuid'
+    Bundle 'posva/vim-vue'
+    Bundle 'mileszs/ack.vim'
+    Bundle 'tpope/vim-classpath'
+    Bundle 'guns/vim-clojure-static'
+    Bundle 'tpope/vim-fireplace'
+    Bundle 'tpope/vim-salve'
+    Bundle 'tpope/vim-projectionist'
+    Bundle 'tpope/vim-dispatch'
+    Bundle 'tpope/vim-rhubarb'
+
+    Bundle 'godoctor/godoctor.vim'
+    Bundle 'OmniSharp/omnisharp-vim'
     Bundle 'hashivim/vim-vagrant'
     Bundle 'mhartington/oceanic-next'
     Bundle 'chriskempson/base16-vim'
@@ -17,7 +36,7 @@
     Bundle 'chrisbra/Recover.vim'
     Bundle 'gabesoft/vim-ags'
     Bundle "mhinz/vim-startify"
-    Bundle 'mxw/vim-jsx'
+    "Bundle 'mxw/vim-jsx'
     Bundle 'kristijanhusak/vim-hybrid-material'
     Bundle 'jasoncodes/ctrlp-modified.vim'
     Bundle 'hashivim/vim-terraform'
@@ -26,7 +45,7 @@
 " material colorscheme
 Bundle "jdkanani/vim-material-theme"
 " use pman to find manual page for php func
-Bundle 'powerman/vim-plugin-viewdoc'
+" Bundle 'powerman/vim-plugin-viewdoc'
 " highlight multiple search matches
 Bundle 'haya14busa/incsearch.vim'
 " for phpspec to write while you edit
@@ -59,9 +78,11 @@ Bundle 'itchyny/lightline.vim'
     Bundle "stephpy/vim-php-cs-fixer"
     Bundle 'adoy/vim-php-refactoring-toolbox'
     Bundle 'tomphp/vim-phpdoc'
+    Bundle 'vim-php/tagbar-phpctags.vim'
 "}
 
 " not needed / don't like
+"Bundle "tpope/vim-abolish"
 "Bundle "Mark"
 "Bundle 'cohama/lexima.vim'
 "Bundle 'Konfekt/FastFold'
@@ -85,7 +106,6 @@ Bundle 'itchyny/lightline.vim'
 "Bundle "adinapoli/vim-markmultiple"
 "Bundle "othree/html5-syntax.vim"
 "Bundle "gregsexton/MatchTag"
-"Bundle "SuperTab"
 "Bundle "goldfeld/vim-seek"
 "Bundle "vim-scripts/Align"
 "Bundle "terryma/vim-multiple-cursors"
@@ -122,3 +142,4 @@ Bundle 'itchyny/lightline.vim'
 "Bundle 'vim-airline/vim-airline-themes'
 "Bundle 'swekaj/php-foldexpr.vim'
 "Bundle 'vim-php/vim-php-refactoring'
+"Bundle "SuperTab"

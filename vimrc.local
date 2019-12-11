@@ -1,6 +1,37 @@
 " general options {
+    " Triger `autoread` when files changes on disk
+    " https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
+    " https://vi.stackexchange.com/questions/13692/prevent-focusgained-autocmd-running-in-command-line-editing-mode
+    autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if mode() != 'c' | checktime | endif
+    " Notification after file change
+    " https://vi.stackexchange.com/questions/13091/autocmd-event-for-autoread
+    autocmd FileChangedShellPost *
+      \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
+
+    let g:syntastic_javascript_checkers=['eslint']
+    let g:syntastic_javascript_eslint_exe='$(npm bin)/eslint'
+    autocmd Filetype javascript setlocal ts=2 sw=2 sts=2 expandtab
+    autocmd Filetype javascript.jsx setlocal ts=2 sw=2 sts=2 expandtab
+
+    if executable("rg")
+        set grepprg=rg\ --vimgrep\ --no-heading
+        set grepformat=%f:%l:%c:%m,%f:%l:%m
+    endif
+    let g:ackprg = 'rg --vimgrep --no-heading'
+
+    "au FileType clojure nmap ,t :w<CR>:Require!<CR>:Eval (run-all-tests)<CR>
+    au FileType clojure nmap <c-t> :w<CR>:Require!<CR>:RunTests<CR>
+    au FileType clojure nmap <c-a> :A<CR>
+
+    au FileType tf setl sw=2 sts=2 et
+
+    nnoremap <^[[1;5C> :SidewaysLeft<cr>
+    nnoremap <^[[1;5D> :SidewaysRight<cr>
+
+    set nojoinspaces
+
     let base16colorspace=256  " Access colors present in 256 colorspace
-    colorscheme base16-default
+    colorscheme base16-default-dark
 
     set noshowmode
     " switch visual block to v
@@ -23,7 +54,7 @@
     let loaded_matchparen=1 " this makes vim epic fast with long lines
     set timeoutlen=250 " lower leader key timeout
     set ttyfast
-    set synmaxcol=320
+    "set synmaxcol=320
     set lazyredraw " to avoid scrolling problems
 
     set t_ts=]2;
@@ -63,6 +94,7 @@
         UnBundle 'tpope/vim-markdown'
         "UnBundle 'jiangmiao/auto-pairs'
         UnBundle 'gcmt/wildfire.vim'
+        UnBundle 'rhysd/conflict-marker.vim'
     " }
     " autopairs {
         let g:AutoPairsOnlyWhitespace=1
@@ -91,11 +123,16 @@
     " }
 
     " tagbar {
-        let g:tagbar_autofocus = 1
-        let g:tagbar_compact = 1
+        "let g:tagbar_left = 0
+        let g:tagbar_autofocus = 0
+        let g:tagbar_compact = 2
         "let g:tagbar_width = 30
         let g:tagbar_type_php  = { 'ctagstype' : 'php', 'kinds' : [ 'i:interfaces', 'c:classes', 'd:constant definitions', 'f:functions', 'j:javascript functions:1' ] }
         map <c-l> :TagbarToggle<CR>
+        let g:tagbar_phpctags_bin='~/bin/phpctags'
+        let g:tagbar_phpctags_memory_limit = '512M'
+        "autocmd VimEnter * nested :call tagbar#autoopen(1)
+        "autocmd BufEnter * nested :call tagbar#autoopen(0)
     "}
 
     " mark {
@@ -124,21 +161,34 @@
     "}
 
     " golang {
+        " govim
+        "au FileType go nmap <c-@> : <C-u>call GOVIMHover()<CR>
+
         " vim-go
+        " gopls and autocompletion
+        let g:go_def_mode = "gopls"
+        let g:go_referrers_mode="guru"
+        let g:go_guru_scope = ["github.com/PaackEng/delivery-system/..."]
+        let g:go_fmt_experimental = 1
+        let g:go_gorename_command = 'gopls' " instead of gorename
+        let g:go_build_tags='infra sql amqp'
+		let g:go_highlight_diagnostic_errors=0
+		let g:go_highlight_diagnostic_warnings=0 
+
+        set statusline+=%#goStatuslineColor#
+        set statusline+=%{go#statusline#Show()}
+        set statusline+=%*
+
         let g:go_list_type = "quickfix"
-        " c-@ === c-space :-O
-        au FileType go nmap <c-@> :GoCoverageToggle<CR>
-        autocmd FileType go nmap <c-b> :<C-u>call <SID>build_go_files()<CR>
-        " syntastic shit on-save {}
-            let g:go_fmt_command = "goimports"
-            let g:go_fmt_fail_silently = 1
-            let g:go_fmt_autosave = 1
-            let g:syntastic_go_checkers = ['gofmt', 'go']
-            let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-            let g:go_list_type = "quickfix"
-        "}
+        let g:go_fmt_command = "gofumports"
+        let g:go_fmt_fail_silently = 1
+        let g:go_fmt_autosave = 1
+        let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+
+        let g:go_highlight_variable_declarations = 1
         let g:go_highlight_build_constraints = 1
         let g:go_highlight_functions = 1
+        let g:go_highlight_function_calls = 1
         let g:go_highlight_methods = 1
         let g:go_highlight_operators = 1
         let g:go_highlight_types = 1
@@ -146,42 +196,107 @@
         let g:go_highlight_extra_types = 1
         let g:go_highlight_generate_tags = 1
         let g:go_term_enabled = 1
-        " autoimport ftw
-        " go-def
-        " if 1, then godeps are included
-        let g:go_autodetect_gopath = 1
+
         au FileType go nmap <c-]> <Plug>(go-def)
-        au FileType go nmap <c-a> :GoAlternate<CR>
+        autocmd FileType go map <c-e> :GoIfErr<CR>
+        autocmd FileType go nmap <leader>e <plug>NERDTreeTabsToggle<CR>
+        autocmd FileType go nmap <c-a> :GoAlternate!<CR>
+        " c-@ === c-space :-O
+        au FileType go nmap <c-@> :GoInfo<CR>
+        au FileType go nmap <c-i> :GoCoverageToggle<CR>
+        autocmd FileType go map <c-b> <esc>:w<CR>:GoTestCompile<CR>
+        autocmd FileType go map <c-s> <esc>:w<CR>:GoTestCompile<CR>
+
         autocmd FileType go set noexpandtab
         autocmd FileType go set nolist
 
-        " default: ['vet', 'golint', 'errcheck']
-        " gotype does not work with non-installed packages https://github.com/alecthomas/gometalinter/issues/40
-        let g:go_metalinter_deadline = '20s'
-        let g:go_metalinter_enabled = ['golint', 'vetshadow', 'errcheck', 'ineffassign', 'vet', 'goimports', 'defercheck', 'aligncheck', 'dupl', 'gofmt', 'varcheck', 'gocyclo', 'testify', 'structcheck', 'deadcode']
-        " build_go_files is a custom function that builds or compiles the test file.
-        " It calls :GoBuild if its a Go file, or :GoTestCompile if it's a test file
-        function! s:build_go_files()
-          let l:file = expand('%')
-          if l:file =~# '^\f\+_test\.go$'
-            call go#cmd#Test(0, 1)
-          elseif l:file =~# '^\f\+\.go$'
-            call go#cmd#Build(0)
-          endif
-        endfunction
         " abbreviations {
             iab ee err := 
-            iab asss assert := assert.New(t)
-            iab assse assert.NoError(err)
-            iab asssec assert.NoError(cmd.Error)
+            iab ass assert := assert.New(t)
+            iab asse assert.NoError(err)
+            iab assec assert.NoError(cmd.Error)
+            iab assq assert.Equal(
+            iab asst assert.True(
+            iab trun t.Run(fmt.Sprintf("%d", i), func(t * testing.T) {<CR>t.Parallel()
+            iab ppr packagesRepository
+            iab mmr movementsRepository
+            iab rrr roundsRepository
+            iab ddr driversRepository
+            iab wwr warehousemanagersRepository
         "}
+
+        " godoctor; Refactor extract foo
+        if exists("g:did_load_filetypes")
+            filetype off
+            filetype plugin indent off
+        endif
+        set rtp+=~/.vim/bundle/godoctor.vim
+        filetype plugin indent on
+        syntax on
     " }
+
+
+    " I'm using supertab for completion.
+    " Use context-dependent completion type.
+    " This mean it'll try each function from g:SuperTabCompletionContexts and
+    " if no one return anything then use g:SuperTabContextDefaultCompletionType:
+    " 1. s:ContextText will handle pathname completions anywhere.
+    " 2. s:ContextText will handle module/class/object member completions
+    "    outside of String/Comment (using &completefunc or &omnifunc, if any).
+    " 3. ContextPlainText will handle String/Comment using default completion.
+    " 4. s:ContextDiscover will handle everything using &completefunc, if any.
+    " 5. Use default.
+    let g:SuperTabDefaultCompletionType = 'context'
+    let g:SuperTabCompletionContexts = ['s:ContextText', 'ContextPlainText', 's:ContextDiscover']
+    let g:SuperTabContextDiscoverDiscovery = ['&completefunc:<c-x><c-u>']
+    let g:SuperTabContextDefaultCompletionType = '<c-p>'
+    function! ContextPlainText()
+        let synname = synIDattr(synID(line('.'), col('.') - 1, 1), 'name')
+        if synname =~ '\(String\|Comment\)'
+            exec 'let complType = "' . escape(g:SuperTabContextDefaultCompletionType, '<') . '"'
+            return complType
+        endif
+    endfunction
+    " Set &completefunc to try &omnifunc or default one if omni fails.
+    autocmd FileType *
+                \ if &omnifunc != '' |
+                \   call SuperTabChain(&omnifunc, g:SuperTabContextDefaultCompletionType) |
+                \ else |
+                \   let b:SuperTabCompletionContexts = ['s:ContextText'] |
+                \ endif
+
+    "autocompletion
+    "let g:SuperTabDefaultCompletionType = "context"
+    "let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
+    "inoremap <tab> <c-r>=Smart_TabComplete()<CR>
+    "function! Smart_TabComplete()
+        "let line = getline('.')                         " current line
+
+        "let substr = strpart(line, -1, col('.')+1)      " from the start of the current
+        "" line to one character right
+        "" of the cursor
+        "let substr = matchstr(substr, "[^ \t]*$")       " word till cursor
+        "if (strlen(substr)==0)                          " nothing to match on empty string
+            "return "\<tab>"
+        "endif
+        "let has_period = match(substr, '\.') != -1      " position of period, if any
+        "let has_slash = match(substr, '\/') != -1       " position of slash, if any
+        "if (!has_period && !has_slash)
+            "return "\<C-X>\<C-P>"                         " existing text matching
+        "elseif ( has_slash )
+            "return "\<C-X>\<C-F>"                         " file matching
+        "else
+            "return "\<C-X>\<C-O>"                         " plugin matching
+        "endif
+    "endfunction
+
     " youcompleteme + ultisnips {
-        let g:ycm_server_python_interpreter = "/usr/bin/python"
-        let g:go_snippet_engine = "neosnippet"
-        let g:ycm_min_num_of_chars_for_completion = 3
-        autocmd FileType html let g:ycm_min_num_of_chars_for_completion = 1
-        "let g:ycm_auto_trigger = 0
+        "let g:loaded_youcompleteme = 1 " disable
+        "let g:ycm_server_python_interpreter = "/usr/bin/python"
+        "let g:go_snippet_engine = "neosnippet"
+        "let g:ycm_min_num_of_chars_for_completion = 3
+        "autocmd FileType html let g:ycm_min_num_of_chars_for_completion = 1
+        ""let g:ycm_auto_trigger = 0
         let g:UltiSnipsExpandTrigger = "<C-k>"
         let g:UltiSnipsJumpForwardTrigger = "<C-k>"
         let g:UltiSnipsJumpBackwardTrigger = "<C-j>"
@@ -191,7 +306,7 @@
         let g:lightline = {
           \ 'active': {
           \   'left': [ [ 'mode', 'paste'],
-          \             [ 'fugitive', 'filename', 'modified', 'ctrlpmark' ],
+          \             [ 'fugitive', 'filename', 'modified'],
           \             [ 'go'] ],
           \   'right': [ [ 'lineinfo' ], 
           \              [ 'percent' ], 
@@ -211,7 +326,6 @@
           \   'fileencoding': 'LightLineFileencoding',
           \   'mode': 'LightLineMode',
           \   'fugitive': 'LightLineFugitive',
-          \   'ctrlpmark': 'CtrlPMark',
           \ },
           \ }
 
@@ -258,8 +372,7 @@
 
         function! LightLineMode()
           let fname = expand('%:t')
-          return fname == 'ControlP' ? 'CtrlP' :
-                \ &ft == 'vimfiler' ? 'VimFiler' :
+          return &ft == 'vimfiler' ? 'VimFiler' :
                 \ winwidth(0) > 60 ? lightline#mode() : ''
         endfunction
 
@@ -269,8 +382,7 @@
             return ''
           endif
 
-          return fname == 'ControlP' ? g:lightline.ctrlp_item :
-                \ &ft == 'vimfiler' ? vimfiler#get_status_string() :
+          return &ft == 'vimfiler' ? vimfiler#get_status_string() :
                 \ ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
                 \ ('' != fname ? fname : '[No Name]')
         endfunction
@@ -278,34 +390,6 @@
         function! LightLineReadonly()
           return &ft !~? 'help' && &readonly ? 'RO' : ''
         endfunction
-
-        function! CtrlPMark()
-          if expand('%:t') =~ 'ControlP'
-            call lightline#link('iR'[g:lightline.ctrlp_regex])
-            return lightline#concatenate([g:lightline.ctrlp_prev, g:lightline.ctrlp_item
-                  \ , g:lightline.ctrlp_next], 0)
-          else
-            return ''
-          endif
-        endfunction
-
-        let g:ctrlp_status_func = {
-              \ 'main': 'CtrlPStatusFunc_1',
-              \ 'prog': 'CtrlPStatusFunc_2',
-              \ }
-
-        function! CtrlPStatusFunc_1(focus, byfname, regex, prev, item, next, marked)
-          let g:lightline.ctrlp_regex = a:regex
-          let g:lightline.ctrlp_prev = a:prev
-          let g:lightline.ctrlp_item = a:item
-          let g:lightline.ctrlp_next = a:next
-          return lightline#statusline(0)
-        endfunction
-
-        function! CtrlPStatusFunc_2(str)
-          return lightline#statusline(0)
-        endfunction
-
 
         " Trigger a highlight in the appropriate direction when pressing these keys:
         let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
@@ -332,18 +416,18 @@
     " elm {
         let g:syntastic_always_populate_loc_list = 1
         let g:syntastic_auto_loc_list = 1
-        let g:elm_syntastic_show_warnings = 0
+        let g:elm_syntastic_show_warnings = 1
         let g:ycm_semantic_triggers = {
             \ 'elm' : ['.'],
         \}
 
         "let g:elm_jump_to_error = 0
         "let g:elm_make_output_file = "elm.js"
-        "let g:elm_make_show_warnings = 0
-        "let g:elm_syntastic_show_warnings = 0
+        let g:elm_make_show_warnings = 0
+        let g:elm_syntastic_show_warnings = 0
         "let g:elm_browser_command = ""
         "let g:elm_detailed_complete = 0
-        "let g:elm_format_autosave = 0
+        let g:elm_format_autosave = 1
         "let g:elm_format_fail_silently = 0
         "let g:elm_setup_keybindings = 1
     " }
@@ -476,7 +560,7 @@
 
         " ctrlp
         nmap <c-f> :CtrlPMRU<CR>
-        nmap <c-t> :CtrlPBuffer<CR>
+        "nmap <c-t> :CtrlPBuffer<CR>
         nmap <c-v> :CtrlPBufTag<CR>
         nmap <c-g> :CtrlPModified<CR>
         "map <c-g> :CtrlPFunky<CR>
@@ -490,10 +574,8 @@
         let g:ctrlp_root_markers = ['.ctrlp_sp', '.ctrlp_sp_go']
         let g:ctrlp_user_command = {
           \ 'types': {
-            \ 0: ['.ctrlp_sp', 'cd %s && find . -type f \( -path ./app/config/\* -o -path ./src/\* -o -path ./vendor/socialpoint/\* -o -path ./vendor/symfony/\* -o -path ./web/\* -o -path ./tests/\* -o -path ./spec/\* \) -not -path "*/.git/*" -not -path "*/vendor/*/vendor/*" -not -path "*/Resources/public/*"'],
-            \ 1: ['.ctrlp_sp_go_bak', 'cd %s && find ../ -type f -not -path "*/.git/*" -not -path "*/Godeps/*" -not -path "*/misc/package/dist_package/*"'],
-            \ 2: ['.ctrlp_sp_go', 'cd %s && find ../ -type f -not -path "*/.git/*" -not -path "*/vendor/*" -not -path "*/Godeps/*" -not -path "*/*sprocket/*" -not -path "*/components/*" -not -path "*/node_modules/*" -not -path "*/.terraform/*"'],
-            \ 3: ['.git/', 'cd %s && git ls-files . -co --exclude-standard'],
+            \ 5: ['.ctrlp_sp_go_bsk', 'cd %s && find . ../bsk -type f -not -path "*/.git/*" -not -path "*/vendor/*" -not -path "*/Godeps/*" -not -path "*/components/*" -not -path "*/node_modules/*" -not -path "*/.terraform/*" -not -path "*/third_party/*"'],
+            \ 7: ['.git/', 'cd %s && git ls-files . -co --exclude-standard'],
           \ }
         \ }
 
@@ -623,15 +705,28 @@
 " Put at the very end of your .vimrc file.
 "let php_var_selector_is_identifier = 0
 function! PhpSyntaxOverride()
-  hi! def link phpDocTags  phpDefine
-  hi! def link phpDocParam phpType
+  "hi! def link phpDocTags  phpDefine
+  "hi! def link phpDocParam phpType
   "hi! phpFunctions guifg=#5f0000 guibg=NONE gui=NONE
   "hi! phpVarSelector guifg=#e57373 guibg=NONE gui=NONE
   "hi! phpMemberSelector guifg=136 guibg=NONE gui=NONE
-  hi! phpIdentifier guifg=#4fc3f7 guibg=NONE gui=NONE
+  "hi! phpIdentifier guifg=#4fc3f7 guibg=NONE gui=NONE
 endfunction
 
 augroup phpSyntaxOverride
   autocmd!
   autocmd FileType php call PhpSyntaxOverride()
 augroup END
+
+map <leader>col :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+"hi! link Error VisualNOS
+
+nmap <leader>sp :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc

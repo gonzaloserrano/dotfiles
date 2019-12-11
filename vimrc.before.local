@@ -9,6 +9,7 @@ if !exists('g:spf13_bundle_groups')
     if has('nvim-removeme')
         let g:spf13_bundle_groups=['general', 'programming', 'go', 'php', 'python', 'javascript', 'html', 'misc']
     else
-        let g:spf13_bundle_groups=['general', 'programming', 'go', 'php', 'python', 'javascript', 'html', 'misc', 'youcompleteme']
+        let g:spf13_bundle_groups=['general', 'programming', 'go', 'php', 'python', 'javascript', 'html', 'misc']
+        " let g:spf13_bundle_groups=['general', 'programming', 'go', 'php', 'python', 'javascript', 'html', 'misc', 'youcompleteme']
     endif
 endif

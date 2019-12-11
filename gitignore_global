@@ -1,11 +1,8 @@
-.gitignore
-.DS_Store
+".DS_Store
+.ctags
 tags
-.phpcomplete_extended
-globals2.json
-.ctrlp_sp
-.ctrlp_sp_go
-.ctrlp_sp_go_new
 .idea
 .vscode
 debug.text
+.goimportsignore
+.history
