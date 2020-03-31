@@ -161,29 +161,34 @@
     "}
 
     " golang {
+        let g:syntastic_go_checkers = []
+        let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
         " govim
         "au FileType go nmap <c-@> : <C-u>call GOVIMHover()<CR>
+        "if has("patch-8.1.1904")
+            "set completeopt+=popup
+            "set completepopup=align:menu,border:off,highlight:Pmenu
+        "endif
 
         " vim-go
         " gopls and autocompletion
         let g:go_def_mode = "gopls"
-        let g:go_referrers_mode="guru"
-        let g:go_guru_scope = ["github.com/PaackEng/delivery-system/..."]
-        let g:go_fmt_experimental = 1
-        let g:go_gorename_command = 'gopls' " instead of gorename
+        "let g:go_referrers_mode="guru"
+        "let g:go_guru_scope = ["github.com/PaackEng/delivery-system/..."]
+        let g:go_rename_command = 'gopls' " instead of gorename
         let g:go_build_tags='infra sql amqp'
-		let g:go_highlight_diagnostic_errors=0
-		let g:go_highlight_diagnostic_warnings=0 
+        let g:go_highlight_diagnostic_errors = 0
+        let g:go_highlight_diagnostic_warnings = 0
 
         set statusline+=%#goStatuslineColor#
         set statusline+=%{go#statusline#Show()}
         set statusline+=%*
 
         let g:go_list_type = "quickfix"
+        "let g:go_fmt_experimental = 1
         let g:go_fmt_command = "gofumports"
-        let g:go_fmt_fail_silently = 1
+        "let g:go_fmt_fail_silently = 1
         let g:go_fmt_autosave = 1
-        let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
         let g:go_highlight_variable_declarations = 1
         let g:go_highlight_build_constraints = 1
@@ -211,18 +216,21 @@
         autocmd FileType go set nolist
 
         " abbreviations {
-            iab ee err := 
             iab ass assert := assert.New(t)
             iab asse assert.NoError(err)
             iab assec assert.NoError(cmd.Error)
             iab assq assert.Equal(
             iab asst assert.True(
+
+            iab reqq require.NoError(t, err)
+            iab reqe require.Equal(t, 
+            iab reqne require.NotEmpty(t, 
+            iab reqt require.True(t, 
+            iab reql require.Len(t, 
+
+            iab testt func TestX(t *testing.T) {<CR>}
+
             iab trun t.Run(fmt.Sprintf("%d", i), func(t * testing.T) {<CR>t.Parallel()
-            iab ppr packagesRepository
-            iab mmr movementsRepository
-            iab rrr roundsRepository
-            iab ddr driversRepository
-            iab wwr warehousemanagersRepository
         "}
 
         " godoctor; Refactor extract foo
@@ -396,23 +404,7 @@
     "}
 "}
 
-" abbreviations {
-    " erlang {
-        iab iof io:format("~n~p~n", []),
-        iab ioff io:format("~n------~n~p~n------~n", []),
-        iab iofff io:format("~n------~n~p~n~p~n------~n", []),
-        iab ioffff io:format("~n------~n~p~n~p~n~p~n------~n", []),
-    "}
-
-    " php {
-        iab errl error_log(date('Y-m-d H:i:s') . " " . "\n", 3, '/tmp/my_error.log');
-        iab ymd date('Y-m-d H:i:s',
-    "}
-
-    " others {
-        ab brr . "<br/>"
-    "}
-
+" others {
     " elm {
         let g:syntastic_always_populate_loc_list = 1
         let g:syntastic_auto_loc_list = 1

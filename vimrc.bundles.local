@@ -1,4 +1,9 @@
-" testing  {
+" testingxir  {
+    Bundle "neoclide/coc.nvim"
+    "Bundle "govim/govim"
+    Bundle "jparise/vim-graphql"
+    Bundle "elixir-editors/vim-elixir"
+    "Bundle 'elixir-lang/vim-elixir'
     Bundle "dense-analysis/ale"
     Bundle "andys8/vim-elm-syntax"
     Bundle 'ElmCast/elm-vim'
@@ -10,7 +15,7 @@
     Bundle 'dart-lang/dart-vim-plugin'
     Bundle 'kburdett/vim-nuuid'
     Bundle 'posva/vim-vue'
-    Bundle 'mileszs/ack.vim'
+    " Bundle 'mileszs/ack.vim'
     Bundle 'tpope/vim-classpath'
     Bundle 'guns/vim-clojure-static'
     Bundle 'tpope/vim-fireplace'
@@ -28,7 +33,6 @@
     Bundle 'dcharbon/vim-flatbuffers'
     Bundle 'burnettk/vim-angular'
     Bundle 'slashmili/alchemist.vim'
-    Bundle 'elixir-lang/vim-elixir'
     Bundle 'vasconcelloslf/vim-interestingwords'
     Bundle "docunext/closetag.vim"
     Bundle 'derekwyatt/vim-scala'
