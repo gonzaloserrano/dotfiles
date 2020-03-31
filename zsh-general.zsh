@@ -54,7 +54,6 @@ export GOPATH=~/go
 export GOBIN=$GOPATH/bin
 export GOSRC=$GOPATH/src
 export PATH=$GOBIN:$PATH
-alias shadow='go tool vet --shadow .'
 
 # rust
 source $HOME/.cargo/env
@@ -70,7 +69,7 @@ alias cdg="while true; do [ ! -d .git ] && cd .. || break; done"
 # Base16 Shell
 
 export PATH="$HOME/bin:$PATH"
-eval $(gdircolors -b ~/configs/LS_COLORS)
+eval $(gdircolors -b ~/.LS_COLORS)
 BASE16_SHELL=$HOME/.config/base16-shell/
 [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
 base16_default-dark
@@ -142,3 +141,5 @@ function cdgo {
 eval "$(jump shell zsh)"
 
 stty -ixon
+
+. $HOME/.asdf/asdf.sh
