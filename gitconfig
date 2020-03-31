@@ -34,13 +34,14 @@
     brrr = for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads
     ca = commit --amend
     ch = log --pretty=format:"*\\ (%h)\\ %s" --no-merges
-    cot = "!f() { git fetch origin && git checkout -t origin/$1; }; f"
+    cot = "!f() { git switch -c ${1#origin/} --track origin/${1#origin/}; }; f"
 [diff]
     algorithm = patience
     compactionHeuristic = true
 [core]
     editor = vim
 	excludesfile = ~/.gitignore_global
+    pager = delta --dark
     # pager = diff-so-fancy | less --tabs=1,5 -R
     # pager = diff-highlight | diff-so-fancy | less --tabs=1,5 -R
 [grep]
@@ -48,12 +49,18 @@
     lineNumber = true
 [push]
     default = current
+[checkout]
+    defaultRemote = origin
 [branch]
     autosetuprebase = always
 [filter "media"]
 	required = true
 	clean = git media clean %f
 	smudge = git media smudge %f
+;[url "git@github.com"]
+    ;insteadOf = "https://github.com"
+[url "git@github.com:PaackEng"]
+    insteadOf = "https://github.com/PaackEng"
 [url "git@github.com:bcneng"]
     insteadOf = "https://github.com/bcneng"
 [url "git@github.com:gonzaloserrano"]
