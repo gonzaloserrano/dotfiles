@@ -1,3 +1,15 @@
+" ruby-rails {
+    au FileType ruby map <Leader>t :call RunCurrentSpecFile()<CR>
+    au FileType ruby map <Leader>s :call RunNearestSpec()<CR>
+    au FileType ruby map <Leader>l :call RunLastSpec()<CR>
+    au FileType ruby map <Leader>a :call RunAllSpecs()<CR>
+    let g:LanguageClient_serverCommands = {
+    \ 'ruby': ['/usr/local/bin/solargraph', 'stdio'],
+    \ }
+    au FileType ruby nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+    set runtimepath+=~/.vim/bundle/LanguageClient-neovim
+" }
+
 " general options {
     " Triger `autoread` when files changes on disk
     " https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
@@ -31,7 +43,8 @@
     set nojoinspaces
 
     let base16colorspace=256  " Access colors present in 256 colorspace
-    colorscheme base16-default-dark
+    "colorscheme base16-default-dark
+    colorscheme gruvbox
 
     set noshowmode
     " switch visual block to v
@@ -171,12 +184,18 @@
         "endif
 
         " vim-go
+
         " gopls and autocompletion
         let g:go_def_mode = "gopls"
-        "let g:go_referrers_mode="guru"
-        "let g:go_guru_scope = ["github.com/PaackEng/delivery-system/..."]
-        let g:go_rename_command = 'gopls' " instead of gorename
+        let g:go_fmt_command="gopls"
+        let g:go_gopls_gofumpt=1
+        let g:go_referrers_mode="gopls"
+        "let g:go_guru_scope = ["github.com/PaackEng/..."]
+        let g:go_rename_command = 'gopls'
+        let g:go_implements_mode = 'gopls'
+
         let g:go_build_tags='infra sql amqp'
+
         let g:go_highlight_diagnostic_errors = 0
         let g:go_highlight_diagnostic_warnings = 0
 
@@ -185,6 +204,9 @@
         set statusline+=%*
 
         let g:go_list_type = "quickfix"
+        let g:go_term_width = 50
+        let g:go_term_close_on_exit = 1
+
         "let g:go_fmt_experimental = 1
         let g:go_fmt_command = "gofumports"
         "let g:go_fmt_fail_silently = 1
@@ -487,14 +509,10 @@
         "}
 
         " git diff {
-            if has('nvim')
-                map <c-d> :vsplit %<bar>te diffwrapper %:p<cr>
-                map <c-h> :vsplit %<bar>te git lp %<cr>
-            else
-                map <c-d> :!diffwrapper %:p<cr>
-                map <c-y> :!GIT_PAGER='opendiff' git diff %<cr>
-                map <c-h> :!git lp %<cr>
-            endif
+            map <c-d> :!git difftool --tool=colordiff --no-prompt %<cr>
+            "map <c-y> :!GIT_PAGER='opendiff' git diff %<cr>
+            map <c-y> :!git difftool -y --tool=opendiff %<cr>
+            map <c-h> :!git log -p --no-ext-diff %<cr>
         "}
 
         " tag jumping {
@@ -679,46 +697,3 @@
       exe "normal! ".a:dir.c."v".a:motion.c
     endfunction
 " }
-
-" Handle URL {
-        " OSX only: Open a web-browser with the URL in the current line
-        function! HandleURI()
-            let s:uri = matchstr(getline("."), '[a-z]*:\/\/[^ >,;]*')
-            echo s:uri
-            if s:uri != ""
-                exec "!open \"" . s:uri . "\""
-            else
-                echo "No URI found in line."
-            endif
-        endfunction
-        map <leader>u :call HandleURI()<CR>
-" }
-
-" Put at the very end of your .vimrc file.
-"let php_var_selector_is_identifier = 0
-function! PhpSyntaxOverride()
-  "hi! def link phpDocTags  phpDefine
-  "hi! def link phpDocParam phpType
-  "hi! phpFunctions guifg=#5f0000 guibg=NONE gui=NONE
-  "hi! phpVarSelector guifg=#e57373 guibg=NONE gui=NONE
-  "hi! phpMemberSelector guifg=136 guibg=NONE gui=NONE
-  "hi! phpIdentifier guifg=#4fc3f7 guibg=NONE gui=NONE
-endfunction
-
-augroup phpSyntaxOverride
-  autocmd!
-  autocmd FileType php call PhpSyntaxOverride()
-augroup END
-
-map <leader>col :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-"hi! link Error VisualNOS
-
-nmap <leader>sp :call <SID>SynStack()<CR>
-function! <SID>SynStack()
-  if !exists("*synstack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
