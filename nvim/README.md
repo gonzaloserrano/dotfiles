@@ -35,3 +35,90 @@ end)
 - copy basic stuff from [packer's guy config](https://github.com/wbthomason/dotfiles/blob/linux/neovim/.config/nvim/init.lua), ie a more convinient way to set the [leader key](https://stackoverflow.com/questions/1764263/what-is-the-leader-in-a-vimrc-file) for custom mappings
 - add tab navigation maps
 - add [onedarker](https://github.com/LunarVim/onedarker.nvim) colorscheme, adding `use "lunarvim/Onedarker.nvim"` to `plugins.lua`, then running `:PackerSync`, then adding `vim.cmd("colorscheme onedarker")` to `init.lua`. Packer added the plugin source to `.local/share/nvim/site/pack/packer/start/Onedarker.nvim`.
+
+## v2
+
+- add [go.nvim](https://github.com/ray-x/go.nvim) with packers in `plugins.lua`, and configured it in `init.lua` with:
+```lua
+-- Go
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.go",
+  callback = function()
+   require('go.format').goimport()
+  end,
+  group = format_sync_grp,
+})
+
+require('go').setup()
+```
+- opened a go file, unindented some code, pressed `:w` and nothing happened when I expected that goimports would format it according to the code above. Buuuuuuh!
+- ran `:healthcheck` and found these warnings:
+```
+## Go Plugin Check
+  - WARNING: lspconfig: not installed/loaded
+  - WARNING: nvim-treesitter: not installed/loaded
+  - WARNING: guihua: not installed/loaded
+  - WARNING: nvim-dap-virtual-text: not installed/loaded
+  - WARNING: telescope: not installed/loaded
+  - WARNING: nvim-dap-ui: not installed/loaded
+  - WARNING: nvim-dap: not installed/loaded
+  - WARNING: Not all plugin installed
+  - OK: GOPATH is set
+  - INFO: GOROOT is not set
+  - OK: GOBIN is set
+  - INFO: Not all enviroment variables set
+```
+
+- To fix it, installed https://github.com/neovim/nvim-lspconfig. Then opened the go file again, and run `:LspInfo`:
+```
+    Language client log: /Users/gonzalo/.local/state/nvim/lsp.log
+    Detected filetype:   go
+
+    0 client(s) attached to this buffer:
+
+    Configured servers list:
+```
+YUNO CLIENTS ATTACHED!!!! (╯°□°)╯︵ ┻━┻
+- Read in [reddit](https://www.reddit.com/r/neovim/comments/oapq4p/cant_get_gopls_to_work/) to run `:lua require'lspconfig'.gopls.setup{}`. It still did not work, but the output was different:
+```
+    Language client log: /Users/gonzalo/.local/state/nvim/lsp.log
+    Detected filetype:   go
+
+    0 client(s) attached to this buffer:
+
+    Other clients that match the filetype: go
+
+    Config: gopls
+     filetypes:         go, gomod, gowork, gotmpl
+     root directory:    /Users/gonzalo/go/src/github.com/gonzaloserrano/foo
+     cmd:               gopls
+     cmd is executable: true
+     autostart:         true
+     custom handlers:
+
+    Configured servers list: gopls
+```
+- Back to nvim-lspconfig readme again, where I skipped the require section :facepalm:. Added this to `init.lua`:
+```lua
+require('lspconfig')['gopls'].setup{
+    on_attach = on_attach,
+    flags = lsp_flags,
+}
+```
+`:LspInfo` now shows `gopls` is attached. Saving the file formats it correctly.
+- Let's try jump to definition. I added this to `init.lua`:
+```lua
+local on_attach = function(client, bufnr)
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+``` 
+For some reson pressing `gd` in normal mode did not work. Then I tried running `:lua vim.lsp.buf.definition()` and that worked!
+
+I found that `on_attach` needed to be defined before the `require('lspconfig')['gopls'].setup` line,
+otherwise on_attach was not correctly passed to lspconfig.

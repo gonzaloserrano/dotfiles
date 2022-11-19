@@ -79,6 +79,16 @@ _G.packer_plugins = {
     path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/Onedarker.nvim",
     url = "https://github.com/lunarvim/Onedarker.nvim"
   },
+  ["go.nvim"] = {
+    loaded = true,
+    path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/go.nvim",
+    url = "https://github.com/ray-x/go.nvim"
+  },
+  ["nvim-lspconfig"] = {
+    loaded = true,
+    path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
+    url = "https://github.com/neovim/nvim-lspconfig"
+  },
   ["packer.nvim"] = {
     loaded = true,
     path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/packer.nvim",
