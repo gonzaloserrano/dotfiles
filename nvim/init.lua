@@ -47,3 +47,20 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   group = format_sync_grp,
 })
 
+
+---- treesitter
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { "lua", "go" },
+  sync_install = true,
+  auto_install = true,
+  highlight = {
+    enable = true,
+  },
+}
+
+map('n', '<c-f>', ':Telescope oldfiles<cr>', silent)
+map('n', '<c-s>', ':Telescope lsp_document_symbols symbols=function,method,struct<cr>', silent)
+map('n', '<c-n>', ':Telescope diagnostics<cr>', silent)
+map('n', '<c-p>', ':Telescope git_files<cr>', silent)
+map('n', '<c-g>', ':Telescope live_grep<cr>', silent)
+map('n', '<c-b>', ':Telescope buffers<cr>', silent)

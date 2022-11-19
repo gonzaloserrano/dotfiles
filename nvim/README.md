@@ -122,3 +122,28 @@ For some reson pressing `gd` in normal mode did not work. Then I tried running `
 
 I found that `on_attach` needed to be defined before the `require('lspconfig')['gopls'].setup` line,
 otherwise on_attach was not correctly passed to lspconfig.
+
+## v3
+
+Moar plugins:
+- popup/panes for everything with [telescope](https://github.com/nvim-telescope/telescope.nvim). It seemed to work great out of the box. Added some mappings that I have with my lunarvim install:
+```lua
+map('n', '<c-f>', ':Telescope oldfiles<cr>', silent)
+map('n', '<c-s>', ':Telescope lsp_document_symbols symbols=function,method,struct<cr>', silent)
+map('n', '<c-n>', ':Telescope diagnostics<cr>', silent)
+map('n', '<c-p>', ':Telescope git_files<cr>', silent)
+map('n', '<c-g>', ':Telescope live_grep<cr>', silent)
+map('n', '<c-b>', ':Telescope buffers<cr>', silent)
+```
+- better syntax highlight with [treesitter](https://github.com/nvim-treesitter/nvim-treesitter/wiki/Installation). Run `:TSInstall go` in a go file (found out via `:checkhealth`). See [instructions](https://github.com/nvim-treesitter/nvim-treesitter#language-parsers). Requires this init:
+```lua
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { "lua", "go" },
+  sync_install = true,
+  auto_install = true,
+  highlight = {
+    enable = true,
+  },
+}
+```
+For some reason lua files errored, so I run `TSInstall lua` and forced a reinstall and now worked :thinkinface:. Go files looked great, with improved syntax highlight.
