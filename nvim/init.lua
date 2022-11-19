@@ -11,8 +11,9 @@ g.maplocalleader = [[,]]
 
 local map = vim.api.nvim_set_keymap
 local silent = { silent = true, noremap = true }
-map('n', '<c-j>', '<cmd>tabpre<cr>', silent)
-map('n', '<c-k>', '<cmd>tabnext<cr>', silent)
+map('n', '<c-j>', ':BufferLineCyclePrev<cr>', silent)
+map('n', '<c-k>', ':BufferLineCycleNext<cr>', silent)
+map('n', '<c-x>', ':BufferClose!<cr>', silent)
 
 -- Colors
 
@@ -37,6 +38,8 @@ require('lspconfig')['gopls'].setup{
     flags = lsp_flags,
 }
 
+map('n', '<c-v>', ':lua vim.lsp.buf.rename()<cr>', silent)
+
 ---- ray-x/go.nvim
 require('go').setup()
 vim.api.nvim_create_autocmd("BufWritePre", {
@@ -46,7 +49,6 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
   group = format_sync_grp,
 })
-
 
 ---- treesitter
 require'nvim-treesitter.configs'.setup {
@@ -64,3 +66,18 @@ map('n', '<c-n>', ':Telescope diagnostics<cr>', silent)
 map('n', '<c-p>', ':Telescope git_files<cr>', silent)
 map('n', '<c-g>', ':Telescope live_grep<cr>', silent)
 map('n', '<c-b>', ':Telescope buffers<cr>', silent)
+
+---- lualine
+require('lualine').setup()
+
+---- bufferline
+vim.opt.termguicolors = true
+require('bufferline').setup {
+  -- If true, new buffers will be inserted at the start/end of the list.
+  -- Default is to insert after current buffer.
+  insert_at_end = true,
+}
+
+---- gitsigns
+require('gitsigns').setup()
+

@@ -147,3 +147,7 @@ require'nvim-treesitter.configs'.setup {
 }
 ```
 For some reason lua files errored, so I run `TSInstall lua` and forced a reinstall and now worked :thinkinface:. Go files looked great, with improved syntax highlight.
+
+## v4
+
+Moar plugins to make pretty [buffers at top](https://github.com/akinsho/bufferline.nvim), [status bar](https://github.com/nvim-lualine/lualine.nvim) and [git changes](https://github.com/lewis6991/gitsigns.nvim). They have their own setup.
