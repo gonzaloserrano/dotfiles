@@ -29,3 +29,9 @@ return require('packer').startup(function(use)
 end)
 ```
 - run `vi` and run `:PackerSync`. This created `.config/nvim/plugin/packer_compiled.lua`
+
+## v1
+
+- copy basic stuff from [packer's guy config](https://github.com/wbthomason/dotfiles/blob/linux/neovim/.config/nvim/init.lua), ie a more convinient way to set the [leader key](https://stackoverflow.com/questions/1764263/what-is-the-leader-in-a-vimrc-file) for custom mappings
+- add tab navigation maps
+- add [onedarker](https://github.com/LunarVim/onedarker.nvim) colorscheme, adding `use "lunarvim/Onedarker.nvim"` to `plugins.lua`, then running `:PackerSync`, then adding `vim.cmd("colorscheme onedarker")` to `init.lua`. Packer added the plugin source to `.local/share/nvim/site/pack/packer/start/Onedarker.nvim`.
