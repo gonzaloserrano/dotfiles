@@ -160,4 +160,4 @@ Moar plugins to make pretty [buffers at top](https://github.com/akinsho/bufferli
 
 ## v6
 
-Add [interestingwords](https://github.com/leisiji/interestingwords.nvim), [nvimtree](https://github.com/nvim-tree/nvim-tree.lua), [swap args](https://github.com/mizlan/iswap.nvim).
+Add [interestingwords](https://github.com/leisiji/interestingwords.nvim), [nvimtree](https://github.com/nvim-tree/nvim-tree.lua), [swap args](https://github.com/mizlan/iswap.nvim), [code completion](hrsh7th/nvim-cmp)

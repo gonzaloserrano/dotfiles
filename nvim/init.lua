@@ -113,3 +113,42 @@ require('iswap').setup{
 map('n', ',s', ':ISwap<cr>', silent)
 map('n', ',<Right>', ':ISwapWithRight<cr>', silent)
 map('n', ',<Left>', ':ISwapWithLeft<cr>', silent)
+
+---- completion
+local cmp = require'cmp'
+
+cmp.setup({
+	sources = {
+	  { name = 'nvim_lsp' },
+	  { name = 'buffer', keyword_length = 4 },
+	},
+	mapping = cmp.mapping.preset.insert({
+					['<Tab>'] = function(fallback)
+									if cmp.visible() then
+													cmp.select_next_item()
+									else
+													fallback()
+									end
+					end,
+					['<S-Tab>'] = function(fallback)
+									if cmp.visible() then
+													cmp.select_prev_item()
+									else
+													fallback()
+									end
+					end,
+					['<CR>'] = cmp.mapping.confirm({ select = true }),
+					['<C-e>'] = cmp.mapping.abort(),
+					['<Esc>'] = cmp.mapping.close(),
+	}),
+	completion = {
+					keyword_length = 2,
+					completeopt = "menu,noselect"
+	},
+})
+
+-- Set up lspconfig.
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+require('lspconfig')['gopls'].setup {
+  capabilities = capabilities
+}
