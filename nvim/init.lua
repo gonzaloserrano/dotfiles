@@ -7,13 +7,17 @@ local cmd = vim.cmd
 g.mapleader = [[ ]]
 g.maplocalleader = [[,]]
 
--- Maps
+-- General mappings
 
 local map = vim.api.nvim_set_keymap
 local silent = { silent = true, noremap = true }
+---- buffers
 map('n', '<c-j>', ':BufferLineCyclePrev<cr>', silent)
 map('n', '<c-k>', ':BufferLineCycleNext<cr>', silent)
-map('n', '<c-x>', ':BufferClose!<cr>', silent)
+map('n', '<c-x>', ':bdelete<cr>', silent)
+---- git
+map('n', '<c-h>', ':term DELTA_PAGER="" git log -p %<cr>', silent)
+map('n', '<c-d>', ':term DELTA_PAGER="" git diff %<cr>', silent)
 
 -- Colors
 
@@ -21,6 +25,7 @@ map('n', '<c-x>', ':BufferClose!<cr>', silent)
 cmd("colorscheme onedarker")
 
 -- Go
+---- moved to ftplugin/go.lua
 
 ---- neovim/nvim-lspconfig
 local on_attach = function(client, bufnr)
@@ -39,16 +44,6 @@ require('lspconfig')['gopls'].setup{
 }
 
 map('n', '<c-v>', ':lua vim.lsp.buf.rename()<cr>', silent)
-
----- ray-x/go.nvim
-require('go').setup()
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*.go",
-  callback = function()
-   require('go.format').goimport()
-  end,
-  group = format_sync_grp,
-})
 
 ---- treesitter
 require'nvim-treesitter.configs'.setup {
@@ -75,7 +70,7 @@ vim.opt.termguicolors = true
 require('bufferline').setup {
   -- If true, new buffers will be inserted at the start/end of the list.
   -- Default is to insert after current buffer.
-  insert_at_end = true,
+  options = { sort_by = 'insert_at_end' }
 }
 
 ---- gitsigns

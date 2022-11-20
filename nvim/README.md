@@ -151,3 +151,9 @@ For some reason lua files errored, so I run `TSInstall lua` and forced a reinsta
 ## v4
 
 Moar plugins to make pretty [buffers at top](https://github.com/akinsho/bufferline.nvim), [status bar](https://github.com/nvim-lualine/lualine.nvim) and [git changes](https://github.com/lewis6991/gitsigns.nvim). They have their own setup.
+
+## v5
+
+- fix buffer close map
+- add maps for git diff and git log (I use [delta](https://github.com/dandavison/delta) for diffing)
+- add maps for go.nvim: since I wanted maps just for go files, I've created `ftplugin/go.lua` and moved all the go stuff there, along with new maps.
