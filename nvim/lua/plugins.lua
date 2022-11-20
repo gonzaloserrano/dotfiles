@@ -3,7 +3,15 @@ return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
   use 'lunarvim/Onedarker.nvim'
   use 'neovim/nvim-lspconfig'
-  use 'ray-x/go.nvim' -- needs lspconfig
+  use {
+    'ray-x/go.nvim', -- needs lspconfig
+    requires = { 
+	    { 
+		    'ray-x/guihua.lua',
+		    run = 'cd lua/fzy && make',
+	    } 
+    }
+  }
   use { -- for go.nvim
     'nvim-telescope/telescope.nvim',
     tag = '0.1.0',

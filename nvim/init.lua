@@ -27,24 +27,6 @@ cmd("colorscheme onedarker")
 -- Go
 ---- moved to ftplugin/go.lua
 
----- neovim/nvim-lspconfig
-local on_attach = function(client, bufnr)
-  -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  -- Mappings.
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-end
-
-require('lspconfig')['gopls'].setup{
-    on_attach = on_attach,
-    flags = lsp_flags,
-}
-
-map('n', '<c-v>', ':lua vim.lsp.buf.rename()<cr>', silent)
-
 ---- treesitter
 require'nvim-treesitter.configs'.setup {
   ensure_installed = { "lua", "go" },
@@ -118,37 +100,49 @@ map('n', ',<Left>', ':ISwapWithLeft<cr>', silent)
 local cmp = require'cmp'
 
 cmp.setup({
-	sources = {
-	  { name = 'nvim_lsp' },
-	  { name = 'buffer', keyword_length = 4 },
-	},
-	mapping = cmp.mapping.preset.insert({
-					['<Tab>'] = function(fallback)
-									if cmp.visible() then
-													cmp.select_next_item()
-									else
-													fallback()
-									end
-					end,
-					['<S-Tab>'] = function(fallback)
-									if cmp.visible() then
-													cmp.select_prev_item()
-									else
-													fallback()
-									end
-					end,
-					['<CR>'] = cmp.mapping.confirm({ select = true }),
-					['<C-e>'] = cmp.mapping.abort(),
-					['<Esc>'] = cmp.mapping.close(),
-	}),
-	completion = {
-					keyword_length = 2,
-					completeopt = "menu,noselect"
-	},
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'buffer', keyword_length = 4 },
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<Tab>'] = function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      else
+        fallback()
+      end
+    end,
+    ['<S-Tab>'] = function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      else
+        fallback()
+      end
+    end,
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<Esc>'] = cmp.mapping.close(),
+  }),
+  completion = {
+    keyword_length = 1,
+    completeopt = "menu,noselect"
+  },
 })
 
--- Set up lspconfig.
+
+---- neovim/nvim-lspconfig
+local on_attach = function(client, bufnr)
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+end
+
+-- Set up completion
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
-require('lspconfig')['gopls'].setup {
-  capabilities = capabilities
+require('lspconfig')['gopls'].setup{
+    on_attach = on_attach,
+    flags = lsp_flags,
+    capabilities = capabilities
 }
+
+map('n', '<c-v>', ':lua vim.lsp.buf.rename()<cr>', silent)
+map('n', 'gd', ':lua vim.lsp.buf.definition()<cr>', silent)

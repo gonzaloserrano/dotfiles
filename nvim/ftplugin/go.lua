@@ -33,6 +33,7 @@ local silent = { silent = true, noremap = true }
 map('n', '<c-y>', ':GoCoverage -t sqlite<cr>', silent)
 map('n', '<c-a>', ':GoAlt!<cr>', silent)
 map('n', '<c-e>', ':GoIfErr<cr>', silent)
+map('n', ',,',    ':GoDoc<cr>', silent)
 
 -- abbreviations
 
