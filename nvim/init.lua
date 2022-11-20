@@ -76,3 +76,40 @@ require('bufferline').setup {
 ---- gitsigns
 require('gitsigns').setup()
 
+---- interestingwords
+map('n', '<space>', ':Interestingwords --toggle<cr>', silent)
+map('n', '<bs>', ':nohl | Interestingwords --remove_all<cr>', silent)
+vim.g.interestingwords_colors = {
+  '#F4A261', '#8CCBEA', '#A4E57E', '#FF7272', '#FFB3FF', '#9999FF', '#FFDB72', '#2A9D8F', '#3366ff',
+}
+
+---- nvim-tree.lua + icons
+require('nvim-tree').setup({
+  sort_by = 'case_sensitive',
+  view = {
+    adaptive_size = true,
+    mappings = {
+      list = {
+        { key = 'u', action = 'dir_up' },
+      },
+    },
+  },
+  renderer = {
+    group_empty = true,
+  },
+  filters = {
+    dotfiles = true,
+  },
+})
+-- require('nvim-web-devicons').setup()
+
+map('n', ',e', ':NvimTreeToggle<cr>', silent)
+
+---- iswap
+require('iswap').setup{
+  -- Move cursor to the other element in ISwap*With commands
+  move_cursor = true,
+}
+map('n', ',s', ':ISwap<cr>', silent)
+map('n', ',<Right>', ':ISwapWithRight<cr>', silent)
+map('n', ',<Left>', ':ISwapWithLeft<cr>', silent)

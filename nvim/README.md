@@ -157,3 +157,7 @@ Moar plugins to make pretty [buffers at top](https://github.com/akinsho/bufferli
 - fix buffer close map
 - add maps for git diff and git log (I use [delta](https://github.com/dandavison/delta) for diffing)
 - add maps for go.nvim: since I wanted maps just for go files, I've created `ftplugin/go.lua` and moved all the go stuff there, along with new maps.
+
+## v6
+
+Add [interestingwords](https://github.com/leisiji/interestingwords.nvim), [nvimtree](https://github.com/nvim-tree/nvim-tree.lua), [swap args](https://github.com/mizlan/iswap.nvim).
