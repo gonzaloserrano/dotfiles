@@ -7,10 +7,18 @@ local cmd = vim.cmd
 g.mapleader = [[ ]]
 g.maplocalleader = [[,]]
 
+-- Opts
+local set = vim.opt
+set.tabstop = 4
+set.softtabstop = 4
+set.shiftwidth = 4
+set.number = true
+
 -- General mappings
 
 local map = vim.api.nvim_set_keymap
 local silent = { silent = true, noremap = true }
+
 ---- buffers
 map('n', '<c-j>', ':BufferLineCyclePrev<cr>', silent)
 map('n', '<c-k>', ':BufferLineCycleNext<cr>', silent)
@@ -18,6 +26,8 @@ map('n', '<c-x>', ':bdelete<cr>', silent)
 ---- git
 map('n', '<c-h>', ':term DELTA_PAGER="" git log -p %<cr>', silent)
 map('n', '<c-d>', ':term DELTA_PAGER="" git diff %<cr>', silent)
+----
+map('n', 'v', '<c-v>', silent)
 
 -- Colors
 
@@ -29,7 +39,7 @@ cmd("colorscheme onedarker")
 
 ---- treesitter
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = { "lua", "go" },
+  ensure_installed = { "lua", "go", "yaml" },
   sync_install = true,
   auto_install = true,
   highlight = {
@@ -43,6 +53,7 @@ map('n', '<c-n>', ':Telescope diagnostics<cr>', silent)
 map('n', '<c-p>', ':Telescope git_files<cr>', silent)
 map('n', '<c-g>', ':Telescope live_grep<cr>', silent)
 map('n', '<c-b>', ':Telescope buffers<cr>', silent)
+map('n', '<c-i>', ':Telescope jumplist<cr>', silent)
 
 ---- lualine
 require('lualine').setup()
@@ -144,5 +155,12 @@ require('lspconfig')['gopls'].setup{
     capabilities = capabilities
 }
 
+-- lsp maps
 map('n', '<c-v>', ':lua vim.lsp.buf.rename()<cr>', silent)
 map('n', 'gd', ':lua vim.lsp.buf.definition()<cr>', silent)
+map('n', 'gt', ':lua vim.lsp.buf.type_definition()<cr>', silent)
+map('n', 'gi', ':lua vim.lsp.buf.implementation()<cr>', silent)
+map('n', 'K', ':lua vim.lsp.buf.hover()<cr>', silent)
+map('n', 'gr', ':lua vim.lsp.buf.references()<cr>', silent)
+map('n', 'gf', ':lua vim.diagnostic.goto_next()<cr>', silent)
+map('n', 'gb', ':lua vim.diagnostic.goto_prev()<cr>', silent)
