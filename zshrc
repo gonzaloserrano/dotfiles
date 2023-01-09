@@ -1,7 +1,11 @@
+#zmodload zsh/zprof
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+#ZSH_DISABLE_COMPFIX=true
 export ZSH="/Users/gonzalo/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
@@ -68,16 +72,23 @@ ZSH_THEME="gonzalo"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+source "/opt/homebrew/opt/kube-ps1/share/kube-ps1.sh"
 plugins=(git)
 plugins=(asdf)
 plugins=(kube-ps1)
 
 source $ZSH/oh-my-zsh.sh
-# PROMPT='$(kube_ps1)'$PROMPT
-KUBE_PS1_SYMBOL_ENABLE=false
+KUBE_PS1_SYMBOL_ENABLE=true
 KUBE_PS1_PREFIX=""
 KUBE_PS1_SUFFIX=" "
-KUBE_PS1_DIVIDER=" ⎈ "
+KUBE_PS1_DIVIDER="/"
+KUBE_PS1_SEPARATOR=""
+KUBE_PS1_CTX_COLOR="cyan"
+function get_cluster_short() {
+  echo ${1##*_}
+}
+KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
+RPROMPT='$(kube_ps1)'$RPROMPT
 
 # User configuration
 
