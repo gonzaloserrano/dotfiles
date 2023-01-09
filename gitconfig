@@ -1,5 +1,12 @@
 [include]
     path = ~/.gitconfig.local
+[init]
+	defaultBranch = main
+[user]
+	name = "Gonzalo Serrano"
+	email = boikot@gmail.com
+[http]
+	cookiefile = /Users/gonzalo/.gitcookies
 [alias]
     st = status
     stp = status --porcelain
@@ -13,7 +20,8 @@
     ls = ls-files
     stl = stash list
     stash-all = stash save --include-untracked
-    pom = pull origin master
+    pomr = pull origin master
+    pomn = pull origin main
     pod = pull origin develop
     sub = submodule update --init --recursive
     rc = rebase --continue
@@ -35,15 +43,13 @@
     ca = commit --amend
     ch = log --pretty=format:"*\\ (%h)\\ %s" --no-merges
     cot = "!f() { git switch -c ${1#origin/} --track origin/${1#origin/}; }; f"
+    pushu = push -u
 [diff]
     algorithm = patience
     compactionHeuristic = true
 [core]
     editor = vim
 	excludesfile = ~/.gitignore_global
-    pager = delta --dark
-    # pager = diff-so-fancy | less --tabs=1,5 -R
-    # pager = diff-highlight | diff-so-fancy | less --tabs=1,5 -R
 [grep]
     extendRegexp = true
     lineNumber = true
@@ -57,34 +63,36 @@
 	required = true
 	clean = git media clean %f
 	smudge = git media smudge %f
-;[url "git@github.com"]
-    ;insteadOf = "https://github.com"
-[url "git@github.com:PaackEng"]
-    insteadOf = "https://github.com/PaackEng"
-[url "git@github.com:bcneng"]
-    insteadOf = "https://github.com/bcneng"
-[url "git@github.com:gonzaloserrano"]
-    insteadOf = "https://github.com/gonzaloserrano"
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
 [credential]
 	helper = osxkeychain
-[diff "json"]
-    textconv = python -m json.tool
 [rerere]
 	enabled = true
-[color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
-[interactive]
-    diffFilter = diff-highlight
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[user]
-	name = "Gonzalo Serrano"
-	email = boikot@gmail.com
-[http]
-	cookiefile = /Users/gonzalo/.gitcookies
+[pager]
+    diff = delta
+    log = delta
+    reflog = delta
+    show = delta
+[interactive]
+    diffFilter = delta --color-only --features=interactive
+[delta]
+    features = side-by-side line-numbers decorations
+    whitespace-error-style = 22 reverse
+
+[delta "interactive"]
+    keep-plus-minus-markers = false
+
+[delta "decorations"]
+    commit-decoration-style = blue ol
+    commit-style = raw
+    file-style = omit
+    hunk-header-decoration-style = blue box
+    hunk-header-file-style = red
+    hunk-header-line-number-style = "#067a00"
+    hunk-header-style = file line-number syntax
