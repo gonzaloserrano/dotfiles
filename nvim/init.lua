@@ -165,3 +165,7 @@ map('n', 'gr', ':lua vim.lsp.buf.references()<cr>', silent)
 map('n', 'gn', ':lua vim.diagnostic.goto_next()<cr>', silent)
 map('n', 'gb', ':lua vim.diagnostic.goto_prev()<cr>', silent)
 map('n', 'ga', ':lua vim.lsp.buf.code_action()<cr>', silent)
+
+-- copilot
+map('i', '<c-j>', 'copilot#Accept("<CR>")', {expr=true, silent=true})
+g.copilot_no_tab_map = 1

@@ -16,10 +16,9 @@ alias gv="rg -v"
 alias gvi="rg -vi"
 alias rgo="rg -tgo"
 alias rgoo="rg -tgo -l"
-alias rjs="rg -g '!node_modules/' -tjs"
-alias rjsv="rg -tjs"
 alias rgp="rg -tprotobuf"
-alias rgd="rg -tmarkdown"
+alias rgy="rg -tyaml"
+alias rgmd="rg -tmarkdown"
 
 alias dir='. ~/bin/dir'
 
