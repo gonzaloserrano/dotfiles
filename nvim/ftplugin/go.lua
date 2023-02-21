@@ -8,10 +8,22 @@ require 'go'.setup({
   -- tag_transform = false,
   -- test_dir = '',
   comment_placeholder = ' is a ',
-  lsp_cfg = true, -- false: use your own lspconfig
   lsp_gofumpt = true, -- true: set default gofmt in gopls format to gofumpt
   lsp_on_attach = true, -- use on_attach from go.nvim
   -- dap_debug = true,
+  -- extra lspconfig
+  lsp_cfg = {
+    -- capabilities = capabilities,
+    settings = {
+      -- https://github.com/golang/tools/blob/master/gopls/doc/settings.md
+      gopls = {
+        -- matcher = 'CaseInsensitive',
+        -- analyses = { unusedparams = false },
+		directoryFilters = { 'vendor', 'manifests', 'testdata', 'test-workdir', '-**/node_modules' },
+        ['local'] = 'github.com/tetrateio/tetrate',
+      },
+    },
+  },
 })
 
 local protocol = require'vim.lsp.protocol'
@@ -30,10 +42,9 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 local map = vim.api.nvim_set_keymap
 local silent = { silent = true, noremap = true }
 
-map('n', '<c-y>', ':GoCoverage -t sqlite<cr>', silent)
+map('n', '<c-y>', ':GoCoverage<cr>', silent)
 map('n', '<c-a>', ':GoAlt!<cr>', silent)
 map('n', '<c-e>', ':GoIfErr<cr>', silent)
-map('n', ',,',    ':GoDoc<cr>', silent)
 
 -- abbreviations
 
