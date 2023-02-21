@@ -104,8 +104,8 @@ require('iswap').setup{
   move_cursor = true,
 }
 map('n', ',s', ':ISwap<cr>', silent)
-map('n', ',<Right>', ':ISwapWithRight<cr>', silent)
-map('n', ',<Left>', ':ISwapWithLeft<cr>', silent)
+map('n', ',,', ':ISwapWithRight<cr>', silent)
+map('n', ',.', ':ISwapWithLeft<cr>', silent)
 
 ---- completion
 local cmp = require'cmp'
