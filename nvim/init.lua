@@ -167,5 +167,6 @@ map('n', 'gb', ':lua vim.diagnostic.goto_prev()<cr>', silent)
 map('n', 'ga', ':lua vim.lsp.buf.code_action()<cr>', silent)
 
 -- copilot
-map('i', '<c-j>', 'copilot#Accept("<CR>")', {expr=true, silent=true})
-g.copilot_no_tab_map = 1
+map('i', '<c-j>', 'copilot#Accept("")', {expr=true, silent=true})
+map('i', '<c-k>', 'copilot#Next()', {expr=true, silent=true})
+map('i', '<c-l>', 'copilot#Dismiss()', {expr=true, silent=true})
