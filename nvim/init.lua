@@ -170,3 +170,7 @@ map('n', 'ga', ':lua vim.lsp.buf.code_action()<cr>', silent)
 map('i', '<c-j>', 'copilot#Accept("")', {expr=true, silent=true})
 map('i', '<c-k>', 'copilot#Next()', {expr=true, silent=true})
 map('i', '<c-l>', 'copilot#Dismiss()', {expr=true, silent=true})
+
+-- chatgpt
+map('v', '<leader>aa', ':ChatGPTEditWithInstructions<cr>', silent)
+map('v', 'gc', ':ChatGPTEditWithInstructions<cr>', silent)

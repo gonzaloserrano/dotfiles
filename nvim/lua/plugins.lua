@@ -50,4 +50,22 @@ return require('packer').startup(function(use)
   }
 
   use 'github/copilot.vim'
+
+  -- use("nvim-lua/plenary.nvim")
+  -- use("MunifTanjim/nui.nvim")
+  -- use("dpayne/CodeGPT.nvim")
+
+  use {
+    "gonzaloserrano/ChatGPT.nvim",
+    config = function()
+      require("chatgpt").setup({
+        -- optional configuration
+      })
+    end,
+    requires = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim"
+    }
+}
 end)

@@ -165,3 +165,7 @@ Add [interestingwords](https://github.com/leisiji/interestingwords.nvim), [nvimt
 ## v7
 
 And [GitHub copilot](https://github.com/github/copilot.vim) plugin.
+
+## v8
+
+And [ChatGPT](https://github.com/jackMort/ChatGPT.nvim) plugin.
