@@ -56,7 +56,7 @@ return require('packer').startup(function(use)
   -- use("dpayne/CodeGPT.nvim")
 
   use {
-    "gonzaloserrano/ChatGPT.nvim",
+    "jackMort/ChatGPT.nvim",
     config = function()
       require("chatgpt").setup({
         -- optional configuration
