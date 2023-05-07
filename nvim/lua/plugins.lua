@@ -75,4 +75,6 @@ return require('packer').startup(function(use)
 		  require("various-textobjs").setup({ useDefaultKeymaps = true })
 	  end,
   }
+
+  use({ "MaximilianLloyd/adjacent.nvim" })
 end)

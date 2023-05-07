@@ -85,6 +85,11 @@ _G.packer_plugins = {
     path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/Onedarker.nvim",
     url = "https://github.com/lunarvim/Onedarker.nvim"
   },
+  ["adjacent.nvim"] = {
+    loaded = true,
+    path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/adjacent.nvim",
+    url = "https://github.com/MaximilianLloyd/adjacent.nvim"
+  },
   ["bufferline.nvim"] = {
     loaded = true,
     path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/bufferline.nvim",

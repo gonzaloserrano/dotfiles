@@ -24,7 +24,7 @@ map('n', '<c-j>', ':BufferLineCyclePrev<cr>', silent)
 map('n', '<c-k>', ':BufferLineCycleNext<cr>', silent)
 map('n', '<c-x>', ':bdelete<cr>', silent)
 ---- git
-map('n', '<c-h>', ':term DELTA_PAGER="" git log -p %<cr>', silent)
+-- map('n', '<c-h>', ':term DELTA_PAGER="" git log -p %<cr>', silent)
 map('n', '<c-d>', ':term DELTA_PAGER="" git diff %<cr>', silent)
 ----
 map('n', 'v', '<c-v>', silent)
@@ -46,14 +46,6 @@ require'nvim-treesitter.configs'.setup {
     enable = true,
   },
 }
-
-map('n', '<c-f>', ':Telescope oldfiles<cr>', silent)
-map('n', '<c-s>', ':Telescope lsp_document_symbols symbols=function,method,struct<cr>', silent)
-map('n', '<c-n>', ':Telescope diagnostics<cr>', silent)
-map('n', '<c-p>', ':Telescope git_files<cr>', silent)
-map('n', '<c-g>', ':Telescope live_grep<cr>', silent)
-map('n', '<c-b>', ':Telescope buffers<cr>', silent)
-map('n', '<c-i>', ':Telescope jumplist<cr>', silent)
 
 ---- lualine
 require('lualine').setup()
@@ -81,11 +73,11 @@ require('nvim-tree').setup({
   sort_by = 'case_sensitive',
   view = {
     adaptive_size = true,
-    mappings = {
-      list = {
-        { key = 'u', action = 'dir_up' },
-      },
-    },
+    -- mappings = {
+    --  list = {
+    --    { key = 'u', action = 'dir_up' },
+    --  },
+    -- },
   },
   renderer = {
     group_empty = true,
@@ -189,3 +181,15 @@ vim.api.nvim_create_autocmd(
 	group = group
 	}
 )
+---- telescope
+
+require('telescope').load_extension('adjacent')
+
+map('n', '<c-f>', ':Telescope oldfiles<cr>', silent)
+map('n', '<c-s>', ':Telescope lsp_document_symbols symbols=function,method,struct<cr>', silent)
+map('n', '<c-n>', ':Telescope diagnostics<cr>', silent)
+map('n', '<c-p>', ':Telescope git_files<cr>', silent)
+map('n', '<c-g>', ':Telescope live_grep<cr>', silent)
+map('n', '<c-b>', ':Telescope buffers<cr>', silent)
+map('n', '<c-i>', ':Telescope jumplist<cr>', silent)
+map('n', '<c-h>', ':Telescope adjacent<cr>', silent)
