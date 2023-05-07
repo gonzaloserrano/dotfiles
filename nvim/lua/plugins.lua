@@ -67,5 +67,12 @@ return require('packer').startup(function(use)
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim"
     }
-}
+  }
+
+  use {
+	  "chrisgrieser/nvim-various-textobjs",
+	  config = function () 
+		  require("various-textobjs").setup({ useDefaultKeymaps = true })
+	  end,
+  }
 end)

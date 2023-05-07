@@ -78,7 +78,7 @@ _G.packer_plugins = {
     config = { "\27LJ\2\n9\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\fchatgpt\frequire\0" },
     loaded = true,
     path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/ChatGPT.nvim",
-    url = "https://github.com/gonzaloserrano/ChatGPT.nvim"
+    url = "https://github.com/jackMort/ChatGPT.nvim"
   },
   ["Onedarker.nvim"] = {
     loaded = true,
@@ -165,6 +165,12 @@ _G.packer_plugins = {
     path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
     url = "https://github.com/nvim-treesitter/nvim-treesitter"
   },
+  ["nvim-various-textobjs"] = {
+    config = { "\27LJ\2\nX\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\1K\0\1\0\1\0\1\22useDefaultKeymaps\2\nsetup\21various-textobjs\frequire\0" },
+    loaded = true,
+    path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/nvim-various-textobjs",
+    url = "https://github.com/chrisgrieser/nvim-various-textobjs"
+  },
   ["nvim-web-devicons"] = {
     loaded = false,
     needs_bufread = false,
@@ -189,6 +195,10 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
+-- Config for: nvim-various-textobjs
+time([[Config for nvim-various-textobjs]], true)
+try_loadstring("\27LJ\2\nX\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\1K\0\1\0\1\0\1\22useDefaultKeymaps\2\nsetup\21various-textobjs\frequire\0", "config", "nvim-various-textobjs")
+time([[Config for nvim-various-textobjs]], false)
 -- Config for: ChatGPT.nvim
 time([[Config for ChatGPT.nvim]], true)
 try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\fchatgpt\frequire\0", "config", "ChatGPT.nvim")
