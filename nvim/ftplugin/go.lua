@@ -19,7 +19,7 @@ require 'go'.setup({
       gopls = {
         -- matcher = 'CaseInsensitive',
         -- analyses = { unusedparams = false },
-		directoryFilters = { 'vendor', 'manifests', 'testdata', 'test-workdir', '-**/node_modules' },
+		directoryFilters = {'-/cloud', '-vendor', '-manifests', '-testdata', '-test-workdir', '-**/node_modules' },
         ['local'] = 'github.com/tetrateio/tetrate',
       },
     },
