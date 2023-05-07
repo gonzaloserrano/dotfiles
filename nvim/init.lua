@@ -94,6 +94,7 @@ require('nvim-tree').setup({
     dotfiles = true,
   },
 })
+
 -- require('nvim-web-devicons').setup()
 
 map('n', ',e', ':NvimTreeToggle<cr>', silent)
@@ -174,3 +175,17 @@ map('i', '<c-l>', 'copilot#Dismiss()', {expr=true, silent=true})
 -- chatgpt
 map('v', '<leader>aa', ':ChatGPTEditWithInstructions<cr>', silent)
 map('v', 'gc', ':ChatGPTEditWithInstructions<cr>', silent)
+
+-- Jump to last position
+local group = vim.api.nvim_create_augroup("jump_last_position", { clear = true })
+vim.api.nvim_create_autocmd(
+	"BufReadPost",
+	{callback = function()
+			local row, col = unpack(vim.api.nvim_buf_get_mark(0, "\""))
+			if {row, col} ~= {0, 0} and row <= vim.api.nvim_buf_line_count(0) then
+				vim.api.nvim_win_set_cursor(0, {row, 0})
+			end
+		end,
+	group = group
+	}
+)
