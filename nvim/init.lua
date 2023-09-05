@@ -157,6 +157,19 @@ map('n', '<c-b>', ':Telescope buffers<cr>', silent)
 map('n', '<c-i>', ':Telescope jumplist<cr>', silent)
 map('n', '<c-y>', ':Telescope adjacent<cr>', silent)
 
+vim.keymap.set("n", ";", "<cmd>lua require('telescope.builtin').resume(require('telescope.themes').get_ivy({}))<cr>", opts)
+
+---- cd to root
+
+local function get_git_root()
+    local dot_git_path = vim.fn.finddir(".git", ".;")
+    return vim.fn.fnamemodify(dot_git_path, ":h")
+end
+
+vim.api.nvim_create_user_command("CdGitRoot", function()
+    vim.api.nvim_set_current_dir(get_git_root())
+end, {})
+
 -- 
 require('mini.completion').setup()
 
