@@ -18,11 +18,67 @@ require 'go'.setup({
       -- https://github.com/golang/tools/blob/master/gopls/doc/settings.md
       gopls = {
         -- matcher = 'CaseInsensitive',
-        -- analyses = { unusedparams = false },
-		directoryFilters = {'-/cloud', '-vendor', '-manifests', '-testdata', '-test-workdir', '-**/node_modules' },
+        analyses = { 
+			-- assign = true,
+			-- atomic = true,
+			-- atomicalign = true,
+			-- bools = true,
+			-- buildtag = true,
+			-- cgocall = true,
+			-- composites = true,
+			-- copylocks = true,
+			-- deepequalerrors = true,
+			-- directive = true,
+			-- embed = true,
+			-- errorsas = true,
+			-- fieldalignment = true,
+			-- httpresponse = true,
+			-- ifaceassert = true,
+			-- loopclosure = true,
+			-- lostcancel = true,
+			-- nilfunc = true,
+			-- nilness = true,
+			-- printf = true,
+			-- shadow = true,
+			-- shift = true,
+			-- simplifycompositelit = true,
+			-- simplifyrange = true,
+			-- simplifyslice = true,
+			-- sortslice = true,
+			-- stdmethods = true,
+			-- stringintconv = true,
+			-- structtag = true,
+			-- testinggoroutine = true,
+			-- tests = true,
+			-- timeformat = true,
+			-- unmarshal = true,
+			-- unreachable = true,
+			-- unsafeptr = true,
+			-- unusedparams = true,
+			-- unusedresult = true,
+			-- unusedwrite = true,
+			-- useany = true,
+			-- fillreturns = true,
+			-- nonewvars = true,
+			-- noresultvalues = true,
+			-- undeclaredname = true,
+			-- unusedvariable = true,
+			-- fillstruct = true,
+			-- infertypeargs = true,
+			-- stubmethods = true
+		},
+		directoryFilters = {'-/cloud', '-vendor', '-manifests', '-testdata', '-**/test-workdir', '-**/node_modules', '-**/.kube' },
+		-- use ['local'] insted of "local = " because it's a keyword
         ['local'] = 'github.com/tetrateio/tetrate',
+		gofumpt = true,
       },
     },
+  },
+  -- lsp_diag_hdlr = false,
+  lsp_codelens = false,
+  lsp_inlay_hints = {
+	  enable = false,
+	  -- only_current_line = true,
   },
 })
 
@@ -42,9 +98,11 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 local map = vim.api.nvim_set_keymap
 local silent = { silent = true, noremap = true }
 
-map('n', '<c-y>', ':GoCoverage<cr>', silent)
+-- map('n', '<c-y>', ':GoCoverage<cr>', silent)
 map('n', '<c-a>', ':GoAlt!<cr>', silent)
 map('n', '<c-e>', ':GoIfErr<cr>', silent)
+-- go.nvim defaults remaps c-k https://github.com/ray-x/go.nvim/issues/173
+map('n', '<c-l>', ':BufferLineCycleNext<cr>', silent)
 
 -- abbreviations
 
