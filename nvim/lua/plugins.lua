@@ -43,20 +43,7 @@ return require('packer').startup(function(use)
     requires = { 'nvim-tree/nvim-web-devicons', opt = true }
   }
 
-  use { 
-    'hrsh7th/nvim-cmp',
-    requires = {
-      {'hrsh7th/cmp-nvim-lsp'},
-      {'hrsh7th/cmp-buffer'},
-      {'hrsh7th/cmp-path'},
-    }
-  }
-
   use 'github/copilot.vim'
-
-  -- use("nvim-lua/plenary.nvim")
-  -- use("MunifTanjim/nui.nvim")
-  -- use("dpayne/CodeGPT.nvim")
 
   use {
     "jackMort/ChatGPT.nvim",
@@ -80,4 +67,6 @@ return require('packer').startup(function(use)
   }
 
   use({ "MaximilianLloyd/adjacent.nvim" })
+
+  use { 'echasnovski/mini.completion', branch = 'stable' }
 end)

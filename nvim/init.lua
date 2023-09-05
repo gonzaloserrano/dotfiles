@@ -93,40 +93,6 @@ map('n', ',s', ':ISwap<cr>', silent)
 map('n', ',,', ':ISwapWithRight<cr>', silent)
 map('n', ',.', ':ISwapWithLeft<cr>', silent)
 
----- completion
-local cmp = require'cmp'
-
-cmp.setup({
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'buffer', keyword_length = 4 },
-  },
-  mapping = cmp.mapping.preset.insert({
-    ['<Tab>'] = function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      else
-        fallback()
-      end
-    end,
-    ['<S-Tab>'] = function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      else
-        fallback()
-      end
-    end,
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    ['<C-e>'] = cmp.mapping.abort(),
-    ['<Esc>'] = cmp.mapping.close(),
-  }),
-  completion = {
-    keyword_length = 1,
-    completeopt = "menu,noselect"
-  },
-})
-
-
 ---- neovim/nvim-lspconfig
 local on_attach = function(client, bufnr)
   -- Enable completion triggered by <c-x><c-o>
@@ -134,11 +100,13 @@ local on_attach = function(client, bufnr)
 end
 
 -- Set up completion
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- capabilities.textDocument.completion.completionItem.snippetSupport = true
+
 require('lspconfig')['gopls'].setup{
-    on_attach = on_attach,
+	on_attach = on_attach,
     flags = lsp_flags,
-    capabilities = capabilities
+    capabilities = capabilities,
 }
 
 -- lsp maps
@@ -153,6 +121,8 @@ map('n', 'gb', ':lua vim.diagnostic.goto_prev()<cr>', silent)
 map('n', 'ga', ':lua vim.lsp.buf.code_action()<cr>', silent)
 
 -- copilot
+vim.g.copilot_no_tab_map = true
+vim.g.copilot_assume_mapped = true
 map('i', '<c-j>', 'copilot#Accept("")', {expr=true, silent=true})
 map('i', '<c-k>', 'copilot#Next()', {expr=true, silent=true})
 map('i', '<c-l>', 'copilot#Dismiss()', {expr=true, silent=true})
@@ -186,6 +156,9 @@ map('n', '<c-g>', ':Telescope live_grep<cr>', silent)
 map('n', '<c-b>', ':Telescope buffers<cr>', silent)
 map('n', '<c-i>', ':Telescope jumplist<cr>', silent)
 map('n', '<c-y>', ':Telescope adjacent<cr>', silent)
+
+-- 
+require('mini.completion').setup()
 
 -- some plugins require config to be set beforehand
 
