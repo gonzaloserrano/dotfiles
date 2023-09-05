@@ -47,6 +47,7 @@ return require('packer').startup(function(use)
 
   use {
     "jackMort/ChatGPT.nvim",
+	commit = "24bcca7",
     config = function()
       require("chatgpt").setup({
         -- optional configuration
@@ -67,6 +68,8 @@ return require('packer').startup(function(use)
   }
 
   use({ "MaximilianLloyd/adjacent.nvim" })
+
+  use({ "almo7aya/openingh.nvim" })
 
   use { 'echasnovski/mini.completion', branch = 'stable' }
 end)
