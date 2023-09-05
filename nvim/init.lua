@@ -1,5 +1,3 @@
-require('plugins')
-
 -- Settings
 
 local g = vim.g
@@ -24,7 +22,7 @@ map('n', '<c-j>', ':BufferLineCyclePrev<cr>', silent)
 map('n', '<c-k>', ':BufferLineCycleNext<cr>', silent)
 map('n', '<c-x>', ':bdelete<cr>', silent)
 ---- git
--- map('n', '<c-h>', ':term DELTA_PAGER="" git log -p %<cr>', silent)
+map('n', '<c-h>', ':term DELTA_PAGER="" git log -p %<cr>', silent)
 map('n', '<c-d>', ':term DELTA_PAGER="" git diff %<cr>', silent)
 ----
 map('n', 'v', '<c-v>', silent)
@@ -89,7 +87,7 @@ require('nvim-tree').setup({
 
 -- require('nvim-web-devicons').setup()
 
-map('n', ',e', ':NvimTreeToggle<cr>', silent)
+map('n', ',e', ':NvimTreeFindFileToggle<cr>', silent)
 
 ---- iswap
 require('iswap').setup{
@@ -192,4 +190,8 @@ map('n', '<c-p>', ':Telescope git_files<cr>', silent)
 map('n', '<c-g>', ':Telescope live_grep<cr>', silent)
 map('n', '<c-b>', ':Telescope buffers<cr>', silent)
 map('n', '<c-i>', ':Telescope jumplist<cr>', silent)
-map('n', '<c-h>', ':Telescope adjacent<cr>', silent)
+map('n', '<c-y>', ':Telescope adjacent<cr>', silent)
+
+-- some plugins require config to be set beforehand
+
+require('plugins')
