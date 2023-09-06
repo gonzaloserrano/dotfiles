@@ -73,4 +73,5 @@ return require('packer').startup(function(use)
 
   use { 'echasnovski/mini.completion', branch = 'stable' }
   use { 'echasnovski/mini.pairs', branch = 'stable' }
+  use { 'echasnovski/mini.indentscope', branch = 'stable' }
 end)

@@ -170,9 +170,14 @@ vim.api.nvim_create_user_command("CdGitRoot", function()
     vim.api.nvim_set_current_dir(get_git_root())
 end, {})
 
--- 
+--  mini
 require('mini.completion').setup()
 require('mini.pairs').setup()
+
+require('mini.indentscope').setup()
+vim.cmd([[
+    au FileType * if index(['yaml', 'gohtmltmpl'], &ft) < 0 | let b:miniindentscope_disable=v:true | endif
+]])
 
 -- some plugins require config to be set beforehand
 
