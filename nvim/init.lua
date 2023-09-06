@@ -172,6 +172,7 @@ end, {})
 
 -- 
 require('mini.completion').setup()
+require('mini.pairs').setup()
 
 -- some plugins require config to be set beforehand
 

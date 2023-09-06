@@ -72,4 +72,5 @@ return require('packer').startup(function(use)
   use({ "almo7aya/openingh.nvim" })
 
   use { 'echasnovski/mini.completion', branch = 'stable' }
+  use { 'echasnovski/mini.pairs', branch = 'stable' }
 end)

@@ -135,6 +135,11 @@ _G.packer_plugins = {
     path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/mini.completion",
     url = "https://github.com/echasnovski/mini.completion"
   },
+  ["mini.pairs"] = {
+    loaded = true,
+    path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/mini.pairs",
+    url = "https://github.com/echasnovski/mini.pairs"
+  },
   ["nui.nvim"] = {
     loaded = true,
     path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/nui.nvim",
