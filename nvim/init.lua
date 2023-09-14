@@ -121,15 +121,15 @@ map('n', 'gb', ':lua vim.diagnostic.goto_prev()<cr>', silent)
 map('n', 'ga', ':lua vim.lsp.buf.code_action()<cr>', silent)
 
 -- copilot
-vim.g.copilot_no_tab_map = true
-vim.g.copilot_assume_mapped = true
-map('i', '<c-j>', 'copilot#Accept("")', {expr=true, silent=true})
-map('i', '<c-k>', 'copilot#Next()', {expr=true, silent=true})
-map('i', '<c-l>', 'copilot#Dismiss()', {expr=true, silent=true})
+-- vim.g.copilot_no_tab_map = true
+-- vim.g.copilot_assume_mapped = true
+-- map('i', '<c-j>', 'copilot#Accept("")', {expr=true, silent=true})
+-- map('i', '<c-k>', 'copilot#Next()', {expr=true, silent=true})
+-- map('i', '<c-l>', 'copilot#Dismiss()', {expr=true, silent=true})
 
 -- chatgpt
-map('v', '<leader>aa', ':ChatGPTEditWithInstructions<cr>', silent)
-map('v', 'gc', ':ChatGPTEditWithInstructions<cr>', silent)
+-- map('v', '<leader>aa', ':ChatGPTEditWithInstructions<cr>', silent)
+-- map('v', 'gc', ':ChatGPTEditWithInstructions<cr>', silent)
 
 -- Jump to last position
 local group = vim.api.nvim_create_augroup("jump_last_position", { clear = true })
@@ -173,6 +173,7 @@ end, {})
 --  mini
 require('mini.completion').setup()
 require('mini.pairs').setup()
+-- require('mini.trailspace').setup()
 
 require('mini.indentscope').setup()
 vim.cmd([[

@@ -43,22 +43,22 @@ return require('packer').startup(function(use)
     requires = { 'nvim-tree/nvim-web-devicons', opt = true }
   }
 
-  use 'github/copilot.vim'
+--  use 'github/copilot.vim'
 
-  use {
-    "jackMort/ChatGPT.nvim",
-	commit = "24bcca7",
-    config = function()
-      require("chatgpt").setup({
-        -- optional configuration
-      })
-    end,
-    requires = {
-      "MunifTanjim/nui.nvim",
-      "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope.nvim"
-    }
-  }
+-- use {
+--   "jackMort/ChatGPT.nvim",
+--   commit = "24bcca7",
+--   config = function()
+--     require("chatgpt").setup({
+--       -- optional configuration
+--     })
+--   end,
+--   requires = {
+--     "MunifTanjim/nui.nvim",
+--     "nvim-lua/plenary.nvim",
+--     "nvim-telescope/telescope.nvim"
+--   }
+-- }
 
   use {
 	  "chrisgrieser/nvim-various-textobjs",
@@ -74,4 +74,5 @@ return require('packer').startup(function(use)
   use { 'echasnovski/mini.completion', branch = 'stable' }
   use { 'echasnovski/mini.pairs', branch = 'stable' }
   use { 'echasnovski/mini.indentscope', branch = 'stable' }
+  -- use { 'echasnovski/mini.trailspace', branch = 'stable' }
 end)
