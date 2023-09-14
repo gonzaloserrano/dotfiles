@@ -107,6 +107,7 @@ require('lspconfig')['gopls'].setup{
 	on_attach = on_attach,
     flags = lsp_flags,
     capabilities = capabilities,
+	-- settings are set by go.nvim at go.lua
 }
 
 -- lsp maps
