@@ -149,7 +149,7 @@ vim.api.nvim_create_autocmd(
 
 require('telescope').load_extension('adjacent')
 
-map('n', '<c-f>', ':Telescope oldfiles<cr>', silent)
+map('n', '<c-f>', ':Telescope frecency<cr>', silent)
 map('n', '<c-s>', ':Telescope lsp_document_symbols symbols=function,method,struct<cr>', silent)
 map('n', '<c-n>', ':Telescope diagnostics<cr>', silent)
 map('n', '<c-p>', ':Telescope git_files<cr>', silent)
