@@ -15,14 +15,13 @@ return require('packer').startup(function(use)
   use { -- for go.nvim
     'nvim-telescope/telescope.nvim',
     tag = '0.1.0',
-    requires = { {'nvim-lua/plenary.nvim'} }
+	requires = { {'nvim-lua/plenary.nvim'} }
   }
   use {
-	"nvim-telescope/telescope-frecency.nvim",
+	'nvim-telescope/telescope-github.nvim',
 	config = function()
-	  require("telescope").load_extension "frecency"
+	  require('telescope').load_extension('gh')
 	end,
-	requires = { "kkharji/sqlite.lua" },
   }
   use {
     'nvim-treesitter/nvim-treesitter',
