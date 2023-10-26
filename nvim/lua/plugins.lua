@@ -24,6 +24,12 @@ return require('packer').startup(function(use)
 	end,
   }
   use {
+	'Marskey/telescope-sg',
+	config = function()
+	  require('telescope').load_extension('ast_grep')
+	end,
+  }
+  use {
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate'
   }

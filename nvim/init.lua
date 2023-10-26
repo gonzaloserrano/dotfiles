@@ -161,6 +161,19 @@ map('n', '<c-y>', ':Telescope adjacent<cr>', silent)
 
 vim.keymap.set("n", ";", "<cmd>lua require('telescope.builtin').resume(require('telescope.themes').get_ivy({}))<cr>", opts)
 
+require('telescope').setup {
+    extensions = {
+        ast_grep = {
+            command = {
+                'sg',
+                '--json=stream',
+            }, -- must have --json=stream
+            grep_open_files = false, -- search in opened files
+            lang = 'go', -- string value, specify language for ast-grep `nil` for default
+        }
+    }
+}
+
 ---- cd to root
 
 local function get_git_root()
