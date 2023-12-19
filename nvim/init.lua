@@ -95,22 +95,6 @@ map('n', ',,', ':ISwapWithRight<cr>', silent)
 map('n', ',.', ':ISwapWithLeft<cr>', silent)
 
 ---- neovim/nvim-lspconfig
-local on_attach = function(client, bufnr)
-  -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-end
-
--- Set up completion
-local capabilities = vim.lsp.protocol.make_client_capabilities()
--- capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-require('lspconfig')['gopls'].setup{
-	on_attach = on_attach,
-    flags = lsp_flags,
-    capabilities = capabilities,
-	-- settings are set by go.nvim at go.lua
-}
-
 -- lsp maps
 map('n', '<c-v>', ':lua vim.lsp.buf.rename()<cr>', silent)
 map('n', 'gd', ':lua vim.lsp.buf.definition()<cr>', silent)

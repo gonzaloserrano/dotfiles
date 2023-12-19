@@ -82,7 +82,21 @@ require 'go'.setup({
   },
 })
 
-local protocol = require'vim.lsp.protocol'
+local on_attach = function(client, bufnr)
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+end
+
+-- Set up completion
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+require('lspconfig')['gopls'].setup{
+	on_attach = on_attach,
+    flags = lsp_flags,
+    capabilities = capabilities,
+	-- settings are set by go.nvim at go.lua
+}
 
 -- format on save as per https://github.com/golang/tools/blob/master/gopls/doc/vim.md#imports-and-formatting
 vim.api.nvim_create_autocmd("BufWritePre", {
