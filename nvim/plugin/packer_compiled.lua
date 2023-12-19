@@ -89,6 +89,11 @@ _G.packer_plugins = {
     path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/bufferline.nvim",
     url = "https://github.com/akinsho/bufferline.nvim"
   },
+  ["copilot.vim"] = {
+    loaded = true,
+    path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/copilot.vim",
+    url = "https://github.com/github/copilot.vim"
+  },
   ["gitsigns.nvim"] = {
     loaded = true,
     path = "/Users/gonzalo/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
@@ -196,6 +201,10 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
+-- Config for: nvim-various-textobjs
+time([[Config for nvim-various-textobjs]], true)
+try_loadstring("\27LJ\2\nX\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\1K\0\1\0\1\0\1\22useDefaultKeymaps\2\nsetup\21various-textobjs\frequire\0", "config", "nvim-various-textobjs")
+time([[Config for nvim-various-textobjs]], false)
 -- Config for: telescope-github.nvim
 time([[Config for telescope-github.nvim]], true)
 try_loadstring("\27LJ\2\nG\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0'\2\3\0B\0\2\1K\0\1\0\agh\19load_extension\14telescope\frequire\0", "config", "telescope-github.nvim")
@@ -204,10 +213,6 @@ time([[Config for telescope-github.nvim]], false)
 time([[Config for telescope-sg]], true)
 try_loadstring("\27LJ\2\nM\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0'\2\3\0B\0\2\1K\0\1\0\rast_grep\19load_extension\14telescope\frequire\0", "config", "telescope-sg")
 time([[Config for telescope-sg]], false)
--- Config for: nvim-various-textobjs
-time([[Config for nvim-various-textobjs]], true)
-try_loadstring("\27LJ\2\nX\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\1K\0\1\0\1\0\1\22useDefaultKeymaps\2\nsetup\21various-textobjs\frequire\0", "config", "nvim-various-textobjs")
-time([[Config for nvim-various-textobjs]], false)
 
 _G._packer.inside_compile = false
 if _G._packer.needs_bufread == true then

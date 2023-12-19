@@ -14,7 +14,6 @@ return require('packer').startup(function(use)
   }
   use { -- for go.nvim
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.0',
 	requires = { {'nvim-lua/plenary.nvim'} }
   }
   use {
@@ -55,13 +54,13 @@ return require('packer').startup(function(use)
     requires = { 'nvim-tree/nvim-web-devicons', opt = true }
   }
 
---  use 'github/copilot.vim'
+  use 'github/copilot.vim'
 
 -- use {
 --   "jackMort/ChatGPT.nvim",
 --   commit = "24bcca7",
 --   config = function()
---     require("chatgpt").setup({
+--     require('chatgpt").setup({
 --       -- optional configuration
 --     })
 --   end,
