@@ -70,6 +70,14 @@ vim.g.interestingwords_colors = {
 ---- nvim-tree.lua + icons
 require('nvim-tree').setup({
   sort_by = 'case_sensitive',
+  respect_buf_cwd = true,
+  sync_root_with_cwd = true,
+  reload_on_bufenter = true,
+  actions = {
+    change_dir = { 
+      enable = true,
+    },
+  },
   view = {
     adaptive_size = true,
   },
@@ -83,7 +91,7 @@ require('nvim-tree').setup({
 
 -- require('nvim-web-devicons').setup()
 
-map('n', ',e', ':NvimTreeFindFileToggle<cr>', silent)
+map('n', ',e', ':NvimTreeFindFileToggle!<cr>', silent)
 
 ---- iswap
 require('iswap').setup{
