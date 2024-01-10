@@ -1,112 +1,50 @@
 #!/usr/bin/env bash
 
-###############################################################################
 # Install brew and brew cask apps                                             #
-###############################################################################
 
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
-# Add older versions cask repository because of 1Password subscription based business model change from v6 to v7
-
-brew tap homebrew/cask-versions homebrew/cask-fonts
-
-declare -a brew_cask_apps=(
-  'adobe-creative-cloud'
-  'android-file-transter'
-  'android-studio'
-  'appcleaner'
-  'bartender'
-  'betterzip'
-  'caffeine'
-  'calibre'
-  'charles'
-  'colorpicker-skalacolor'
-  'contexts'
-  'docker'
-  'dropbox'
-  'firefox'
-  'google-chrome'
-  'google-nik-collection'
-  'homebrew/cask-fonts/font-hasklig'
-  'imagealpha'
-  'istat-menus'
-  'iterm2-beta'
-  'java'
-  'jumpcut'
-  'keybase'
-  'kitematic'
-  'licecap'
-  'notion'
-  'postman'
-  'qlcolorcode'
-  'qlmarkdown'
-  'qlstephen'
-  'qlvideo'
-  'quicklook-json'
-  'sequel-pro'
-  'sketchbook'
-  'skype'
-  'slack'
-  'spotify'
-  'suspicious-package'
-  'the-unarchiver'
-  'transmit'
-  'visual-studio-code'
-  'vlc'
-  'webpquicklook'
-  'webtorrent'
-  'whatsapp'
-)
-
-for app in "${brew_cask_apps[@]}"; do
-  brew cask install "$app"
-done
+# /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 declare -a brew_cli_tools=(
-  'ack'
   'ag'
+  'age'
+  'asdf'
   'bat'
   'cmake'
   'colordiff'
-  'composer'
   'coreutils'
   'ctags'
+  'difftastic'
   'dos2unix'
+  'exa'
   'exiftool'
   'ffmpeg'
   'fzf'
   'git'
+  'git-delta'
+  'gh'
   'gnu-sed'
   'gnu-tar'
-  'go'
-  'gradle'
   'graphviz'
   'htop'
   'httpie'
-  'hub'
   'hugo'
-  'icdiff' # columnar diff
   'imagemagick'
   'jq'
   'jump'
   'mas'
   'ncdu'
-  'node'
-  'nvm'
   'parallel'
-  'php'
   'pidcat'
+  'rename'
   'ripgrep'
-  'sbt'
-  'terraform'
+  'shellcheck'
   'tig'
   'tldr'
   'tmux'
   'tree'
   'vim'
+  'watch'
   'watchman'
-  'yarn'
-  'youtube-dl'
   'zsh'
   'zsh-autosuggestions'
   'zsh-history-substring-search'
@@ -117,9 +55,21 @@ for tool in "${brew_cli_tools[@]}"; do
   brew install "$tool"
 done
 
-###############################################################################
+
+declare -a brew_dev_tools=(
+  'node'
+  'go'
+  'gradle'
+  'yarn'
+  'sbt'
+  'nvm'
+)
+
+for tool in "${brew_dev_tools[@]}"; do
+  brew install "$tool"
+done
+
 # Install Mac App Store apps                                                  #
-###############################################################################
 
 declare -a mas_apps=(
   '419330170' # Moom
@@ -131,9 +81,43 @@ for app in "${mas_apps[@]}"; do
   mas install "$app"
 done
 
-###############################################################################
 # Configure installed apps                                                    #
-###############################################################################
 
-# Set ZSH as the default shell
+# Install Oh My ZSH
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+brew tap homebrew/cask-versions homebrew/cask-fonts
+
+declare -a brew_cask_apps=(
+  'homebrew/cask-drivers/logitech-options'
+  '1password'
+  'adobe-creative-cloud'
+  'bitbar'
+  'charles'
+  'cleanshot'
+  'docker'
+  'dropbox'
+  'google-chrome'
+  'iterm2'
+  'jumpcut'
+  'keybase'
+  # 'mtmr'
+  'notion'
+  'skype'
+  'slack'
+  'spotify'
+  'tableplus'
+  'the-unarchiver'
+  'visual-studio-code'
+  'vlc'
+  # 'webtorrent'
+  # 'whatsapp'
+  'zoom'
+  'lunar'
+  'muzzle'
+)
+
+for app in "${brew_cask_apps[@]}"; do
+  brew install --cask "$app"
+done
+

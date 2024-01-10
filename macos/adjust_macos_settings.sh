@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-###############################################################################
 # 📱 Dock
-###############################################################################
 
 defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock autohide-delay -float 0.05
@@ -18,33 +16,11 @@ defaults write com.apple.dock show-recents -bool false
 defaults write com.apple.dock show-process-indicators -bool true
 
 
-# Add a spacer to the left side of the Dock (where the applications are)
-#defaults write com.apple.dock persistent-apps -array-add '{tile-data={}; tile-type="spacer-tile";}'
-# Add a spacer to the right side of the Dock (where the Trash is)
-#defaults write com.apple.dock persistent-others -array-add '{tile-data={}; tile-type="spacer-tile";}'
-
-###############################################################################
 # 🎛 Mission Control
-###############################################################################
 
 defaults write com.apple.dock expose-animation-duration -float 0.1
 defaults write com.apple.dashboard mcx-disabled -bool true
-
-# Don’t automatically rearrange Spaces based on most recent use
 defaults write com.apple.dock mru-spaces -bool false
-
-# Hot corners
-# Possible values:
-#  0: no-op
-#  2: Mission Control
-#  3: Show application windows
-#  4: Desktop
-#  5: Start screen saver
-#  6: Disable screen saver
-#  7: Dashboard
-# 10: Put display to sleep
-# 11: Launchpad
-# 12: Notification Center
 
 # Top left screen corner → Show application windows
 defaults write com.apple.dock wvous-tl-corner -int 3
@@ -64,9 +40,7 @@ defaults write com.apple.dock wvous-br-modifier -int 0
 
 killall Dock
 
-###############################################################################
 # ⌨️ Keyboard
-###############################################################################
 
 defaults write -g KeyRepeat -int 3
 defaults write -g InitialKeyRepeat -int 15
@@ -84,16 +58,11 @@ defaults write -g NSAutomaticPeriodSubstitutionEnabled -bool false
 defaults write -g NSAutomaticQuoteSubstitutionEnabled -bool false
 defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false
 
-###############################################################################
 # 🖱️ Mouse
-###############################################################################
-
 # Enable secondary button on click
 defaults write com.apple.driver.AppleBluetoothMultitouch.mouse MouseButtonMode TwoButton
 
-###############################################################################
 # 💻 Trackpad
-###############################################################################
 
 # Enable tap to click for the current user and the login screen. (Don't have to press down on the trackpad -- just tap it.)
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
@@ -108,9 +77,7 @@ defaults -currentHost write -g com.apple.trackpad.trackpadCornerClickBehavior -i
 defaults -currentHost write -g com.apple.trackpad.enableSecondaryClick -bool true
 defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -int 1
 
-###############################################################################
 # 📂 Finder
-###############################################################################
 
 defaults write com.apple.finder DisableAllAnimations -bool true
 defaults write -g AppleShowAllExtensions -bool true
@@ -302,8 +269,7 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 defaults write -g CGFontRenderingFontSmoothingDisabled -bool false
 
 # Set computer name (as done via System Preferences → Sharing)
-COMPUTER_NAME="imac"
-
+COMPUTER_NAME="mbpro"
 sudo scutil --set ComputerName $COMPUTER_NAME
 sudo scutil --set HostName $COMPUTER_NAME
 sudo scutil --set LocalHostName $COMPUTER_NAME
