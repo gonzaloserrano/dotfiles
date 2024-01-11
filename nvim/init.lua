@@ -21,7 +21,7 @@ local silent = { silent = true, noremap = true }
 ---- buffers
 map('n', '<c-j>', ':BufferLineCyclePrev<cr>', silent)
 map('n', '<c-k>', ':BufferLineCycleNext<cr>', silent)
-map('n', '<c-x>', ':bdelete<cr>', silent)
+map('n', '<c-x>', ':bdelete!<cr>', silent)
 ---- git
 map('n', '<c-h>', ':term DELTA_PAGER="" git log -p %<cr>', silent)
 map('n', '<c-d>', ':term DELTA_PAGER="" git diff %<cr>', silent)
