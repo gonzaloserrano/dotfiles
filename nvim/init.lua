@@ -2,16 +2,28 @@
 
 local g = vim.g
 local cmd = vim.cmd
+local fn = vim.fn
+local set = vim.opt
+
+--
+
 g.mapleader = [[ ]]
 g.maplocalleader = [[,]]
 
 -- Opts
-local set = vim.opt
 set.tabstop = 4
 set.softtabstop = 4
 set.shiftwidth = 4
 set.number = true
 set.clipboard = "unnamedplus"
+
+-- backups
+set.backup = true
+set.shada = "!,h,'1000,<1000,s128,/1000,:1000,@1000"
+local datadir = fn.stdpath('data')
+vim.o.backupdir = datadir .. '/backup'
+vim.o.directory = datadir .. '/tmp'
+vim.o.undodir   = datadir .. '/undo'
 
 -- General mappings
 
