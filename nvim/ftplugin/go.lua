@@ -141,3 +141,43 @@ cmd('iab rene require.NotEmpty(t,')
 cmd('iab ret require.True(t,')
 cmd('iab rel require.Len(t,')
 cmd('iab testt func TestX(t *testing.T) {<CR>')
+
+-- Move diagnostics to quickfix window.
+-- Adapted from https://github.com/samhh/dotfiles/blob/99e67298fbcb61d7398ad1850f3c2df31d90bd0d/home/.config/nvim/plugin/lsp.lua#L120
+local function setup_diags()
+  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics,
+    {
+      virtual_text = false,
+      signs = true,
+      update_in_insert = false,
+      underline = true,
+    }
+  )
+end
+
+local function setup_qf()
+  local pubdiag = "textDocument/publishDiagnostics"
+  local def_pubdiag_handler = vim.lsp.handlers[pubdiag]
+  vim.lsp.handlers[pubdiag] = function(err, method, res, cid, bufnr, cfg)
+    def_pubdiag_handler(err, method, res, cid, bufnr, cfg)
+
+    local qfdiags = {}
+    for bufnr_, diags in pairs(vim.diagnostic.get()) do
+      for _, diag in ipairs(diags) do
+        -- Filter out deprecation diagnostics.
+        if not string.match(diag.message, "deprecated") then
+          diag.bufnr = bufnr_
+          diag.lnum = diag.range.start.line + 1
+          diag.col = diag.range.start.character + 1
+          diag.text = diag.message
+          table.insert(qfdiags, diag)
+        end
+      end
+    end
+    vim.diagnostic.setqflist(qfdiags)
+  end
+end
+
+setup_diags()
+setup_qf()
