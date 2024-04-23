@@ -166,6 +166,6 @@ Add [interestingwords](https://github.com/leisiji/interestingwords.nvim), [nvimt
 
 And [GitHub copilot](https://github.com/github/copilot.vim) plugin.
 
-## v8
+## Next versions
 
-And [ChatGPT](https://github.com/jackMort/ChatGPT.nvim) plugin.
+Trying plugins, fixing LSP/gopls stuff, etc etc. No more reporting of this since standard vim 101.
