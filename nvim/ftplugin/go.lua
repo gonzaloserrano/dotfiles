@@ -2,7 +2,7 @@
 
 ---- from https://github.com/ray-x/go.nvim#sample-vimrc
 require 'go'.setup({
-  goimport = 'gopls', -- if set to 'gopls' will use golsp format
+  goimports = 'gopls', -- if set to 'gopls' will use golsp format
   gofmt = 'gopls', -- if set to gopls will use golsp format
   -- max_line_len = 120,
   -- tag_transform = false,
@@ -98,28 +98,15 @@ require('lspconfig')['gopls'].setup{
 	-- settings are set by go.nvim at go.lua
 }
 
--- format on save as per https://github.com/golang/tools/blob/master/gopls/doc/vim.md#imports-and-formatting
+local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.go",
   callback = function()
-    local params = vim.lsp.util.make_range_params()
-    params.context = {only = {"source.organizeImports"}}
-    -- buf_request_sync defaults to a 1000ms timeout. Depending on your
-    -- machine and codebase, you may want longer. Add an additional
-    -- argument after params if you find that you have to write the file
-    -- twice for changes to be saved.
-    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
-    for cid, res in pairs(result or {}) do
-      for _, r in pairs(res.result or {}) do
-        if r.edit then
-          local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
-          vim.lsp.util.apply_workspace_edit(r.edit, enc)
-        end
-      end
-    end
-    vim.lsp.buf.format({async = false})
-  end
+   require('go.format').goimports()
+  end,
+  group = format_sync_grp,
 })
+
 
 -- maps
 
@@ -129,7 +116,6 @@ local silent = { silent = true, noremap = true }
 -- map('n', '<c-y>', ':GoCoverage<cr>', silent)
 map('n', '<c-a>', ':GoAlt!<cr>', silent)
 map('n', '<c-e>', ':GoIfErr<cr>', silent)
--- go.nvim defaults remaps c-k https://github.com/ray-x/go.nvim/issues/173
 map('n', '<c-l>', ':BufferLineCycleNext<cr>', silent)
 
 -- abbreviations
@@ -141,43 +127,3 @@ cmd('iab rene require.NotEmpty(t,')
 cmd('iab ret require.True(t,')
 cmd('iab rel require.Len(t,')
 cmd('iab testt func TestX(t *testing.T) {<CR>')
-
--- Move diagnostics to quickfix window.
--- Adapted from https://github.com/samhh/dotfiles/blob/99e67298fbcb61d7398ad1850f3c2df31d90bd0d/home/.config/nvim/plugin/lsp.lua#L120
-local function setup_diags()
-  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics,
-    {
-      virtual_text = false,
-      signs = true,
-      update_in_insert = false,
-      underline = true,
-    }
-  )
-end
-
-local function setup_qf()
-  local pubdiag = "textDocument/publishDiagnostics"
-  local def_pubdiag_handler = vim.lsp.handlers[pubdiag]
-  vim.lsp.handlers[pubdiag] = function(err, method, res, cid, bufnr, cfg)
-    def_pubdiag_handler(err, method, res, cid, bufnr, cfg)
-
-    local qfdiags = {}
-    for bufnr_, diags in pairs(vim.diagnostic.get()) do
-      for _, diag in ipairs(diags) do
-        -- Filter out deprecation diagnostics.
-        if not string.match(diag.message, "deprecated") then
-          diag.bufnr = bufnr_
-          diag.lnum = diag.range.start.line + 1
-          diag.col = diag.range.start.character + 1
-          diag.text = diag.message
-          table.insert(qfdiags, diag)
-        end
-      end
-    end
-    vim.diagnostic.setqflist(qfdiags)
-  end
-end
-
-setup_diags()
-setup_qf()
