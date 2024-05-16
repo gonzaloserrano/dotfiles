@@ -42,8 +42,8 @@ map('n', 'v', '<c-v>', silent)
 
 -- Colors
 
----- lunarvim/Onedarker.nvim
-cmd("colorscheme onedarker")
+-- cmd("colorscheme onedarker")
+cmd("colorscheme onedark")
 
 -- Go
 ---- moved to ftplugin/go.lua
@@ -129,7 +129,7 @@ map('n', '<c-v>', ':lua vim.lsp.buf.rename()<cr>', silent)
 map('n', 'gd', ':lua vim.lsp.buf.definition()<cr>', silent)
 map('n', 'gt', ':lua vim.lsp.buf.type_definition()<cr>', silent)
 map('n', 'gi', ':lua vim.lsp.buf.implementation()<cr>', silent)
-map('n', 'K', ':lua vim.lsp.buf.hover()<cr>', silent)
+-- map('n', 'K', ':lua vim.lsp.buf.hover()<cr>', silent) -- default in nvim 0.10.0
 map('n', 'gr', ':lua vim.lsp.buf.references()<cr>', silent)
 map('n', 'gn', ':lua vim.diagnostic.goto_next()<cr>', silent)
 map('n', 'gb', ':lua vim.diagnostic.goto_prev()<cr>', silent)
@@ -176,6 +176,9 @@ map('n', '<c-y>', ':Telescope adjacent<cr>', silent)
 vim.keymap.set("n", ";", "<cmd>lua require('telescope.builtin').resume(require('telescope.themes').get_ivy({}))<cr>", opts)
 
 require('telescope').setup {
+	defaults = {
+		wrap_results = true,
+	},
     extensions = {
         ast_grep = {
             command = {

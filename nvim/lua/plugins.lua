@@ -44,7 +44,8 @@ return require('packer').startup(function(use)
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   }
   use {
-    'akinsho/bufferline.nvim', 
+	'Theyashsawarkar/bufferline.nvim',
+    -- 'akinsho/bufferline.nvim', 
     tag = "v3.*", 
     requires = 'nvim-tree/nvim-web-devicons'
   }
@@ -92,4 +93,6 @@ return require('packer').startup(function(use)
   use { 'echasnovski/mini.pairs', branch = 'stable' }
   use { 'echasnovski/mini.indentscope', branch = 'stable' }
   -- use { 'echasnovski/mini.trailspace', branch = 'stable' }
+  use {'kevinhwang91/nvim-bqf', ft = 'qf'}
+  use {'navarasu/onedark.nvim'}
 end)
