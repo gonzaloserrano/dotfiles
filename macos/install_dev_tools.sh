@@ -32,12 +32,11 @@ declare -a brew_tools=(
     'sql-language-server'
     'ast-grep'
     'asdf'
+	'python'
+	'pipx'
 )
 
 mkdir -p ~/.helm/plugins
-# helm plugin install https://github.com/viglesiasce/helm-gcs.git --version v0.2.0
-# helm repo add paack-repo gs://paack-system-production-charts
-# helm repo update
 helm plugin install https://github.com/databus23/helm-diff --version master
 
 for tool in "${brew_tools[@]}"; do
