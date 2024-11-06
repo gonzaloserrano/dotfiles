@@ -1,2 +1,2 @@
 local set = vim.opt
-set.conceallevel = 2
+set.conceallevel = 0
