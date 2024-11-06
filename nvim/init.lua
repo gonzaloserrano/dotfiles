@@ -38,12 +38,42 @@ map('n', '<c-x>', ':bdelete!<cr>', silent)
 map('n', '<c-h>', ':term DELTA_PAGER="" git --no-pager log -p %<cr>', silent)
 map('n', '<c-d>', ':term DELTA_PAGER="" git --no-pager diff %<cr>', silent)
 ----
-map('n', 'v', '<c-v>', silent)
+-- map('n', 'v', '<c-v>', silent)
 
 -- Colors
 
 -- cmd("colorscheme onedarker")
-cmd("colorscheme onedark")
+local colors = require("onenord.colors").load()
+
+require("onenord").setup({
+  custom_highlights = {
+    ["@module"] = { fg = colors.light_green },
+    ["@function"] = { fg = colors.light_red },
+    ["@function.method.go"] = { fg = colors.red },
+    ["@function.method.call"] = { fg = colors.light_red },
+    ["@function.builtin"] = { fg = colors.yellow },
+    ["@constructor.go"] = { fg = colors.light_red },
+    ["@variable.parameter.go"] = { fg = colors.white },
+    -- ["@variable.member"] = { fg = colors.light_blue },
+    ["@type"] = { fg = colors.blue },
+    ["@type.go"] = { fg = colors.light_green },
+    ["@type.builtin"] = { fg = colors.light_green },
+    ["@property.go"] = { fg = colors.purple },
+    ["@keyword"] = { fg = colors.yellow },
+    ["@keyword.repeat"] = { fg = colors.yellow },
+    ["@keyword.conditional"] = { fg = colors.yellow },
+    ["@keyword.function.go"] = { fg = colors.yellow },
+    ["@keyword.return.go"] = { fg = colors.yellow },
+    ["@operator.go"] = { fg = colors.blue },
+	["@comment.todo.comment"] = { fg = colors.pink },
+  },
+  custom_colors = {
+	dark_blue = "#aeaeae",
+	blue = "#c7aa8d",
+	yellow = "#d5b271",
+	orange = "#d48f61",
+  },
+})
 
 -- Go
 ---- moved to ftplugin/go.lua

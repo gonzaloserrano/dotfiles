@@ -61,7 +61,11 @@ return require('packer').startup(function(use)
     requires = { 'nvim-tree/nvim-web-devicons', opt = true }
   }
 
-  use 'github/copilot.vim'
+  use {
+	  'rmehri01/onenord.nvim'
+  }
+
+  -- use 'github/copilot.vim'
 
 -- use {
 --   "jackMort/ChatGPT.nvim",
