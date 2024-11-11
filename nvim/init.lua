@@ -67,6 +67,8 @@ require("onenord").setup({
     ["@keyword.return.go"] = { fg = colors.yellow },
     ["@operator.go"] = { fg = colors.blue },
 	["@comment.todo.comment"] = { fg = colors.pink },
+	["@lsp.type.parameter.go"] = { fg = colors.white },
+	["@lsp.typemod.variable.readonly.go"] =  { fg = colors.purple },
   },
   custom_colors = {
 	dark_blue = "#aeaeae",
@@ -156,7 +158,7 @@ map('n', ',.', ':ISwapWithLeft<cr>', silent)
 
 ---- neovim/nvim-lspconfig
 -- lsp maps
-map('n', '<c-v>', ':lua vim.lsp.buf.rename()<cr>', silent)
+map('n', '<c-e>', ':lua vim.lsp.buf.rename()<cr>', silent)
 map('n', 'gd', ':lua vim.lsp.buf.definition()<cr>', silent)
 map('n', 'gt', ':lua vim.lsp.buf.type_definition()<cr>', silent)
 map('n', 'gi', ':lua vim.lsp.buf.implementation()<cr>', silent)
