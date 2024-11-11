@@ -89,14 +89,82 @@ return require('packer').startup(function(use)
 	  end,
   }
 
-  use({ "MaximilianLloyd/adjacent.nvim" })
+  use { "MaximilianLloyd/adjacent.nvim" }
 
-  use({ "almo7aya/openingh.nvim" })
+  use { "almo7aya/openingh.nvim" }
 
   use { 'echasnovski/mini.completion', branch = 'stable' }
+  use { 'echasnovski/mini.fuzzy', branch = 'stable' }
   use { 'echasnovski/mini.pairs', branch = 'stable' }
   use { 'echasnovski/mini.indentscope', branch = 'stable' }
   -- use { 'echasnovski/mini.trailspace', branch = 'stable' }
   use {'kevinhwang91/nvim-bqf', ft = 'qf'}
-  use {'navarasu/onedark.nvim'}
+  use {'nvim-treesitter/nvim-treesitter-context'}
+  use {'nvim-treesitter/nvim-treesitter-textobjects'}
+  use {'ziontee113/syntax-tree-surfer'}
+  use {'j-hui/fidget.nvim'}
+  --
+  use {
+	  "robitx/gp.nvim",
+	  config = function()
+		  local config = {
+			  hooks = {
+				  InspectPlugin = function(plugin, params)
+					  local bufnr = vim.api.nvim_create_buf(false, true)
+					  local copy = vim.deepcopy(plugin)
+					  local key = copy.config.openai_api_key
+					  copy.config.openai_api_key = key:sub(1, 3) .. string.rep("*", #key - 6) .. key:sub(-3)
+					  for provider, _ in pairs(copy.providers) do
+						  local s = copy.providers[provider].secret
+						  if s and type(s) == "string" then
+							  copy.providers[provider].secret = s:sub(1, 3) .. string.rep("*", #s - 6) .. s:sub(-3)
+						  end
+					  end
+					  local plugin_info = string.format("Plugin structure:\n%s", vim.inspect(copy))
+					  local params_info = string.format("Command params:\n%s", vim.inspect(params))
+					  local lines = vim.split(plugin_info .. "\n" .. params_info, "\n")
+					  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+					  vim.api.nvim_win_set_buf(0, bufnr)
+				  end,
+				  Implement = function(gp, params)
+					  local template = "Having following from {{filename}}:\n\n"
+					  .. "```{{filetype}}\n{{selection}}\n```\n\n"
+					  .. "Please rewrite this according to the contained instructions."
+					  .. "\n\nRespond exclusively with the snippet that should replace the selection above."
+
+					  local agent = gp.get_command_agent()
+					  gp.info("Implementing selection with agent: " .. agent.name)
+
+					  gp.Prompt(
+					  params,
+					  gp.Target.rewrite,
+					  nil, -- command will run directly without any prompting for user input
+					  agent.model,
+					  template,
+					  agent.system_prompt
+					  )
+				  end,
+				  UnitTests = function(gp, params)
+					  local template = "I have the following Go code from {{filename}}:\n\n"
+					  .. "```{{filetype}}\n{{selection}}\n```\n\n"
+					  .. "Please respond by writing table driven unit tests for the code above."
+					  .. "Make sure the code compiles properly! Don't respond with code if you are not sure."
+					  local agent = gp.get_command_agent()
+					  gp.Prompt(params, gp.Target.enew, nil, agent.model, template, agent.system_prompt)
+				  end,
+				  GoDoc = function(gp, params)
+					  local template = "I have the following Go code from {{filename}}:\n\n"
+					  .. "```{{filetype}}\n{{selection}}\n```\n\n"
+					  .. "Please respond by writing the godoc for the code above."
+					  .. "Don't respond with code if you are not sure."
+					  local agent = gp.get_command_agent()
+					  gp.Prompt(params, gp.Target.enew, nil, agent.model, template, agent.system_prompt)
+				  end,
+			  },
+		  }
+
+		  require("gp").setup(config)
+		  -- shortcuts might be setup here (see Usage > Shortcuts in Readme)
+	  end,
+  }
 end)
