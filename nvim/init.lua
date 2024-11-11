@@ -202,15 +202,36 @@ map('n', '<c-n>', ':Telescope diagnostics<cr>', silent)
 map('n', '<c-p>', ':Telescope git_files<cr>', silent)
 -- map('n', '<c-g>', ':Telescope live_grep<cr>', silent)
 map('n', '<c-g>', ':lua require("telescope").extensions.live_grep_args.live_grep_args()<CR>', silent)
+map('n', '<c-m>', ':Telescope resume<cr>', silent)
 map('n', '<c-b>', ':Telescope buffers<cr>', silent)
 map('n', '<c-i>', ':Telescope jumplist<cr>', silent)
 map('n', '<c-y>', ':Telescope adjacent<cr>', silent)
 
-vim.keymap.set("n", ";", "<cmd>lua require('telescope.builtin').resume(require('telescope.themes').get_ivy({}))<cr>", opts)
+-- cvim.keymap.set("n", ";", "<cmd>lua require('telescope.builtin').resume(require('telescope.themes').get_ivy({}))<cr>", opts)
 
 require('telescope').setup {
 	defaults = {
 		wrap_results = true,
+		layout_strategy = 'vertical',
+		layout_config = {
+			prompt_position = 'top',
+			mirror =  true,
+			preview_height = 0.6,
+		},
+		mappings = {
+			n = {
+				['<c-d>'] = require('telescope.actions').delete_buffer
+			},
+			i = {
+				["<C-h>"] = "which_key",
+				['<c-d>'] = require('telescope.actions').delete_buffer
+			}
+		},
+	},
+	pickers = {
+		oldfiles = {
+			cwd_only = true,
+		}
 	},
     extensions = {
         ast_grep = {
