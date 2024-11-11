@@ -16,6 +16,7 @@ set.softtabstop = 4
 set.shiftwidth = 4
 set.number = true
 set.clipboard = "unnamedplus"
+set.spelllang = "en"
 
 -- backups
 set.backup = true
