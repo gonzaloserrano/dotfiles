@@ -32,6 +32,7 @@ local map = vim.api.nvim_set_keymap
 local silent = { silent = true, noremap = true }
 
 ---- buffers
+vim.opt.termguicolors = true
 map('n', '<c-j>', ':BufferLineCyclePrev<cr>', silent)
 map('n', '<c-k>', ':BufferLineCycleNext<cr>', silent)
 map('n', '<c-x>', ':bdelete!<cr>', silent)
@@ -41,78 +42,17 @@ map('n', '<c-d>', ':term DELTA_PAGER="" git --no-pager diff %<cr>', silent)
 ----
 -- map('n', 'v', '<c-v>', silent)
 
--- Colors
-
--- cmd("colorscheme onedarker")
-local colors = require("onenord.colors").load()
-
-require("onenord").setup({
-  custom_highlights = {
-    ["@module"] = { fg = colors.light_green },
-    ["@function"] = { fg = colors.light_red },
-    ["@function.method.go"] = { fg = colors.red },
-    ["@function.method.call"] = { fg = colors.light_red },
-    ["@function.builtin"] = { fg = colors.yellow },
-    ["@constructor.go"] = { fg = colors.light_red },
-    ["@variable.parameter.go"] = { fg = colors.white },
-    -- ["@variable.member"] = { fg = colors.light_blue },
-    ["@type"] = { fg = colors.blue },
-    ["@type.go"] = { fg = colors.light_green },
-    ["@type.builtin"] = { fg = colors.light_green },
-    ["@property.go"] = { fg = colors.purple },
-    ["@keyword"] = { fg = colors.yellow },
-    ["@keyword.repeat"] = { fg = colors.yellow },
-    ["@keyword.conditional"] = { fg = colors.yellow },
-    ["@keyword.function.go"] = { fg = colors.yellow },
-    ["@keyword.return.go"] = { fg = colors.yellow },
-    ["@operator.go"] = { fg = colors.blue },
-	["@comment.todo.comment"] = { fg = colors.pink },
-	["@lsp.type.parameter.go"] = { fg = colors.white },
-	["@lsp.typemod.variable.readonly.go"] =  { fg = colors.purple },
-  },
-  custom_colors = {
-	dark_blue = "#aeaeae",
-	blue = "#c7aa8d",
-	yellow = "#d5b271",
-	orange = "#d48f61",
-  },
-})
-
--- Go
----- moved to ftplugin/go.lua
-
----- treesitter
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = { "lua", "go", "yaml" },
-  sync_install = true,
-  auto_install = true,
-  highlight = {
-    enable = true,
-  },
-}
-
----- lualine
-require('lualine').setup {
-	sections = {
-		lualine_c = {
-			{
-				'filename',
-				path = 3,
-			},
-		},
-	},
-}
-
----- bufferline
-vim.opt.termguicolors = true
-require('bufferline').setup {
-  -- If true, new buffers will be inserted at the start/end of the list.
-  -- Default is to insert after current buffer.
-  options = { sort_by = 'insert_at_end' }
-}
-
----- gitsigns
-require('gitsigns').setup()
+-- telescope
+map('n', '<c-f>', ':Telescope oldfiles<cr>', silent)
+map('n', '<c-s>', ':Telescope lsp_document_symbols symbols=function,method,struct<cr>', silent)
+map('n', '<c-n>', ':Telescope diagnostics<cr>', silent)
+map('n', '<c-p>', ':Telescope git_files<cr>', silent)
+-- map('n', '<c-g>', ':Telescope live_grep<cr>', silent)
+map('n', '<c-g>', ':lua require("telescope").extensions.live_grep_args.live_grep_args()<CR>', silent)
+map('n', '<c-m>', ':Telescope resume<cr>', silent)
+map('n', '<c-b>', ':Telescope buffers<cr>', silent)
+map('n', '<c-i>', ':Telescope jumplist<cr>', silent)
+map('n', '<c-y>', ':Telescope adjacent<cr>', silent)
 
 ---- interestingwords
 map('n', '<space>', ':Interestingwords --toggle<cr>', silent)
@@ -121,42 +61,8 @@ vim.g.interestingwords_colors = {
   '#F4A261', '#8CCBEA', '#A4E57E', '#FF7272', '#FFB3FF', '#9999FF', '#FFDB72', '#2A9D8F', '#3366ff',
 }
 
----- nvim-tree.lua + icons
-require('nvim-tree').setup({
-  sort_by = 'case_sensitive',
-  respect_buf_cwd = true,
-  sync_root_with_cwd = true,
-  reload_on_bufenter = true,
-  actions = {
-    change_dir = { 
-      enable = true,
-    },
-  },
-  view = {
-    adaptive_size = true,
-  },
-  renderer = {
-    group_empty = true,
-  },
-  filters = {
-    dotfiles = true,
-  },
-})
-
--- require('nvim-web-devicons').setup()
-
 map('n', ',e', ':NvimTreeFindFileToggle!<cr>', silent)
 
----- iswap
-require('iswap').setup{
-  -- Move cursor to the other element in ISwap*With commands
-  move_cursor = true,
-}
-map('n', ',s', ':ISwap<cr>', silent)
-map('n', ',,', ':ISwapWithRight<cr>', silent)
-map('n', ',.', ':ISwapWithLeft<cr>', silent)
-
----- neovim/nvim-lspconfig
 -- lsp maps
 map('n', '<c-e>', ':lua vim.lsp.buf.rename()<cr>', silent)
 map('n', 'gd', ':lua vim.lsp.buf.definition()<cr>', silent)
@@ -192,61 +98,8 @@ vim.api.nvim_create_autocmd(
 	group = group
 	}
 )
----- telescope
-
-require('telescope').load_extension('adjacent')
-
-map('n', '<c-f>', ':Telescope oldfiles<cr>', silent)
-map('n', '<c-s>', ':Telescope lsp_document_symbols symbols=function,method,struct<cr>', silent)
-map('n', '<c-n>', ':Telescope diagnostics<cr>', silent)
-map('n', '<c-p>', ':Telescope git_files<cr>', silent)
--- map('n', '<c-g>', ':Telescope live_grep<cr>', silent)
-map('n', '<c-g>', ':lua require("telescope").extensions.live_grep_args.live_grep_args()<CR>', silent)
-map('n', '<c-m>', ':Telescope resume<cr>', silent)
-map('n', '<c-b>', ':Telescope buffers<cr>', silent)
-map('n', '<c-i>', ':Telescope jumplist<cr>', silent)
-map('n', '<c-y>', ':Telescope adjacent<cr>', silent)
-
--- cvim.keymap.set("n", ";", "<cmd>lua require('telescope.builtin').resume(require('telescope.themes').get_ivy({}))<cr>", opts)
-
-require('telescope').setup {
-	defaults = {
-		wrap_results = true,
-		layout_strategy = 'vertical',
-		layout_config = {
-			prompt_position = 'top',
-			mirror =  true,
-			preview_height = 0.6,
-		},
-		mappings = {
-			n = {
-				['<c-d>'] = require('telescope.actions').delete_buffer
-			},
-			i = {
-				["<C-h>"] = "which_key",
-				['<c-d>'] = require('telescope.actions').delete_buffer
-			}
-		},
-	},
-	pickers = {
-		oldfiles = {
-			cwd_only = true,
-		}
-	},
-    extensions = {
-        ast_grep = {
-            command = {
-                'sg',
-                '--json=stream',
-            }, -- must have --json=stream
-            grep_open_files = false, -- search in opened files
-            lang = 'go', -- string value, specify language for ast-grep `nil` for default
-        }
-    }
-}
 
 ---- cd to root
-
 local function get_git_root()
     local dot_git_path = vim.fn.finddir(".git", ".;")
     return vim.fn.fnamemodify(dot_git_path, ":h")
@@ -255,22 +108,6 @@ end
 vim.api.nvim_create_user_command("CdGitRoot", function()
     vim.api.nvim_set_current_dir(get_git_root())
 end, {})
-
---  mini
-require('mini.completion').setup()
-require('mini.pairs').setup()
--- require('mini.trailspace').setup()
-
-require('mini.indentscope').setup()
-vim.cmd([[
-    au FileType * if index(['yaml', 'gohtmltmpl'], &ft) < 0 | let b:miniindentscope_disable=v:true | endif
-]])
-
---
-
-require('fidget').setup()
-
---
 
 -- Make :bd and :q behave as usual when tree is visible
 vim.api.nvim_create_autocmd({'BufEnter', 'QuitPre'}, {

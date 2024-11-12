@@ -1,44 +1,6 @@
 -- ray-x/go.nvim
 
 ---- from https://github.com/ray-x/go.nvim#sample-vimrc
-require 'go'.setup({
-  lsp_keymaps = false, -- disable c-k
-  goimports = 'gopls', -- if set to 'gopls' will use golsp format
-  gofmt = 'gopls', -- if set to gopls will use golsp format
-  tag_transform = false,
-  test_dir = '',
-  comment_placeholder = '   ',
-  lsp_gofumpt = true, -- true: set default gofmt in gopls format to gofumpt
-  lsp_on_attach = true, -- use on_attach from go.nvim
-  dap_debug = true,
-  -- lsp_cfg = true, -- false: use your own lspconfig
-  lsp_cfg = {
-    capabilities = {
-      textDocument = {
-        completion = {
-          completionItem = {
-            snippetSupport = false,
-          },
-        },
-      },
-    },
-    settings = {
-      gopls = {
-        directoryFilters = {
-          '-/cloud', '-vendor', '-manifests', '-testdata', '-/test-workdir', '-**/node_modules', '-**/.kube',
-          '-aws-controller', '-genistio', '-gitops', '-helm', '-infrastructure', '-iam', '-onboarding', '-registry', '-release', '-tctl', '-teamsync', '-tsboperator', '-wasmfetcher', '-tetrate',
-        },
-        -- see https://github.com/golang/tools/blob/master/gopls/doc/analyzers.md
-        analyses = {
-          shadow = true,
-        }
-      }
-    }
-  },
-  lsp_inlay_hints = {
-    enable = false, -- this is the only field apply to neovim > 0.10
-  },
-})
 
 local protocol = require'vim.lsp.protocol'
 
