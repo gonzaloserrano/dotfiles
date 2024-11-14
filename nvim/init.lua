@@ -147,7 +147,12 @@ vim.api.nvim_create_autocmd({'BufEnter', 'QuitPre'}, {
   end
 })
 
+-- iswap
+map('n', ',s', ':ISwap<cr>', silent)
+map('n', ',,', ':ISwapWithRight<cr>', silent)
+map('n', ',.', ':ISwapWithLeft<cr>', silent)
 
 -- some plugins require config to be set beforehand
 
 require('plugins')
+require('gitsigns').setup({})

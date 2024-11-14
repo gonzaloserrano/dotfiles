@@ -215,9 +215,6 @@ local plugins = {
   },
   {
 	'lewis6991/gitsigns.nvim',
-	configure = function()
-		require('gitsigns').setup()
-	end,
   },
   {'leisiji/interestingwords.nvim'},
   {
@@ -227,10 +224,6 @@ local plugins = {
 			  -- Move cursor to the other element in ISwap*With commands
 			  move_cursor = true,
 		  }
-		  map('n', ',s', ':ISwap<cr>', silent)
-		  map('n', ',,', ':ISwapWithRight<cr>', silent)
-		  map('n', ',.', ':ISwapWithLeft<cr>', silent)
-
 	  end
   },
   {
