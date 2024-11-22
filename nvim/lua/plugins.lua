@@ -381,6 +381,9 @@ local plugins = {
 		  -- shortcuts might be setup here (see Usage > Shortcuts in Readme)
 	  end,
   },
+  {
+	'sindrets/diffview.nvim'
+  }
 }
 
 

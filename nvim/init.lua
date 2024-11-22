@@ -37,8 +37,8 @@ map('n', '<c-j>', ':BufferLineCyclePrev<cr>', silent)
 map('n', '<c-k>', ':BufferLineCycleNext<cr>', silent)
 map('n', '<c-x>', ':bdelete!<cr>', silent)
 ---- git
-map('n', '<c-h>', ':term DELTA_PAGER="" git --no-pager log -p %<cr>', silent)
-map('n', '<c-d>', ':term DELTA_PAGER="" git --no-pager diff %<cr>', silent)
+map('n', '<c-h>', ':DiffviewFileHistory %<cr>', silent)
+map('n', '<c-d>', ':DiffviewOpen<cr>', silent)
 ----
 -- map('n', 'v', '<c-v>', silent)
 
