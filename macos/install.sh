@@ -1,25 +1,42 @@
 #!/usr/bin/env bash
 
+set -x -e
+
 # xcode cli tools
-xcode-select --install
+# only once
+# xcode-select --install
 
 # brew packages
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# do this once:
+# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# echo >> /Users/gonzalo/.zprofile
+# echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/gonzalo/.zprofile
+# eval "$(/opt/homebrew/bin/brew shellenv)"
 
 declare -a brew_tools=(
+    # these first
+    'coreutils'
+    'cmake'
+    'go'
+    'zsh'
+
+    # rest
+    '1password'
     'age'
     'asdf'
     'ast-grep'
+    'awscli'
     'bash-language-server'
     'bat'
-    'cmake'
+    'bitwarden'
+    'chipmk/tap/docker-mac-net-connect'
     'colordiff'
-    'coreutils'
+    'crane'
     'difftastic'
     'dive'
     'docker-credential-helper-ecr'
-    'docker-mac-net-connect'
-    'exa'
+    'eza'
     'fzf'
     'gh'
     'ghostty'
@@ -27,10 +44,11 @@ declare -a brew_tools=(
     'git-delta'
     'gnu-sed'
     'gnu-tar'
-    'go'
     'google-cloud-sdk'
     'graphviz'
+    'gum'
     'helm'
+    'hiddenbar'
     'htop'
     'httpie'
     'hugo'
@@ -40,6 +58,7 @@ declare -a brew_tools=(
     'jump'
     'k9s'
     'kind'
+    'kube-ps1'
     'kubectx'
     'kubernetes-cli'
     'kustomize'
@@ -61,24 +80,26 @@ declare -a brew_tools=(
     'silicon'
     'skopeo'
     'sql-language-server'
+    'terraform'
     'tig'
     'tree'
     'watch'
     'yaml-language-server'
-    'zsh'
+    'yq'
     'zsh-autosuggestions'
     'zsh-history-substring-search'
     'zsh-syntax-highlighting'
 
-	# casks
-    'bitbar'
-    'cleanshot'
+    # casks
     'chatgpt'
+    'cleanshot'
     'docker'
     'dropbox'
+    'font-hasklug-nerd-font'
     'google-chrome'
     'jumpcut'
     'keybase'
+    'keyboardcleantool'
     'notion'
     'skype'
     'slack'
@@ -88,6 +109,7 @@ declare -a brew_tools=(
     'visual-studio-code'
     'vlc'
     'webtorrent'
+    'xbar'
     'zoom'
 )
 
@@ -97,15 +119,17 @@ done
 
 declare -a go_tools=(
   'github.com/99designs/gqlgen'
+  'github.com/Yash-Handa/logo-ls'
+  'github.com/aarzilli/gdlv'
+  'github.com/daveadams/go-rapture/cmd/rapture'
+  'github.com/go-delve/delve/cmd/dlv'
   'github.com/golangci/golangci-lint/cmd/golangci-lint'
+  'github.com/google/go-containerregistry/cmd/crane'
   'github.com/kyoh86/richgo'
   'github.com/matryer/moq'
   'github.com/mfuentesg/ksd'
-  'mvdan.cc/gofumpt'
-  'github.com/go-delve/delve/cmd/dlv'
-  'github.com/aarzilli/gdlv'
-  'github.com/Yash-Handa/logo-ls'
   'github.com/msoap/go-carpet'
+  'mvdan.cc/gofumpt'
 )
 
 for tool in "${go_tools[@]}"; do
