@@ -1,0 +1,75 @@
+#!/bin/bash
+
+set -e
+
+# Check if gum is installed
+if ! command -v gum &> /dev/null; then
+    echo "Error: gum is not installed. Install it from https://github.com/charmbracelet/gum"
+    exit 1
+fi
+
+# Check if we're in a git repo
+if ! git rev-parse --git-dir &> /dev/null; then
+    gum style --foreground 196 "Error: Not in a git repository"
+    exit 1
+fi
+
+# Get current directory name
+CURRENT_DIR=$(basename "$PWD")
+
+# Detect default branch (master or main)
+DEFAULT_BRANCH=""
+if git show-ref --verify --quiet refs/heads/main; then
+    DEFAULT_BRANCH="main"
+elif git show-ref --verify --quiet refs/heads/master; then
+    DEFAULT_BRANCH="master"
+else
+    gum style --foreground 196 "Error: Neither 'main' nor 'master' branch found"
+    exit 1
+fi
+
+gum style --foreground 212 "Current directory: $CURRENT_DIR"
+gum style --foreground 212 "Default branch: $DEFAULT_BRANCH"
+echo
+
+# Capture current branch to allow using it as the base
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+# Ask for suffix
+SUFFIX=$(gum input --placeholder "Enter worktree suffix (branch name)")
+
+if [ -z "$SUFFIX" ]; then
+    gum style --foreground 196 "Error: Suffix cannot be empty"
+    exit 1
+fi
+
+# Construct worktree path and branch name
+WORKTREE_DIR="../${CURRENT_DIR}-${SUFFIX}"
+BRANCH_NAME="$SUFFIX"
+
+# Build branch options for selection (default branch first, then current if different)
+BRANCH_OPTIONS=("$DEFAULT_BRANCH")
+if [ "$CURRENT_BRANCH" != "$DEFAULT_BRANCH" ]; then
+    BRANCH_OPTIONS+=("$CURRENT_BRANCH")
+fi
+
+# Let the user choose the branch to create the worktree from
+BASE_BRANCH=$(gum choose --header "Select branch to create worktree from" "${BRANCH_OPTIONS[@]}") || exit 0
+
+# Confirm action with the selected base branch
+gum confirm "Create worktree at $WORKTREE_DIR with branch $BRANCH_NAME from $BASE_BRANCH?" || exit 0
+
+# Create worktree
+gum spin --spinner dot --title "Creating worktree..." -- \
+    git worktree add "$WORKTREE_DIR" -b "$BRANCH_NAME" "$BASE_BRANCH"
+
+gum style --foreground 42 "✓ Worktree created successfully"
+echo
+
+# Change to the new worktree directory
+cd "$WORKTREE_DIR" || exit 1
+
+gum style --foreground 42 "✓ Changed directory to $WORKTREE_DIR"
+
+# Start a new shell in the worktree directory
+exec "$SHELL"

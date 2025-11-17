@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+GH_USERNAME="gonzaloserrano"
+
+# Ensure we are inside a git repo
+if [ ! -f ".git/config" ]; then
+  echo "No .git/config found. Run this inside a git repository." >&2
+  exit 1
+fi
+
+# Ensure origin exists
+if ! git config --get remote.origin.url >/dev/null 2>&1; then
+  echo "No 'origin' remote found in this repo." >&2
+  exit 1
+fi
+
+# If fork already exists, do nothing (except print config)
+if git config --get remote.fork.url >/dev/null 2>&1; then
+  echo "Remote 'fork' already exists. Nothing to do."
+  echo
+  cat .git/config
+  exit 0
+fi
+
+origin_url="$(git config --get remote.origin.url)"
+
+# Build fork URL based on origin URL
+case "$origin_url" in
+  git@github.com:*)
+    # SSH form: git@github.com:ORG/REPO(.git)
+    repo_path="${origin_url#git@github.com:}"  # ORG/REPO(.git)
+    repo_name="${repo_path#*/}"               # REPO(.git)
+    fork_url="git@github.com:${GH_USERNAME}/${repo_name}"
+    ;;
+  https://github.com/*)
+    # HTTPS form: https://github.com/ORG/REPO(.git)
+    repo_path="${origin_url#https://github.com/}"  # ORG/REPO(.git)
+    repo_name="${repo_path#*/}"                    # REPO(.git)
+    fork_url="https://github.com/${GH_USERNAME}/${repo_name}"
+    ;;
+  *)
+    echo "Unsupported origin URL format: $origin_url" >&2
+    exit 1
+    ;;
+esac
+
+# Add the fork remote
+git remote add fork "$fork_url"
+
+# Ensure the desired fetch refspec
+git config remote.fork.fetch "+refs/heads/*:refs/remotes/fork/*"
+
+# Print resulting config
+echo
+cat .git/config

@@ -1,0 +1,97 @@
+#! /bin/bash
+
+# set -x
+
+# arg number should be 0 or 1
+if [ "$#" -gt 1 ]; then
+	echo "Usage: git pr [commit]"
+	exit 1
+fi
+
+if [ -n "$1" ]; then
+	# check if gum exists, otherwise exit
+	if ! command -v gum &> /dev/null; then
+		echo "gum could not be found, you can install it with:"
+		echo "go install github.com/charmbracelet/gum@latest"
+		exit 1
+	fi
+
+	# check repo is clean or exit
+	if [ -n "$(git status --porcelain)" ]; then
+		echo "Repo is dirty, please commit or stash your changes"
+		exit 1
+	fi
+
+	git checkout master
+	
+	# check commit exists or exit
+	if [ -z "$(git log --format=%B $1 | head -n 1)" ]; then
+		echo "Commit $1 does not exist"
+		exit 1
+	fi
+
+	# use gum to choose release branch
+	echo "Choose release branch:"
+	BRANCH=$(gum choose release-1.10.x release-1.9.x release-1.8.x release-1.7.x)
+	git checkout $BRANCH
+	git pull
+
+	# create a new branch based on that branch name with the release prefix
+	# remove "release-" prefix from branch name
+	BRANCH_SHORT=$(echo $BRANCH | sed 's/release-//')
+
+	FIRST_BODY_LINE=$(git show -s --format='%B' $1 | head -n 1)
+	PR_NUMBER="$(echo "$FIRST_BODY_LINE" | grep -o '\d\d\d\d*')"
+	if [ -n "$PR_NUMBER" ]; then
+		BRANCH_NAME=$(gh pr view $PR_NUMBER --json headRefName -t '{{ .headRefName }}')
+		echo "Found PR #$PR_NUMBER with branch name $BRANCH_NAME. Use it? (y/n)"
+		read -n 1 -r
+		if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+			echo
+			echo "Enter new branch name:"
+			BRANCH_NAME=$(gum input --placeholder "$BRANCH_NAME")
+		fi
+	fi
+	if [ -z "$BRANCH_NAME" ]; then
+		echo "Invalid branch name"
+		exit 1
+	fi
+	NEW_BRANCH="${BRANCH_SHORT}-${BRANCH_NAME}"
+	# check if it exists
+	if [ -n "$(git branch --list $NEW_BRANCH)" ]; then
+		echo "Branch $NEW_BRANCH already exists"
+		# prompt for deletion
+		read -p "Delete it? (y/n) " -n 1 -r
+		if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+			# delete it
+			git branch -D "${NEW_BRANCH}"
+		fi
+	fi
+	git checkout -b "${NEW_BRANCH}"
+
+	# cherry-pick the commit
+	git cherry-pick $1
+
+	# ask the user if it looks ok
+	read -p "Does it look ok? (y/n) " -n 1 -r
+	if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+		exit 1
+	fi
+
+	# push the branch
+	git push fork
+
+	TITLE="$(git log --format=%B -n 1 | head -n 1)"
+	PR_NUMBER="$(echo "$TITLE" | grep -o '[0-9]*')"
+	TITLE_TEXT="$(echo "$TITLE" | awk '{$NF="";sub(/[ \t]+$/,"")}1')"
+	BODY="Cherry-picks #$PR_NUMBER"
+	gh pr create -H "gonzaloserrano:$NEW_BRANCH" -B $BRANCH -t "[${BRANCH_SHORT}] ${TITLE_TEXT}" -b "$BODY" --web
+	exit 0
+fi
+
+# if BRANCH is not set, use current branch
+if [ -z "$BRANCH" ]; then
+	BRANCH=$(git branch --show-current)
+fi
+
+gh pr create -H "gonzaloserrano:$BRANCH" --web

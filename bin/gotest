@@ -1,0 +1,43 @@
+#! /bin/bash
+
+set -ex
+
+reflex -d fancy -g '*.go' -d none -- richgo test -v ./... -tags=sqlite -failfast --run $1
+# reflex -g '*.go' -d none -- go test -v . -tags=sqlite -failfast --run $1
+exit 0
+
+if [ -z "$1" ]; then
+    set -x
+    time go test $GOTESTRACE -v -tags=sqlite ./... --count=1 --timeout=5s -failfast
+    if [ "${BASH_ARGV[0]}" == "nocache" ]; then
+      watchman-make -p '**/*.go' -r 'time go test $GOTESTRACE -v -tags=sqlite ./... --count=1 --timeout=5s -failfast'
+    else
+      watchman-make -p '**/*.go' -r 'time go test $GOTESTRACE -v -tags=sqlite ./... --timeout=5s -failfast'
+    fi
+else
+    if [ "$1" == "now" ]; then
+      if [ -z "$2" ] || [ "$2" == "nocache" ]; then
+        set -x
+        if [ "${BASH_ARGV[0]}" == "nocache" ]; then
+          time go test $GOTESTRACE -v -tags=sqlite ./... --count=1 --timeout=5s -failfast
+        else
+          time go test $GOTESTRACE -v -tags=sqlite ./... --timeout=5s -failfast
+        fi
+      else
+        set -x
+        if [ "${BASH_ARGV[0]}" == "nocache" ]; then
+          time go test $GOTESTRACE -v -tags=sqlite ./... --run $2 --count=1 --timeout=5s -failfast
+        else
+          time go test $GOTESTRACE -v -tags=sqlite ./... --run $2 --timeout=5s -failfast
+        fi
+      fi
+    else
+      set -x
+      time go test $GOTESTRACE -v -tags=sqlite ./... --run $1 --count=1 --timeout=5s -failfast
+      if [ "${BASH_ARGV[0]}" == "nocache" ]; then
+        watchman-make -p '**/*.go' -r "time go test $GOTESTRACE -v -tags=sqlite ./... --run $1 --count=1 --timeout=5s -failfast"
+      else
+        watchman-make -p '**/*.go' -r "time go test $GOTESTRACE -v -tags=sqlite ./... --run $1 --timeout=5s -failfast"
+      fi
+    fi
+fi

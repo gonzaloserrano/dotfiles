@@ -1,0 +1,25 @@
+# /bin/bash
+
+# Opens the github page for comparison between the current branch and the one passed as first argument [develop is default]
+
+giturl=$(git config --get remote.origin.url)
+if [ "$giturl" == "" ]
+then
+    echo "Not a git repository or no remote.origin.url set"
+    exit 1;
+fi
+
+if [[ "$1" ]]
+then
+    AGAINST="$1"
+else
+    AGAINST="develop"
+fi
+
+giturl=${giturl/git\@github\.com\:/https://github.com/}
+giturl=${giturl/git\@github-sp\.com\:/https://github.com/}
+giturl=${giturl/\.git//}
+branch="$(git symbolic-ref HEAD 2>/dev/null)" || branch="(unnamed branch)" # detached HEAD
+branch=${branch##refs/heads/}
+giturl=${giturl}compare/$AGAINST...$branch?expand=1
+open $giturl

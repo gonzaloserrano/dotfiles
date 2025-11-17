@@ -1,0 +1,7 @@
+#! /bin/bash
+
+paste <(kubectl get pods --sort-by=.status.startTime -n $1) <(kubectl get pods -n $1 --sort-by=.status.startTime -o=custom-columns="IMAGE:.spec.containers[0].image" | awk -F '/' 'NR==1 {print; next} {print $2}') \
+	| sed 's/(.* ago)\s//' \
+	| sed 's/RESTARTS/R/' \
+	| awk '{printf "%0.35s %0.3s %0.6s %s %0.4s %0.34s\n", $1, $2, $3, $4, $5, $6}' \
+	| column -t

@@ -1,0 +1,11 @@
+#! /bin/bash -x
+
+gopls version
+TMP_DIR="$(mktemp -d)"
+cd "$TMP_DIR"
+git clone git@github.com:golang/tools.git --depth 1
+cd tools/gopls
+cp /Users/gonzalo/go/bin/gopls /Users/gonzalo/go/bin/gopls-$(date +%s)
+go install .
+gopls version
+echo rm -rf "$TMP_DIR"

@@ -1,0 +1,25 @@
+# /bin/bash
+
+gh pr view --web
+
+exit 0
+
+# Opens the github page for the current git repository in your browser
+
+giturl=$(git config --get remote.origin.url)
+if [ "$giturl" == "" ]
+then
+    echo "Not a git repository or no remote.origin.url set"
+    exit 1;
+fi
+
+giturl=${giturl/git\@github\.com\:/https://github.com/}
+giturl=${giturl/\.git//}
+if [ "$1" = "" ]; then
+    branch="$(git symbolic-ref HEAD 2>/dev/null)" || branch="(unnamed branch)" # detached HEAD
+    branch=${branch##refs/heads/}
+else
+    branch=$1
+fi
+giturl=${giturl}/tree/$branch
+open $giturl

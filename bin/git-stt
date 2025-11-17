@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# select modified files and echo to vi them
+
+if [ "$1" = '' ] 
+then
+    STATUS="modified"
+else
+    STATUS=$1
+fi
+VIM_FILES=`git status . | grep $STATUS | awk '{print $2}' | tr '\n' ' ' | sed 's/ %//'`
+/bin/echo "vi $VIM_FILES"

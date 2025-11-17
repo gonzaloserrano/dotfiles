@@ -1,0 +1,17 @@
+#! /bin/bash
+
+# kubectl get all does not show istio resources
+# https://stackoverflow.com/questions/47691479/listing-all-resources-in-a-namespace/58588040
+# Changed negative substring by send to run in macOS
+
+# get all names and concatenate them with comma
+NAMES="$(kubectl api-resources \
+                 --namespaced \
+                 --verbs list \
+                 -o name \
+           | tr '\n' , \
+           | sed 's/.$//')"
+
+
+# --show-kind is optional
+kubectl get "$NAMES" --show-kind

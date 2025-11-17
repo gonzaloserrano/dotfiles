@@ -1,0 +1,4 @@
+#! /bin/bash
+
+FILES=`cat - | awk '{print $2}' | sort | uniq | tr "\n" " "`
+echo "vi $FILES" | sed 's/  / /g'

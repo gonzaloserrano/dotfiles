@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# how what's in the stash{$1}
+
+if [ "$1" = '' ]
+then
+    git stash list
+else
+    git stash show --no-ext-diff stash@{$1}
+fi

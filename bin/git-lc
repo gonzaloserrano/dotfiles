@@ -1,0 +1,53 @@
+#! /bin/bash
+
+set -e
+
+usage() {
+    echo "Usage: $(basename "$0") [<commits_behind>] | [<start_commit_behind> <end_commit_behind>]"
+    exit 1
+}
+
+# This block replaces lines 6-10 and line 13 of your script.
+if [[ $# -eq 0 ]]; then
+    # No arguments: diff files changed between HEAD~1 and working directory, filtered by current path
+    FILES=$(git diff --name-only HEAD~1 . | sort)
+elif [[ $# -eq 1 ]]; then
+    # One argument: diff files changed between HEAD~$1 and working directory, filtered by current path
+    ARG1=$1
+    if ! [[ "$ARG1" =~ ^[0-9]+$ ]]; then
+        echo "Error: Argument <commits_behind> must be a non-negative integer." >&2
+        usage
+    fi
+    FILES=$(git diff --name-only HEAD~$ARG1 . | sort)
+elif [[ $# -eq 2 ]]; then
+    # Two arguments: diff files changed between HEAD~$1 and HEAD~$2, filtered by current path
+    ARG1=$1
+    ARG2=$2
+    if ! [[ "$ARG1" =~ ^[0-9]+$ ]]; then
+        echo "Error: Argument <start_commit_behind> must be a non-negative integer." >&2
+        usage
+    fi
+    if ! [[ "$ARG2" =~ ^[0-9]+$ ]]; then
+        echo "Error: Argument <end_commit_behind> must be a non-negative integer." >&2
+        usage
+    fi
+	FILES=$(git diff --name-only HEAD~$ARG1 HEAD~$ARG2 . | sort)
+else
+    # More than two arguments
+    usage
+fi
+
+cd `git rev-parse --show-toplevel .`
+FILE_COUNT=$(echo "$FILES" | sed '/^\s*$/d' | wc -l)
+echo "File count: $FILE_COUNT"
+if [[ $FILE_COUNT -eq 1 ]]; then
+	# Only one file changed: edit it directly
+	nvim "$FILES"
+	exit 0
+fi
+
+gum style --foreground 112 "Select files changed:"
+PICKED=$(gum choose --ordered --height=50 --no-limit $FILES)
+if [[ $PICKED != "user aborted" ]]; then
+	nvim -p $PICKED
+fi

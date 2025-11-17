@@ -1,0 +1,3 @@
+#! /bin/sh
+
+cat - | jq -R 'split(".") | .[1] | @base64d | fromjson' | jq 'if .exp then (.exp_human = (.exp|gmtime|strftime("%Y-%m-%dT%H:%M:%S %Z"))) else . end'

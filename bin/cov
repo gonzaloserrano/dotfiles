@@ -1,0 +1,114 @@
+#!/bin/bash
+
+# Check if gum is installed
+if ! command -v gum &> /dev/null; then
+  echo "gum is not installed. Please install it from https://github.com/charmbracelet/gum"
+  exit 1
+fi
+
+GO_FILE_PATTERN="*.go"
+if [[ -n "$1" ]]; then
+  GO_FILE_PATTERN="*$1*.go"
+  echo "Filtering Go files with pattern: $GO_FILE_PATTERN"
+fi
+
+GO_FILE=$(find . -type f -name "$GO_FILE_PATTERN" ! -name "*_test.go" | sed 's|^\./||' | gum filter --header "Select the Go file to gather coverage:")
+
+# Check if a file was selected
+if [[ -z "$GO_FILE" ]]; then
+  echo "No file selected. Exiting."
+  exit 1
+fi
+
+echo "You selected: $GO_FILE"
+
+# Determine the corresponding test file
+TEST_FILE="${GO_FILE%.go}_test.go"
+
+# Check if the test file exists
+if [[ ! -f "$TEST_FILE" ]]; then
+  echo "No corresponding test file found for $GO_FILE (expected: $TEST_FILE)."
+  exit 1
+fi
+
+# Extract raw test names (actual test functions)
+raw_test_names=($(grep -o 'func Test[^(]*' "$TEST_FILE" | sed 's/func //'))
+
+# Prepare options for gum choose
+declare -a TEST_CHOICES
+TEST_CHOICES+=("All below") # "All": run all specific tests found: -run '^(TestA|TestB)$'
+
+if [[ ${#raw_test_names[@]} -gt 0 ]]; then
+  TEST_CHOICES+=("${raw_test_names[@]}") # Individual test names
+  TEST_CHOICES+=("None")
+else
+  echo "No specific test functions found in $TEST_FILE. Only 'None' option is available."
+fi
+
+# Use gum to select a test function/option
+TEST_NAME=$(gum choose --header "Select a test function/option:" "${TEST_CHOICES[@]}")
+
+# Check if a test function was selected
+if [[ -z "$TEST_NAME" ]]; then
+  echo "No test function selected. Exiting."
+  exit 1
+fi
+
+echo "You selected: $TEST_NAME"
+
+# Prompt for sqlite tag
+SQLITE_TAG_ARG=""
+if gum confirm "Use sqlite tag?"; then
+  SQLITE_TAG_ARG="-tags=sqlite"
+fi
+
+# Construct arguments for `go test` (to be passed via go-carpet -args)
+GO_TEST_RUN_ARG="" # This will hold the --run part, if any
+
+if [[ "$TEST_NAME" == "All below" ]]; then
+  # This option is only available if raw_test_names is not empty.
+  # Construct regex like ^(TestA|TestB|...)$
+  joined_tests=$(IFS='|'; echo "${raw_test_names[*]}")
+  GO_TEST_RUN_ARG="--run '(${joined_tests})'"
+  echo "Preparing to run go-carpet for $GO_FILE, targeting all specific tests found: ${GO_TEST_RUN_ARG}..."
+elif [[ "$TEST_NAME" != "None" ]]; then
+  # This means a specific test function name was chosen from raw_test_names
+  GO_TEST_RUN_ARG="--run ^${TEST_NAME}$"
+  echo "Preparing to run go-carpet for $GO_FILE with test $TEST_NAME (${GO_TEST_RUN_ARG})..."
+else # TEST_NAME == "None"
+  echo "Preparing to run go-carpet for $GO_FILE..."
+  # GO_TEST_RUN_ARG remains empty for "Any"
+fi
+
+# Combine SQLITE_TAG_ARG and GO_TEST_RUN_ARG into a single string for -args
+CARPET_ARGS_STR=""
+if [[ -n "$SQLITE_TAG_ARG" ]]; then
+  CARPET_ARGS_STR="$SQLITE_TAG_ARG"
+fi
+
+if [[ -n "$GO_TEST_RUN_ARG" ]]; then
+  if [[ -n "$CARPET_ARGS_STR" ]]; then
+    CARPET_ARGS_STR="$CARPET_ARGS_STR $GO_TEST_RUN_ARG"
+  else
+    CARPET_ARGS_STR="$GO_TEST_RUN_ARG"
+  fi
+fi
+
+# Run go-carpet with the selected file and test arguments
+while true; do
+  if [[ -n "$CARPET_ARGS_STR" ]]; then
+    set -x
+    go-carpet -256colors -file "$GO_FILE" -args "$CARPET_ARGS_STR" | bat
+    set +x
+  else
+    set -x
+    go-carpet -256colors -file "$GO_FILE" | bat
+    set +x
+  fi
+
+  if ! gum confirm "Run go-carpet again with the same arguments?"; then
+    echo "Exiting."
+    break
+  fi
+  echo "Running go-carpet again with the same arguments..."
+done

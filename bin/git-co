@@ -1,0 +1,42 @@
+#!/bin/sh
+
+set -eu
+
+if [ "$#" -ne 1 ]; then
+    printf "Usage: %s <BRANCH>\n" "$0" >&2
+    exit 1
+fi
+
+BRANCH=$1
+
+# Normalize uppercase MASTER/MAIN to lowercase
+case "$BRANCH" in
+    MASTER) BRANCH=master ;;
+    MAIN)   BRANCH=main ;;
+esac
+
+# Check if a branch exists locally or remotely (POSIX sh)
+branch_exists() {
+    B=$1
+
+    # Local branch
+    if git show-ref --verify --quiet "refs/heads/$B" 2>/dev/null; then
+        return 0
+    fi
+
+    # Remote branch
+    if git ls-remote --exit-code . "refs/heads/$B" >/dev/null 2>&1; then
+        return 0
+    fi
+
+    return 1
+}
+
+# Swap master <-> main when missing
+if [ "$BRANCH" = "master" ] && ! branch_exists "master" && branch_exists "main"; then
+    BRANCH=main
+elif [ "$BRANCH" = "main" ] && ! branch_exists "main" && branch_exists "master"; then
+    BRANCH=master
+fi
+
+exec git checkout "$BRANCH"

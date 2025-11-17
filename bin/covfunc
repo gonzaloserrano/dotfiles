@@ -1,0 +1,13 @@
+#! /bin/bash
+
+if [ $# -eq 0 ]; then
+    echo "covfunc prints coverage information for a given func by a test"
+    echo ""
+    echo "No arguments provided."
+    echo "Usage: covfunc TestName funcName"
+    exit 1
+fi
+
+set -x
+
+go-carpet -256colors -func "$2" -args "--run $1" | bat

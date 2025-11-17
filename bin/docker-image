@@ -1,0 +1,7 @@
+#! /bin/bash
+
+TMPDIR=$(mktemp -d -t docker-image-XXXXXX)
+echo $TMPDIR
+cd $TMPDIR
+echo "FROM $1" > Dockerfile
+docker buildx build -o rootfs .

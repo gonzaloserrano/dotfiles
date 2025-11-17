@@ -1,0 +1,93 @@
+#! /bin/bash
+
+# Usage: git backport <git hash of the commit in the master branch>
+
+# set -x
+
+# CHANGE ME: name of your github fork for the monorepo, since we don't
+# want to dirty origin.
+GIT_ORIGIN_NAME=fork
+
+# arg number should be 0 or 1
+if [ "$#" != 1 ]; then
+	echo "Usage: git pr [commit]"
+	exit 1
+fi
+
+# asserts tools
+hash gum 2>/dev/null || { echo >&2 "gum command not found, install it with: go install github.com/charmbracelet/gum@latest"; exit 1; }
+hash gh 2>/dev/null || { echo >&2 "gh command not found, install it with: brew install gh"; exit 1; }
+hash jq 2>/dev/null || { echo >&2 "jq command not found, install it with: brew install jq"; exit 1; }
+
+GH_USER=$(gh api user | jq -r .login)
+
+# check repo is clean or exit
+if [ -n "$(git status --porcelain)" ]; then
+	echo "Repo is dirty, please commit or stash your changes first."
+	exit 1
+fi
+
+git checkout master
+
+# check commit exists or exit
+COMMIT=$1
+if [ -z "$(git log --format=%B $COMMIT | head -n 1)" ]; then
+	echo "Commit to backport $COMMIT does not exist in master."
+	exit 1
+fi
+
+# use gum to choose release branch
+BRANCH=$(gum choose --header "Choose release branch:" release-1.12.x release-1.11.x release-1.10.x release-1.9.x)
+git checkout $BRANCH
+git pull
+
+# create a new branch based on that branch name with the release prefix
+# remove "release-" prefix from branch name
+BRANCH_SHORT=$(echo $BRANCH | sed 's/release-//')
+
+FIRST_BODY_LINE=$(git show -s --format='%B' $1 | head -n 1)
+PR_NUMBER="$(echo "$FIRST_BODY_LINE" | grep -o '\d\d\d\d*')"
+if [ -n "$PR_NUMBER" ]; then
+	BRANCH_NAME=$(gh pr view $PR_NUMBER --json headRefName -t '{{ .headRefName }}')
+	echo "Found PR #$PR_NUMBER with branch name $BRANCH_NAME. Use it? (y/n)"
+	read -n 1 -r
+	if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+		echo
+		echo "Enter new branch name:"
+		BRANCH_NAME=$(gum input --placeholder "$BRANCH_NAME")
+	fi
+fi
+if [ -z "$BRANCH_NAME" ]; then
+	echo "Invalid branch name"
+	exit 1
+fi
+NEW_BRANCH="${BRANCH_SHORT}-${BRANCH_NAME}"
+# check if it exists
+if [ -n "$(git branch --list $NEW_BRANCH)" ]; then
+	echo "Branch $NEW_BRANCH already exists"
+	# prompt for deletion
+	read -p "Delete it? (y/n) " -n 1 -r
+	if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+		# delete it
+		git branch -D "${NEW_BRANCH}"
+	fi
+fi
+git checkout -b "${NEW_BRANCH}"
+
+# cherry-pick the commit
+git cherry-pick $1
+
+# ask the user if it looks ok
+read -p "Does it look ok? (y/n) " -n 1 -r
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+	exit 1
+fi
+
+# push the branch to the defined origin
+git push $GIT_ORIGIN_NAME
+
+TITLE="$(git log --format=%B -n 1 | head -n 1)"
+PR_NUMBER="$(echo "$TITLE" | grep -o '[0-9]*')"
+TITLE_TEXT="$(echo "$TITLE" | awk '{$NF="";sub(/[ \t]+$/,"")}1')"
+BODY="Cherry-picks #$PR_NUMBER"
+gh pr create -H "$GH_USER:$NEW_BRANCH" -B $BRANCH -t "[${BRANCH_SHORT}] ${TITLE_TEXT}" -b "$BODY" --web
