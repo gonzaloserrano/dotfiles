@@ -1,13 +1,33 @@
-#!/bin/sh
+#! /bin/sh
 
 set -eu
 
-if [ "$#" -ne 1 ]; then
-    printf "Usage: %s <BRANCH>\n" "$0" >&2
+CREATE_BRANCH=0
+if [ "$#" -ge 1 ] && [ "$1" = "-b" ]; then
+    CREATE_BRANCH=1
+    shift
+fi
+
+usage() {
+    printf "Usage:\n" >&2
+    printf "  %s [-b] <BRANCH>\n" "$0" >&2
+    printf "  %s <BRANCH> [-- <FILE>...]\n" "$0" >&2
+    printf "  %s -- <FILE>...\n" "$0" >&2
     exit 1
+}
+
+# If first non-option is --, treat as plain 'git checkout -- <files...>'
+if [ "$#" -ge 1 ] && [ "$1" = "--" ]; then
+    # No branch logic, just delegate to git
+    exec git checkout "$@"
+fi
+
+if [ "$#" -lt 1 ]; then
+    usage
 fi
 
 BRANCH=$1
+shift  # remaining args may be: [-- <FILE>...]
 
 # Normalize uppercase MASTER/MAIN to lowercase
 case "$BRANCH" in
@@ -32,11 +52,32 @@ branch_exists() {
     return 1
 }
 
-# Swap master <-> main when missing
-if [ "$BRANCH" = "master" ] && ! branch_exists "master" && branch_exists "main"; then
-    BRANCH=main
-elif [ "$BRANCH" = "main" ] && ! branch_exists "main" && branch_exists "master"; then
-    BRANCH=master
+# Swap master <-> main when missing (only for existing branches)
+if [ "$CREATE_BRANCH" -eq 0 ]; then
+    if [ "$BRANCH" = "master" ] && ! branch_exists "master" && branch_exists "main"; then
+        BRANCH=main
+    elif [ "$BRANCH" = "main" ] && ! branch_exists "main" && branch_exists "master"; then
+        BRANCH=master
+    fi
 fi
 
-exec git checkout "$BRANCH"
+if [ "$CREATE_BRANCH" -eq 1 ]; then
+    # Creating a branch with file pathspecs doesn’t really make sense, so forbid it.
+    if [ "$#" -gt 0 ]; then
+        printf "Error: file arguments are not supported with -b.\n" >&2
+        usage
+    fi
+    exec git checkout -b "$BRANCH"
+else
+    # If there are extra args, assume they are `-- <FILE>...` or `<FILE>...`
+    if [ "$#" -gt 0 ]; then
+        # Ensure we pass a `--` before file paths if not already present
+        if [ "$1" = "--" ]; then
+            exec git checkout "$BRANCH" "$@"
+        else
+            exec git checkout "$BRANCH" -- "$@"
+        fi
+    else
+        exec git checkout "$BRANCH"
+    fi
+fi
