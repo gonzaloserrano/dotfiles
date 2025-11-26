@@ -148,6 +148,8 @@ permission = True    # Noun, not predicate
 
 ### Imports
 
+Use `import` statements for packages and modules, not for individual classes or functions (except from `typing` and `collections.abc`).
+
 ```python
 # Good - grouped and sorted (ruff handles this)
 from __future__ import annotations
@@ -162,11 +164,24 @@ from pydantic import BaseModel
 from mypackage.core import process
 from mypackage.models import User
 
+# Good - import modules, not individual items
+from sound.effects import echo
+echo.EchoFilter(...)
+
+# Good - typing symbols can be imported directly
+from typing import Any, TypeVar
+from collections.abc import Sequence, Mapping
+
+# Good - use aliases when needed
+import pandas as pd  # Standard abbreviations OK
+from mypackage.submodule import very_long_module as vlm
+
+# Bad - importing individual classes (non-typing)
+from sound.effects.echo import EchoFilter
+
 # Bad - ungrouped, relative imports in library code
-from .core import process
-import os, sys
-from pydantic import BaseModel
-import httpx
+from .core import process  # Avoid relative imports
+import os, sys  # Never multiple imports on one line
 ```
 
 ### Module Structure
@@ -234,17 +249,51 @@ def process(item: Item) -> Result:
     except ValueError as e:
         raise ProcessingError(f"failed to transform: {e}", item.id) from e
 
-# Bad - bare except
+# Good - use built-in exceptions appropriately
+def set_age(age: int) -> None:
+    if age < 0:
+        raise ValueError("age must be non-negative")
+
+# Bad - bare except (catches KeyboardInterrupt, SystemExit)
 try:
     process(item)
 except:  # Never do this
     pass
 
-# Bad - catching and ignoring
+# Bad - catching Exception without re-raising
 try:
     process(item)
 except Exception:
     pass  # Silently swallowing errors
+
+# OK - catching Exception only if re-raising or at isolation point
+try:
+    process(item)
+except Exception:
+    logger.exception("Processing failed")
+    raise  # Re-raise after logging
+```
+
+### Assertions
+
+Do not use `assert` for validation or preconditions—use explicit conditionals:
+
+```python
+# Bad - assert can be disabled with -O flag
+def process(data: bytes) -> dict:
+    assert data, "data required"  # Skipped in optimized mode!
+    return parse(data)
+
+# Good - explicit validation
+def process(data: bytes) -> dict:
+    if not data:
+        raise ValueError("data required")
+    return parse(data)
+
+# OK - assert in tests (pytest)
+def test_process():
+    result = process(b"test")
+    assert result["status"] == "ok"
 ```
 
 ### Context Managers
@@ -443,6 +492,166 @@ def process(value: str | int) -> str:
 def process_user(user: User | None) -> str:
     assert user is not None, "user required"
     return user.name  # Type narrowed to User
+```
+
+## Formatting
+
+### Line Length and Indentation
+
+- Maximum 80 characters per line (URLs and long imports excepted)
+- Use 4 spaces for indentation; never tabs
+- Use implicit line continuation inside parentheses, brackets, braces
+
+```python
+# Good - implicit continuation with aligned elements
+result = some_function(
+    argument_one,
+    argument_two,
+    argument_three,
+)
+
+# Good - hanging indent
+result = some_function(
+    argument_one, argument_two,
+    argument_three,
+)
+
+# Bad - backslash continuation
+result = some_long_function_name() \
+    + another_function()
+
+# Good - parentheses for continuation
+result = (
+    some_long_function_name()
+    + another_function()
+)
+```
+
+### Whitespace
+
+```python
+# Good
+spam(ham[1], {eggs: 2})
+x = 1
+dict["key"] = list[index]
+def func(default: str = "value") -> None: ...
+
+# Bad - spaces inside brackets
+spam( ham[ 1 ], { eggs: 2 } )
+
+# Bad - space before bracket
+spam (ham[1])
+dict ["key"]
+
+# Good - break at highest syntactic level
+if (
+    condition_one
+    and condition_two
+    and condition_three
+):
+    do_something()
+
+# Bad - break in middle of expression
+if (condition_one and
+    condition_two):
+    do_something()
+```
+
+### Blank Lines
+
+- Two blank lines between top-level definitions (functions, classes)
+- One blank line between method definitions
+- No blank line after `def` line
+
+## Comprehensions
+
+Use comprehensions for simple transformations. Avoid complex comprehensions.
+
+```python
+# Good - simple comprehension
+squares = [x * x for x in range(10)]
+evens = {x for x in numbers if x % 2 == 0}
+mapping = {k: v for k, v in pairs}
+
+# Good - generator for large data
+total = sum(x * x for x in range(1000000))
+
+# Bad - multiple for clauses (hard to read)
+result = [
+    (x, y, z)
+    for x in range(5)
+    for y in range(5)
+    for z in range(5)
+    if x != y
+]
+
+# Good - use nested loops instead
+result = []
+for x in range(5):
+    for y in range(5):
+        for z in range(5):
+            if x != y:
+                result.append((x, y, z))
+
+# Bad - complex conditions in comprehension
+result = [transform(x) for x in data if validate(x) and x.enabled and x.value > 0]
+
+# Good - extract to function or use loop
+def should_include(x):
+    return validate(x) and x.enabled and x.value > 0
+
+result = [transform(x) for x in data if should_include(x)]
+```
+
+## Strings
+
+### Formatting
+
+Use f-strings for interpolation. For logging, use `%` format with pattern strings.
+
+```python
+# Good - f-strings for general use
+message = f"Processing {item.name} (id={item.id})"
+
+# Good - logging with % patterns (deferred formatting)
+logger.info("Processing %s (id=%s)", item.name, item.id)
+
+# Bad - f-strings in logging (always formatted even if not logged)
+logger.debug(f"Data: {expensive_repr(data)}")
+
+# Good - join for concatenation in loops
+parts = []
+for item in items:
+    parts.append(str(item))
+result = ", ".join(parts)
+
+# Or simply:
+result = ", ".join(str(item) for item in items)
+
+# Bad - += concatenation in loop
+result = ""
+for item in items:
+    result += str(item) + ", "  # Creates many intermediate strings
+```
+
+### Multiline Strings
+
+```python
+# Good - textwrap.dedent for indented multiline
+import textwrap
+
+long_string = textwrap.dedent("""\
+    First line
+    Second line
+    Third line
+""")
+
+# Good - implicit concatenation
+message = (
+    "This is a very long message that needs "
+    "to be split across multiple lines for "
+    "readability purposes."
+)
 ```
 
 ## Configuration
@@ -791,6 +1000,36 @@ def create_test_service() -> Service:
     )
 ```
 
+## Main Entry Point
+
+Always guard module-level code to prevent execution on import:
+
+```python
+# Good - guarded entry point
+def main() -> None:
+    """Application entry point."""
+    config = load_config()
+    result = process(config)
+    print(result)
+
+
+if __name__ == "__main__":
+    main()
+
+# With CLI framework (typer)
+import typer
+
+app = typer.Typer()
+
+@app.command()
+def main(config: Path = typer.Option(...)) -> None:
+    """Process with configuration."""
+    ...
+
+if __name__ == "__main__":
+    app()
+```
+
 ## Anti-patterns to Avoid
 
 ### Mutable Default Arguments
@@ -874,6 +1113,65 @@ class EmailService: ...
 class PaymentProcessor: ...
 class ReportGenerator: ...
 class AuthService: ...
+```
+
+### Avoid Power Features
+
+Avoid metaclasses, dynamic attribute access via `__getattr__`, bytecode manipulation, and reflection tricks. Use simpler alternatives.
+
+```python
+# Bad - metaclass for simple use case
+class SingletonMeta(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super().__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+# Good - module-level instance or factory function
+_instance = None
+
+def get_instance() -> Service:
+    global _instance
+    if _instance is None:
+        _instance = Service()
+    return _instance
+```
+
+### Avoid staticmethod
+
+Use module-level functions instead of `@staticmethod`:
+
+```python
+# Bad - staticmethod
+class StringUtils:
+    @staticmethod
+    def clean(text: str) -> str:
+        return text.strip().lower()
+
+# Good - module-level function
+def clean_text(text: str) -> str:
+    return text.strip().lower()
+```
+
+### Boolean Evaluation Pitfalls
+
+```python
+# Good - explicit None check
+if value is not None:
+    process(value)
+
+# Bad - falsy check when 0 or "" are valid
+if value:  # Fails for value=0 or value=""
+    process(value)
+
+# Good - explicit comparison for sequences
+if len(items) == 0:
+    return default
+
+# OK - implicit boolean for sequences (when falsy means empty)
+if not items:
+    return default
 ```
 
 ## Documentation
@@ -1032,6 +1330,7 @@ uv run pytest
 
 ## Additional Resources
 
+- [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html)
 - [PEP 8 - Style Guide](https://peps.python.org/pep-0008/)
 - [PEP 484 - Type Hints](https://peps.python.org/pep-0484/)
 - [uv Documentation](https://docs.astral.sh/uv/)
