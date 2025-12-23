@@ -1,5 +1,3 @@
-require('lspconfig')['bashls'].setup{}
-
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'sh',
   callback = function()
