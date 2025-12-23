@@ -2,8 +2,6 @@
 
 ---- from https://github.com/ray-x/go.nvim#sample-vimrc
 
-local protocol = require'vim.lsp.protocol'
-
 local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.go",
@@ -31,4 +29,8 @@ cmd('iab rene require.NotEmpty(t,')
 cmd('iab ret require.True(t,')
 cmd('iab rel require.Len(t,')
 cmd('iab testt func TestX(t *testing.T) {<CR>')
+cmd('iab testr t.Run(tc.name, func(t *testing.T) { {<CR>')
 cmd('iab jsonm d, _ := json.MarshalIndent(x, "", "  ")<CR>println(string(d))')
+cmd('iab jsonmm d, _ = json.MarshalIndent(x, "", "  ")<CR>println(string(d))')
+cmd('iab yamlm d, _ := util.ToYAMLGeneric(x)<CR>println(string(d))')
+cmd('iab yamlmm d, _ = util.ToYAMLGeneric(x)<CR>println(string(d))')

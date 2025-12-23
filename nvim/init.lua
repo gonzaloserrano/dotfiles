@@ -3,33 +3,12 @@
 local g = vim.g
 local cmd = vim.cmd
 local fn = vim.fn
-local set = vim.opt
-
---
-
-g.mapleader = [[ ]]
-g.maplocalleader = [[,]]
-
--- Opts
-set.tabstop = 4
-set.softtabstop = 4
-set.shiftwidth = 4
-set.number = true
-set.clipboard = "unnamedplus"
-set.spelllang = "en"
-
--- backups
-set.backup = true
-set.shada = "!,h,'1000,<1000,s128,/1000,:1000,@1000"
-local datadir = fn.stdpath('data')
-vim.o.backupdir = datadir .. '/backup'
-vim.o.directory = datadir .. '/tmp'
-vim.o.undodir   = datadir .. '/undo'
 
 -- General mappings
 
 local map = vim.api.nvim_set_keymap
 local silent = { silent = true, noremap = true }
+cmd('cabbrev W w') -- make :W typo actually save
 
 ---- buffers
 vim.opt.termguicolors = true
@@ -45,7 +24,7 @@ map('n', '<c-d>', ':DiffviewOpen<cr>', silent)
 -- telescope
 map('n', '<c-f>', ':Telescope oldfiles<cr>', silent)
 map('n', '<c-s>', ':Telescope lsp_document_symbols symbols=function,method,struct<cr>', silent)
-map('n', '<c-n>', ':Telescope diagnostics<cr>', silent)
+map('n', '<c-n>', ':Telescope diagnostics sort_by=severity<cr>', silent)
 map('n', '<c-p>', ':Telescope git_files<cr>', silent)
 -- map('n', '<c-g>', ':Telescope live_grep<cr>', silent)
 map('n', '<c-g>', ':lua require("telescope").extensions.live_grep_args.live_grep_args()<CR>', silent)
@@ -156,3 +135,34 @@ map('n', ',.', ':ISwapWithLeft<cr>', silent)
 
 require('plugins')
 require('gitsigns').setup({})
+
+-- 
+
+require('mini.splitjoin').setup({})
+
+local gen_loader = require('mini.snippets').gen_loader
+require('mini.snippets').setup({
+  snippets = {
+    -- Load custom file with global snippets first (adjust for Windows)
+    -- gen_loader.from_file('~/.config/nvim/snippets/global.json'),
+
+    -- Load snippets based on current language by reading files from
+    -- "snippets/" subdirectories from 'runtimepath' directories.
+    gen_loader.from_lang(),
+  },
+})
+
+
+vim.lsp.enable({'buf_ls', 'sh', 'yamlls', 'pylsp', 'vtsls'})
+
+-- In your init.lua or wherever you configure plugins
+local keyboard_mapper = require('keyboard-mapper')
+
+keyboard_mapper.setup({
+  keymap = "<leader>km"  -- Optional: set a keymap to open the mapper
+})
+
+--
+
+vim.opt.undofile = true
+vim.opt.undodir = vim.fn.expand("~/.local/share/nvim/undo")

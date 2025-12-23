@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "plugins": {
+    "example-skills@anthropic-agent-skills": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gonzalo/.claude/plugins/cache/anthropic-agent-skills/example-skills/00756142ab04",
+        "version": "00756142ab04",
+        "installedAt": "2025-12-22T09:24:49.304Z",
+        "lastUpdated": "2025-12-22T09:24:49.304Z",
+        "gitCommitSha": "00756142ab04c82a447693cf373c4e0c554d1005",
+        "isLocal": true
+      }
+    ],
+    "gopls-lsp@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gonzalo/.claude/plugins/cache/claude-plugins-official/gopls-lsp/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2025-12-23T11:03:14.316Z",
+        "lastUpdated": "2025-12-23T11:03:14.316Z",
+        "isLocal": true
+      }
+    ],
+    "pyright-lsp@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/gonzalo/.claude/plugins/cache/claude-plugins-official/pyright-lsp/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2025-12-23T11:05:07.171Z",
+        "lastUpdated": "2025-12-23T11:05:07.171Z",
+        "isLocal": true
+      }
+    ]
+  }
+}

@@ -1,7 +1,15 @@
 {
   "includeCoAuthoredBy": false,
+  "permissions": {
+    "deny": [
+      "Bash(git push:*)"
+    ],
+    "defaultMode": "plan"
+  },
   "enabledPlugins": {
-    "example-skills@anthropic-agent-skills": true
+    "example-skills@anthropic-agent-skills": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true
 }
