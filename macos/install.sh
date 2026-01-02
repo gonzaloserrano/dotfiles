@@ -38,6 +38,7 @@ declare -a brew_tools=(
     'docker-credential-helper-ecr'
     'eza'
     'fzf'
+    'gemini'
     'gh'
     'ghostty'
     'git'
@@ -158,4 +159,14 @@ declare -a krew_tools=(
 
 for tool in "${krew_tools[@]}"; do
   kubectl krew install "$tool"
+done
+
+declare -a js_tools=(
+	'happy-coder'
+	'openai/codex'
+	'simple-photo-gallery'
+	'vtsls/language-server'
+)
+for tool in "${js_tools[@]}"; do
+  npm install -g "$tool"
 done
