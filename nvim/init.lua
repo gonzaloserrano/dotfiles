@@ -136,10 +136,6 @@ map('n', ',.', ':ISwapWithLeft<cr>', silent)
 require('plugins')
 require('gitsigns').setup({})
 
--- 
-
-require('mini.splitjoin').setup({})
-
 local gen_loader = require('mini.snippets').gen_loader
 require('mini.snippets').setup({
   snippets = {

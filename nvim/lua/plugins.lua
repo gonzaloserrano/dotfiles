@@ -300,27 +300,28 @@ local plugins = {
   },
   { "almo7aya/openingh.nvim" },
   { 
-      'echasnovski/mini.completion',
+      'nvim-mini/mini.completion',
       version = '*',
       config = function()
         require('mini.completion').setup()
       end,
   },
-  { 
-      'echasnovski/mini.fuzzy',
+  {
+      'nvim-mini/mini.fuzzy',
       version = '*',
       config = function()
+        require('mini.fuzzy').setup()
       end
   },
   { 
-      'echasnovski/mini.pairs',
+      'nvim-mini/mini.pairs',
       version = '*',
       config = function()
         require('mini.pairs').setup()
       end
   },
   { 
-      'echasnovski/mini.indentscope',
+      'nvim-mini/mini.indentscope',
       version = '*',
       config = function()
           require('mini.indentscope').setup()
@@ -329,28 +330,70 @@ local plugins = {
           ]])
       end
   },
-  { 
-      'echasnovski/mini.splitjoin',
+  {
+      'nvim-mini/mini.splitjoin',
+      version = '*',
+      config = function()
+        require('mini.splitjoin').setup()
+      end
+  },
+  {
+      'nvim-mini/mini.snippets',
       version = '*',
       config = function()
       end
   },
-  { 
-      'echasnovski/mini.snippets',
+  {
+      'nvim-mini/mini.notify',
       version = '*',
       config = function()
+        require('mini.notify').setup({
+          window = {
+            max_width_share = 0.6,
+          },
+        })
+      end
+  },
+  {
+      'nvim-mini/mini.clue',
+      version = '*',
+      config = function()
+        local miniclue = require('mini.clue')
+        miniclue.setup({
+          triggers = {
+            { mode = 'n', keys = '<Leader>' },
+            { mode = 'x', keys = '<Leader>' },
+            { mode = 'n', keys = 'g' },
+            { mode = 'x', keys = 'g' },
+            { mode = 'n', keys = "'" },
+            { mode = 'x', keys = "'" },
+            { mode = 'n', keys = '`' },
+            { mode = 'x', keys = '`' },
+            { mode = 'n', keys = '"' },
+            { mode = 'x', keys = '"' },
+            { mode = 'n', keys = '[' },
+            { mode = 'x', keys = '[' },
+            { mode = 'n', keys = ']' },
+            { mode = 'x', keys = ']' },
+            { mode = 'i', keys = '<C-x>' },
+            { mode = 'n', keys = '<C-w>' },
+          },
+          clues = {
+            miniclue.gen_clues.builtin_completion(),
+            miniclue.gen_clues.g(),
+            miniclue.gen_clues.marks(),
+            miniclue.gen_clues.registers(),
+            miniclue.gen_clues.windows(),
+            miniclue.gen_clues.z(),
+            miniclue.gen_clues.square_brackets(),
+          },
+        })
       end
   },
   {'kevinhwang91/nvim-bqf', ft = 'qf'},
   {'nvim-treesitter/nvim-treesitter-context'},
   {'nvim-treesitter/nvim-treesitter-textobjects'},
   {'ziontee113/syntax-tree-surfer'},
-  {
-      'j-hui/fidget.nvim',
-      config = function()
-        require('fidget').setup()
-      end
-  },
   {
     'sindrets/diffview.nvim'
   },
