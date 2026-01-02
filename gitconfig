@@ -11,10 +11,13 @@
     st = status
     stp = status --porcelain
     br = branch
-    co = checkout
-    df = diff --no-ext-diff
-    dfs = diff --no-ext-diff --staged
-    lp = log -p --no-prefix
+	# df = diff --no-ext-diff
+    df = diff --ext-diff
+	# dfs = diff --no-ext-diff --staged 
+    dfs = diff --staged --ext-diff
+    lp = log -p --no-prefix --ext-diff
+	# ds = -c diff.external=difft show --ext-diff
+	ds = show --ext-diff
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     lgs = log -git whatchanged -n 1 --no-prefix
     ls = ls-files
@@ -41,14 +44,16 @@
     tl = log --tags --simplify-by-decoration --pretty=format:"%C(green)%h\\ %C(yellow)[%ai]\\ %C(red)%d"
     brrr = for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads
     ca = commit --amend
-    ch = log --pretty=format:"*\\ (%h)\\ %s" --no-merges
+	# ch = log --pretty=format:"*\ (%h)\ %s" --no-merges
     cot = "!f() { git switch -c ${1#origin/} --track origin/${1#origin/}; }; f"
     pushu = push -u
+    cp = cherry-pick
+    wt = worktree
 [diff]
     algorithm = patience
     compactionHeuristic = true
 [core]
-    editor = vim
+    editor = nvim
 	excludesfile = ~/.gitignore_global
 [grep]
     extendRegexp = true
@@ -59,6 +64,7 @@
     defaultRemote = origin
 [branch]
     autosetuprebase = always
+	sort = -committerdate
 [filter "media"]
 	required = true
 	clean = git media clean %f
@@ -75,10 +81,12 @@
 	process = git-lfs filter-process
 	required = true
 [pager]
-    diff = delta
-    log = delta
+    # diff = delta
+	external = difftastic
+    # log = delta
     reflog = delta
     show = delta
+	tool = difft
 [interactive]
     diffFilter = delta --color-only --features=interactive
 [delta]
@@ -96,3 +104,7 @@
     hunk-header-file-style = red
     hunk-header-line-number-style = "#067a00"
     hunk-header-style = file line-number syntax
+[column]
+	ui = auto
+[url "https://github.com/rust-lang/crates.io-index"]
+  insteadOf = https://github.com/rust-lang/crates.io-index
