@@ -1,0 +1,112 @@
+#!/bin/bash
+#
+# Add hardcoded MCP servers to Claude using gum for selection.
+#
+# Usage: add-mcp
+
+set -euo pipefail
+
+# MCP server definitions: name|env_var_name|command
+readonly SERVERS=(
+  "chrome-devtools||npx chrome-devtools-mcp@latest"
+  "firecrawl|FIRECRAWL_API_KEY|npx -y firecrawl-mcp"
+  "nano-banana|GEMINI_API_KEY|/opt/homebrew/bin/go run github.com/gonzaloserrano/nano-banana-mcp-go@latest"
+  "playwright||npx @playwright/mcp@latest"
+)
+
+err() {
+  echo "ERROR: $*" >&2
+}
+
+check_dependencies() {
+  if ! command -v gum &>/dev/null; then
+    err "gum not installed. Run: brew install gum"
+    exit 1
+  fi
+  if ! command -v claude &>/dev/null; then
+    err "claude CLI not installed"
+    exit 1
+  fi
+}
+
+#######################################
+# Get env var value from environment or prompt user.
+# Arguments:
+#   $1 - Variable name
+# Outputs:
+#   Writes value to stdout
+#######################################
+get_env_value() {
+  local var_name="$1"
+  local value="${!var_name:-}"
+
+  if [[ -z "${value}" ]]; then
+    value=$(gum input \
+      --placeholder "Enter ${var_name}" \
+      --header "${var_name} not found in environment")
+  fi
+
+  echo "${value}"
+}
+
+#######################################
+# Add an MCP server to Claude.
+# Arguments:
+#   $1 - Server name
+#   $2 - Environment variable name
+#   $3 - Command to run
+# Returns:
+#   0 on success, 1 if no env value provided
+#######################################
+add_server() {
+  local name="$1"
+  local env_var="$2"
+  local cmd="$3"
+
+  echo "Adding ${name} MCP server..."
+  if [[ -n "${env_var}" ]]; then
+    local env_value
+    env_value=$(get_env_value "${env_var}")
+    if [[ -z "${env_value}" ]]; then
+      err "No value provided for ${env_var}, skipping"
+      return 1
+    fi
+    # shellcheck disable=SC2086
+    claude mcp add "${name}" -e "${env_var}=${env_value}" -- ${cmd}
+  else
+    # shellcheck disable=SC2086
+    claude mcp add "${name}" -- ${cmd}
+  fi
+}
+
+main() {
+  check_dependencies
+
+  # Build selection list
+  local names=()
+  local server
+  for server in "${SERVERS[@]}"; do
+    names+=("${server%%|*}")
+  done
+
+  local selected
+  selected=$(gum choose --header "Select MCP server to add" "${names[@]}")
+
+  if [[ -z "${selected}" ]]; then
+    exit 0
+  fi
+
+  # Find and add selected server
+  for server in "${SERVERS[@]}"; do
+    local name="${server%%|*}"
+    if [[ "${name}" == "${selected}" ]]; then
+      local rest="${server#*|}"
+      local env_var="${rest%%|*}"
+      local cmd="${rest#*|}"
+      add_server "${name}" "${env_var}" "${cmd}"
+      break
+    fi
+  done
+}
+
+main "$@"

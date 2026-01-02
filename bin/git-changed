@@ -1,0 +1,42 @@
+#!/bin/bash
+
+set -e
+
+usage() {
+    echo "Usage: $(basename "$0") <extension> [<base_branch>] [vi]"
+    echo ""
+    echo "List files with given extension changed between current branch and base branch."
+    echo "  <extension>    File extension to filter (e.g., go, ts, py)"
+    echo "  <base_branch>  Base branch to compare against (default: master)"
+    echo "  vi             Open files in nvim"
+    exit 1
+}
+
+if [[ $# -lt 1 ]] || [[ $# -gt 3 ]]; then
+    usage
+fi
+
+EXT="$1"
+BASE_BRANCH="${2:-master}"
+OPEN_VIM="${3:-}"
+
+# Get merge-base to find where current branch diverged from base
+MERGE_BASE=$(git merge-base HEAD "$BASE_BRANCH" 2>/dev/null) || {
+    echo "Error: Could not find merge-base with '$BASE_BRANCH'" >&2
+    exit 1
+}
+
+# Get changed files filtered by extension
+FILES=$(git diff --name-only "$MERGE_BASE" HEAD -- "*.${EXT}" | sort)
+
+if [[ -z "$FILES" ]]; then
+    echo "No .${EXT} files changed between current branch and ${BASE_BRANCH}"
+    exit 0
+fi
+
+if [[ "$OPEN_VIM" == "vi" ]]; then
+    # shellcheck disable=SC2086
+    nvim -p $FILES
+else
+    echo "$FILES"
+fi
