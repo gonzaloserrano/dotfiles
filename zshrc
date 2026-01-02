@@ -12,7 +12,7 @@ export ZSH="/Users/gonzalo/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="gonzalo"
+ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -95,7 +95,7 @@ RPROMPT='$(kube_ps1)'$RPROMPT
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -129,3 +129,13 @@ export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
 export LDFLAGS="-L/usr/local/opt/imagemagick@6/lib"
 export CPPFLAGS="-I/usr/local/opt/imagemagick@6/include"
 export PKG_CONFIG_PATH="/usr/local/opt/imagemagick@6/lib/pkgconfig"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/gonzalo/.lmstudio/bin"
+
+#zprof # debug
+
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+
+# Added by Antigravity
+export PATH="/Users/gonzalo/.antigravity/antigravity/bin:$PATH"
