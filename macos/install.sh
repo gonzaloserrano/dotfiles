@@ -170,3 +170,7 @@ declare -a js_tools=(
 for tool in "${js_tools[@]}"; do
   npm install -g "$tool"
 done
+
+# symlinks
+mkdir -p ~/Library/Application\ Support/com.mitchellh.ghostty
+ln -sf ~/Documents/shell/dotfiles/ghostty.config ~/Library/Application\ Support/com.mitchellh.ghostty/config
