@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
-set -x -e
+set -x
 
 # xcode cli tools
 # only once
-# xcode-select --install
+# 1. install Xcode from App Store
+# 2. sudo xcodebuild -license
+# 3. xcode-select --install
 
 # brew packages
 
@@ -19,12 +21,11 @@ declare -a brew_tools=(
     'coreutils'
     'cmake'
     'go'
-    'zsh'
+    # 'zsh' -- latest macOS has 5.9
 
     # rest
-    '1password'
-    'age'
-    'asdf'
+    # '1password' -- will use browser
+    # 'age' -- experimental
     'ast-grep'
     'awscli'
     'bash-language-server'
@@ -32,21 +33,16 @@ declare -a brew_tools=(
     'bitwarden'
     'chipmk/tap/docker-mac-net-connect'
     'colordiff'
-    'crane'
     'difftastic'
-    'dive'
     'docker-credential-helper-ecr'
     'eza'
     'fzf'
     'gemini'
     'gh'
-    'ghostty'
     'git'
     'git-delta'
     'gnu-sed'
     'gnu-tar'
-    'google-cloud-sdk'
-    'graphviz'
     'gum'
     'helm'
     'hiddenbar'
@@ -64,12 +60,10 @@ declare -a brew_tools=(
     'kubernetes-cli'
     'kustomize'
     'lua-language-server'
-    'mas'
     'ncdu'
     'node'
     'nvim'
     'ollama'
-    'orbstack'
     'parallel'
     'pdfgrep'
     'pidcat'
@@ -79,7 +73,6 @@ declare -a brew_tools=(
     'ripgrep'
     'shellcheck'
     'silicon'
-    'skopeo'
     'sql-language-server'
     'terraform'
     'tig'
@@ -91,12 +84,22 @@ declare -a brew_tools=(
     'zsh-history-substring-search'
     'zsh-syntax-highlighting'
 
+	# -- no need for $JOB
+    # 'crane'
+    # 'dive'
+    # 'google-cloud-sdk'
+    # 'graphviz'
+    # 'orbstack'
+    # 'skopeo'
+	# -- END OF: no need for $JOB
+
     # casks
     'chatgpt'
     'cleanshot'
     'docker'
     'dropbox'
     'font-hasklug-nerd-font'
+    'ghostty'
     'google-chrome'
     'jumpcut'
     'keybase'
@@ -119,17 +122,18 @@ done
 
 declare -a go_tools=(
   'github.com/99designs/gqlgen'
-  'github.com/Yash-Handa/logo-ls'
+  #'github.com/Yash-Handa/logo-ls'
   'github.com/aarzilli/gdlv'
-  'github.com/daveadams/go-rapture/cmd/rapture'
+  # 'github.com/daveadams/go-rapture/cmd/rapture' -- no need for $JOB
   'github.com/go-delve/delve/cmd/dlv'
-  'github.com/golangci/golangci-lint/cmd/golangci-lint'
-  'github.com/google/go-containerregistry/cmd/crane'
+  # 'github.com/golangci/golangci-lint/cmd/golangci-lint' -- probably can go run pinned version instead
+  # 'github.com/google/go-containerregistry/cmd/crane' --no need for $JOB
   'github.com/kyoh86/richgo'
   'github.com/matryer/moq'
-  'github.com/mfuentesg/ksd'
+  # 'github.com/mfuentesg/ksd' --no need for $JOB
   'github.com/msoap/go-carpet'
-  'mvdan.cc/gofumpt'
+  # 'mvdan.cc/gofumpt' -- probably can go run pinned version instead
+  'github.com/grishy/gopkgview'
 )
 
 for tool in "${go_tools[@]}"; do
@@ -137,32 +141,11 @@ for tool in "${go_tools[@]}"; do
 done
 
 # Install Oh My ZSH
-sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-mkdir -p ~/.helm/plugins
-helm plugin install https://github.com/databus23/helm-diff --version master
-
-# k8s and istio stuff
-
-asdf plugin-add istioctl https://github.com/virtualstaticvoid/asdf-istioctl.git
-asdf plugin-add tctl https://github.com/chirauki/asdf-tctl.git
-asdf current
-
-kubectl krew index add kvaps https://github.com/kvaps/krew-index
-
-declare -a krew_tools=(
-    'neat'
-    'pod-dive'
-    'view-secret'
-    'evict-pod'
-    'kvaps/node-shell'
-)
-
-for tool in "${krew_tools[@]}"; do
-  kubectl krew install "$tool"
-done
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+fi
 
 declare -a js_tools=(
-	'happy-coder'
 	'openai/codex'
 	'simple-photo-gallery'
 	'vtsls/language-server'
@@ -171,6 +154,8 @@ for tool in "${js_tools[@]}"; do
   npm install -g "$tool"
 done
 
-# symlinks
-mkdir -p ~/Library/Application\ Support/com.mitchellh.ghostty
-ln -sf ~/Documents/shell/dotfiles/ghostty.config ~/Library/Application\ Support/com.mitchellh.ghostty/config
+# Claude Code
+if ! command -v claude &> /dev/null; then
+  curl -fsSL https://claude.ai/install.sh | bash
+  claude update
+fi
