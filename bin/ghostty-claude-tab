@@ -1,0 +1,3 @@
+#!/bin/bash
+# Open Claude Code in a new Ghostty window (temp directory)
+open -na "Ghostty" --args -e "$HOME/bin/claude-quick"
