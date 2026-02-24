@@ -1,0 +1,66 @@
+#! /bin/bash
+
+set -e
+
+AUTO_MODE=false
+if [[ "$1" == "--auto" ]]; then
+  AUTO_MODE=true
+  shift
+fi
+
+REPO_URL=$1
+
+# Detect URL format and parse accordingly
+if [[ "$REPO_URL" == https://* ]]; then
+  # HTTPS format: https://github.com/USERNAME/REPONAME
+  USERNAME=$(echo "$REPO_URL" | awk -F'/' '{print $4}')
+  REPONAME=$(echo "$REPO_URL" | awk -F'/' '{print $5}' | sed 's/\.git//')
+elif [[ "$REPO_URL" == git@* ]]; then
+  # SSH format: git@github.com:USERNAME/REPONAME.git
+  USERNAME=$(echo "$REPO_URL" | awk -F':' '{print $2}' | awk -F'/' '{print $1}')
+  REPONAME=$(echo "$REPO_URL" | awk -F':' '{print $2}' | awk -F'/' '{print $2}' | sed 's/\.git//')
+elif [[ "$REPO_URL" =~ ^[^/]+/[^/]+$ ]]; then
+  # Shorthand format: USERNAME/REPONAME
+  USERNAME=$(echo "$REPO_URL" | awk -F'/' '{print $1}')
+  REPONAME=$(echo "$REPO_URL" | awk -F'/' '{print $2}')
+  REPO_URL="git@github.com:$USERNAME/$REPONAME.git"
+else
+  echo "Error: Unrecognized format. Use one of:"
+  echo "  clone USER/REPO"
+  echo "  clone git@github.com:USER/REPO.git"
+  echo "  clone https://github.com/USER/REPO"
+  exit 1
+fi
+echo "Username: $USERNAME"
+echo "Repo name: $REPONAME"
+
+LOCAL_DIR="$HOME/go/src/github.com/$USERNAME"
+mkdir -p $LOCAL_DIR
+LOCAL_REPO="$LOCAL_DIR/$REPONAME"
+if [ -d "$LOCAL_REPO" ]; then
+  if [[ "$AUTO_MODE" == true ]]; then
+    exit 0
+  fi
+  echo "Repository already exists at: $LOCAL_REPO"
+  echo ""
+  git -C "$LOCAL_REPO" status
+
+  # Check if working tree is clean
+  if git -C "$LOCAL_REPO" diff --quiet && git -C "$LOCAL_REPO" diff --cached --quiet; then
+    BRANCH=$(git -C "$LOCAL_REPO" rev-parse --abbrev-ref HEAD)
+    echo ""
+    read -p "Working tree clean. Pull '$BRANCH'? (y/n) " -n 1 -r
+    echo ""
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      git -C "$LOCAL_REPO" pull origin "$BRANCH"
+    fi
+  fi
+else
+  cd $LOCAL_DIR
+  git clone $REPO_URL
+fi
+
+if [[ "$AUTO_MODE" == false ]]; then
+  echo ""
+  echo "cd $LOCAL_REPO"
+fi
