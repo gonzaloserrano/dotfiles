@@ -213,23 +213,15 @@ local plugins = {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     config = function()
-        require'nvim-treesitter.configs'.setup {
-            ensure_installed = { "lua", "go", "yaml" },
-            sync_install = true,
-            auto_install = true,
-            highlight = {
-                enable = true,
-            },
-            incremental_selection = {
-                enable = true,
-                keymaps = {
-                    init_selection = "<C-CR>",
-                    node_incremental = "<C-CR>",
-                    scope_incremental = false,
-                    node_decremental = "<C-->",
-                },
-            },
-        }
+        -- New nvim-treesitter API (1.0+)
+        require('nvim-treesitter').setup({})
+        -- Install parsers manually: :TSInstall lua go yaml
+		require('nvim-treesitter').install({'go', 'gomod', 'gosum', 'gowork', 'json', 'yaml', 'lua', 'python'})
+        vim.api.nvim_create_autocmd('FileType', {
+            callback = function(args)
+                pcall(vim.treesitter.start, args.buf)
+            end,
+        })
     end,
   },
   {
@@ -263,15 +255,16 @@ local plugins = {
     'lewis6991/gitsigns.nvim',
   },
   {'leisiji/interestingwords.nvim'},
-  {
-      'mizlan/iswap.nvim',
-      config = function()
-          require('iswap').setup{
-              -- Move cursor to the other element in ISwap*With commands
-              move_cursor = true,
-          }
-      end
-  },
+  -- DISABLED: iswap.nvim incompatible with current nvim-treesitter (uses removed 'nvim-treesitter.query' API)
+  -- {
+  --     'mizlan/iswap.nvim',
+  --     dependencies = { 'nvim-treesitter/nvim-treesitter' },
+  --     config = function()
+  --         require('iswap').setup{
+  --             move_cursor = true,
+  --         }
+  --     end
+  -- },
   {
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons', lazy = true },
@@ -405,12 +398,7 @@ local plugins = {
         { "folke/snacks.nvim" }, -- optional
         { "echasnovski/mini.pick" }, -- optional
         { "ibhagwan/fzf-lua" }, -- optional
-        {
-            "nvim-treesitter/nvim-treesitter",
-            opts = {
-              ensure_installed = { "go" },
-            },
-        },
+        { "nvim-treesitter/nvim-treesitter" },
     },
     build = "go install github.com/lotusirous/gostdsym/stdsym@latest", -- optional
     cmd = { "GoDoc" }, -- optional
@@ -458,6 +446,20 @@ local plugins = {
 	   config = function()
 		   require("telescope").load_extension("undo")
 	   end
+   },
+   {
+     "FabijanZulj/blame.nvim",
+     lazy = false,
+     config = function()
+       require('blame').setup {}
+     end,
+   },
+   {
+	   'nvim-java/nvim-java',
+	   config = function()
+		   require('java').setup()
+		   vim.lsp.enable('jdtls')
+	   end,
    }
 }
 
