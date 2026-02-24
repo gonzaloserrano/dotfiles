@@ -1,0 +1,5 @@
+#!/bin/bash
+# Quick Claude Code session in a temp directory
+dir=$(mktemp -d)
+cd "$dir" || exit 1
+exec claude --dangerously-skip-permissions "$@"
