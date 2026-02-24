@@ -66,6 +66,7 @@ local plugins = {
   {
     'ray-x/go.nvim', -- needs lspconfig
     -- commit = 'ecffa1757ac8e84e1e128f12e0fdbf8418354f6f',
+	branch = "treesitter-main",
     dependencies = {  -- optional packages
         "ray-x/guihua.lua",
         "neovim/nvim-lspconfig",
