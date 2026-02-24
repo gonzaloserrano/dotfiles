@@ -28,3 +28,5 @@ AGENTS.md
 .kiro
 summary_output
 .ropeproject
+.ignore
+.envrc
