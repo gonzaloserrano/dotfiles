@@ -349,9 +349,10 @@ local plugins = {
       end
   },
   {'kevinhwang91/nvim-bqf', ft = 'qf'},
-  {'nvim-treesitter/nvim-treesitter-context'},
-  {'nvim-treesitter/nvim-treesitter-textobjects'},
-  {'ziontee113/syntax-tree-surfer'},
+  -- DISABLED: incompatible with nvim-treesitter 1.0 (uses removed 'nvim-treesitter.configs' API)
+  -- {'nvim-treesitter/nvim-treesitter-context'},
+  -- {'nvim-treesitter/nvim-treesitter-textobjects'},
+  -- {'ziontee113/syntax-tree-surfer'},
   {
     'sindrets/diffview.nvim'
   },
