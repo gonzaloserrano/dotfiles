@@ -1,0 +1,502 @@
+#!/bin/bash
+#
+# Add MCP servers, plugins, or skills to Claude using gum for selection.
+#
+# Usage: cc-add
+
+set -euo pipefail
+
+# MCP server definitions: name|env_var_name|command
+readonly MCP_SERVERS=(
+  "chrome-devtools||npx chrome-devtools-mcp@latest"
+  "firecrawl|FIRECRAWL_API_KEY|npx -y firecrawl-mcp"
+  "nano-banana|GEMINI_API_KEY|/opt/homebrew/bin/go run github.com/gonzaloserrano/nano-banana-mcp-go@latest"
+  "playwright||npx @playwright/mcp@latest"
+  "pg-aiguide||https://mcp.tigerdata.com/docs"
+)
+
+# Plugin definitions: name|source (marketplace or URL)
+readonly PLUGINS=(
+)
+
+# Skill definitions: name|source (git URL or local path)
+# Skills are installed to ~/.claude/skills/
+readonly SKILLS=(
+  "stop-slop|https://github.com/hardikpandya/stop-slop"
+  "algorithmic-art|https://github.com/anthropics/skills"
+  "brand-guidelines|https://github.com/anthropics/skills"
+  "canvas-design|https://github.com/anthropics/skills"
+  "doc-coauthoring|https://github.com/anthropics/skills"
+  "docx|https://github.com/anthropics/skills"
+  "frontend-design|https://github.com/anthropics/skills"
+  "internal-comms|https://github.com/anthropics/skills"
+  "mcp-builder|https://github.com/anthropics/skills"
+  "pdf|https://github.com/anthropics/skills"
+  "pptx|https://github.com/anthropics/skills"
+  "skill-creator|https://github.com/anthropics/skills"
+  "slack-gif-creator|https://github.com/anthropics/skills"
+  "theme-factory|https://github.com/anthropics/skills"
+  "web-artifacts-builder|https://github.com/anthropics/skills"
+  "webapp-testing|https://github.com/anthropics/skills"
+  "xlsx|https://github.com/anthropics/skills"
+)
+
+readonly SKILLS_DIR="${HOME}/.claude/skills"
+
+err() {
+  echo "ERROR: $*" >&2
+}
+
+#######################################
+# Extract org/repo from a URL or command.
+# Arguments:
+#   $1 - URL or command string
+# Outputs:
+#   Writes org/repo or short source to stdout
+#######################################
+extract_source() {
+  local input="$1"
+
+  # GitHub URL: https://github.com/org/repo -> org/repo
+  if [[ "${input}" =~ github\.com/([^/]+/[^/]+) ]]; then
+    echo "${BASH_REMATCH[1]}"
+  # npx command: npx package@version -> npm:package
+  elif [[ "${input}" =~ ^npx[[:space:]]+(-y[[:space:]]+)?@?([^@[:space:]]+) ]]; then
+    echo "npm:${BASH_REMATCH[2]}"
+  # go run: go run github.com/org/repo@version -> org/repo
+  elif [[ "${input}" =~ github\.com/([^@]+)@ ]]; then
+    echo "${BASH_REMATCH[1]}"
+  else
+    echo "${input}"
+  fi
+}
+
+check_dependencies() {
+  if ! command -v gum &>/dev/null; then
+    err "gum not installed. Run: brew install gum"
+    exit 1
+  fi
+  if ! command -v claude &>/dev/null; then
+    err "claude CLI not installed"
+    exit 1
+  fi
+}
+
+#######################################
+# Get env var value from environment or prompt user.
+# Arguments:
+#   $1 - Variable name
+# Outputs:
+#   Writes value to stdout
+#######################################
+get_env_value() {
+  local var_name="$1"
+  local value="${!var_name:-}"
+
+  if [[ -z "${value}" ]]; then
+    value=$(gum input \
+      --placeholder "Enter ${var_name}" \
+      --header "${var_name} not found in environment") || true
+  fi
+
+  echo "${value}"
+}
+
+#######################################
+# Add an MCP server to Claude.
+# Arguments:
+#   $1 - Server name
+#   $2 - Environment variable name
+#   $3 - Command to run
+# Returns:
+#   0 on success, 1 if no env value provided
+#######################################
+add_mcp_server() {
+  local name="$1"
+  local env_var="$2"
+  local cmd="$3"
+
+  echo "Adding ${name} MCP server..."
+  if [[ -n "${env_var}" ]]; then
+    local env_value
+    env_value=$(get_env_value "${env_var}")
+    if [[ -z "${env_value}" ]]; then
+      err "No value provided for ${env_var}, skipping"
+      return 1
+    fi
+    # shellcheck disable=SC2086
+    claude mcp add "${name}" -e "${env_var}=${env_value}" -- ${cmd}
+  else
+    # shellcheck disable=SC2086
+    claude mcp add "${name}" -- ${cmd}
+  fi
+}
+
+#######################################
+# Add a plugin to Claude.
+# Arguments:
+#   $1 - Plugin name
+#   $2 - Plugin source (marketplace or URL)
+#   $3 - Scope (user, project, local)
+#######################################
+add_plugin() {
+  local name="$1"
+  local source="$2"
+  local scope="$3"
+
+  echo "Adding ${name} plugin (scope: ${scope})..."
+  claude plugin install --scope "${scope}" "${source}"
+}
+
+#######################################
+# Add a skill to Claude by copying/cloning to ~/.claude/skills/.
+# Arguments:
+#   $1 - Skill name (subdirectory name in repo or local path)
+#   $2 - Source (git URL or local path)
+#######################################
+add_skill() {
+  local name="$1"
+  local source="$2"
+  local dest="${SKILLS_DIR}/${name}"
+
+  mkdir -p "${SKILLS_DIR}"
+
+  if [[ -d "${dest}" ]]; then
+    echo "Skill ${name} already exists at ${dest}"
+    local overwrite
+    overwrite=$(gum choose --header "Overwrite existing skill?" "Yes" "No") || true
+    if [[ "${overwrite}" != "Yes" ]]; then
+      return 0
+    fi
+    rm -rf "${dest}"
+  fi
+
+  echo "Installing ${name} skill to ${dest}..."
+
+  if [[ "${source}" =~ ^https?:// ]]; then
+    # Git URL - clone to temp and copy skill subdirectory
+    local tmp_dir
+    tmp_dir=$(mktemp -d)
+    trap "rm -rf ${tmp_dir}" EXIT
+
+    echo "Cloning ${source}..."
+    if ! git clone --depth 1 --quiet "${source}" "${tmp_dir}/repo"; then
+      err "Failed to clone ${source}"
+      return 1
+    fi
+
+    # Look for the skill in common locations
+    local skill_path=""
+    for path in "${tmp_dir}/repo/${name}" "${tmp_dir}/repo/skills/${name}" "${tmp_dir}/repo"; do
+      if [[ -f "${path}/SKILL.md" ]]; then
+        skill_path="${path}"
+        break
+      fi
+    done
+
+    if [[ -z "${skill_path}" ]]; then
+      err "Could not find SKILL.md for ${name} in ${source}"
+      return 1
+    fi
+
+    cp -r "${skill_path}" "${dest}"
+  elif [[ -d "${source}" ]]; then
+    # Local directory
+    cp -r "${source}" "${dest}"
+  else
+    err "Source ${source} is not a valid URL or directory"
+    return 1
+  fi
+
+  echo "Skill ${name} installed successfully!"
+  echo "Skills are hot-reloaded - no restart needed."
+}
+
+select_and_add_mcp() {
+  if [[ ${#MCP_SERVERS[@]} -eq 0 ]]; then
+    return 0
+  fi
+
+  # Get installed MCPs (name: command format)
+  local installed_mcps_raw
+  installed_mcps_raw=$(claude mcp list 2>/dev/null | grep -E "^[a-z]" || true)
+  local installed_mcps
+  installed_mcps=$(echo "${installed_mcps_raw}" | cut -d: -f1 || true)
+
+  # Find unmanaged MCPs (installed but not in script)
+  local managed_names=()
+  local server
+  for server in "${MCP_SERVERS[@]}"; do
+    managed_names+=("${server%%|*}")
+  done
+
+  local unmanaged=()
+  while IFS= read -r line; do
+    [[ -z "${line}" ]] && continue
+    local mcp_name="${line%%:*}"
+    local mcp_cmd="${line#*: }"
+    mcp_cmd="${mcp_cmd%% - *}"  # Remove status part
+    local is_managed=false
+    for name in "${managed_names[@]}"; do
+      if [[ "${name}" == "${mcp_name}" ]]; then
+        is_managed=true
+        break
+      fi
+    done
+    if [[ "${is_managed}" == "false" ]]; then
+      local mcp_source
+      mcp_source=$(extract_source "${mcp_cmd}")
+      unmanaged+=("${mcp_name} (${mcp_source})")
+    fi
+  done <<< "${installed_mcps_raw}"
+
+  if [[ ${#unmanaged[@]} -gt 0 ]]; then
+    echo "Unmanaged MCPs:"
+    for mcp in "${unmanaged[@]}"; do
+      echo "  ${mcp}"
+    done
+    echo ""
+  fi
+
+  local installed_items=()
+  local available_items=()
+  for server in "${MCP_SERVERS[@]}"; do
+    local name="${server%%|*}"
+    local rest="${server#*|}"
+    local cmd="${rest#*|}"
+    local source
+    source=$(extract_source "${cmd}")
+    if echo "${installed_mcps}" | grep -qx "${name}"; then
+      installed_items+=("${name} (${source}) ✓")
+    else
+      available_items+=("${name} (${source})")
+    fi
+  done
+
+  local items=("${installed_items[@]}" "${available_items[@]}")
+
+  local selected
+  selected=$(gum choose --height 25 --header "Select MCP server to add" "${items[@]}") || true
+
+  if [[ -z "${selected}" ]]; then
+    return 0
+  fi
+
+  # Extract name (remove source and ✓ marker)
+  local selected_name="${selected%% (*}"
+
+  for server in "${MCP_SERVERS[@]}"; do
+    local name="${server%%|*}"
+    if [[ "${name}" == "${selected_name}" ]]; then
+      local rest="${server#*|}"
+      local env_var="${rest%%|*}"
+      local cmd="${rest#*|}"
+      add_mcp_server "${name}" "${env_var}" "${cmd}"
+      break
+    fi
+  done
+}
+
+select_and_add_plugin() {
+  local plugins_json="${HOME}/.claude/plugins/installed_plugins.json"
+
+  # Get installed plugins from JSON (full name@marketplace format)
+  local installed_plugins_full=""
+  local installed_plugins=""
+  if [[ -f "${plugins_json}" ]]; then
+    installed_plugins_full=$(grep -oE '"[^"]+@[^"]+"' "${plugins_json}" | tr -d '"' | sort -u || true)
+    installed_plugins=$(echo "${installed_plugins_full}" | cut -d@ -f1 || true)
+  fi
+
+  # Find unmanaged plugins (installed but not in script)
+  local managed_names=()
+  local plugin
+  for plugin in "${PLUGINS[@]+"${PLUGINS[@]}"}"; do
+    managed_names+=("${plugin%%|*}")
+  done
+
+  local unmanaged=()
+  while IFS= read -r p; do
+    [[ -z "${p}" ]] && continue
+    local p_name="${p%%@*}"
+    local p_marketplace="${p#*@}"
+    local is_managed=false
+    for name in "${managed_names[@]+"${managed_names[@]}"}"; do
+      if [[ "${name}" == "${p_name}" ]]; then
+        is_managed=true
+        break
+      fi
+    done
+    if [[ "${is_managed}" == "false" ]]; then
+      unmanaged+=("${p_name} (${p_marketplace})")
+    fi
+  done <<< "${installed_plugins_full}"
+
+  if [[ ${#unmanaged[@]} -gt 0 ]]; then
+    echo "Unmanaged plugins:"
+    for p in "${unmanaged[@]}"; do
+      echo "  ${p}"
+    done
+    echo ""
+  fi
+
+  if [[ ${#PLUGINS[@]} -eq 0 ]]; then
+    return 0
+  fi
+
+  local installed_items=()
+  local available_items=()
+  for plugin in "${PLUGINS[@]}"; do
+    local name="${plugin%%|*}"
+    local url="${plugin#*|}"
+    local source
+    source=$(extract_source "${url}")
+    if echo "${installed_plugins}" | grep -qx "${name}"; then
+      installed_items+=("${name} (${source}) ✓")
+    else
+      available_items+=("${name} (${source})")
+    fi
+  done
+
+  local items=("${installed_items[@]}" "${available_items[@]}")
+
+  local selected
+  selected=$(gum choose --height 25  --header "Select plugin to add" "${items[@]}") || true
+
+  if [[ -z "${selected}" ]]; then
+    return 0
+  fi
+
+  # Extract name (remove source and ✓ marker)
+  local selected_name="${selected%% (*}"
+
+  local scope
+  scope=$(gum choose --header "Select scope" "user (system-wide)" "project" "local") || true
+  scope="${scope%% *}"  # Extract first word
+
+  if [[ -z "${scope}" ]]; then
+    return 0
+  fi
+
+  for plugin in "${PLUGINS[@]}"; do
+    local name="${plugin%%|*}"
+    if [[ "${name}" == "${selected_name}" ]]; then
+      local source="${plugin#*|}"
+      add_plugin "${name}" "${source}" "${scope}"
+      break
+    fi
+  done
+}
+
+select_and_add_skill() {
+  if [[ ${#SKILLS[@]} -eq 0 ]]; then
+    return 0
+  fi
+
+  # Find unmanaged skills (installed but not in script)
+  local managed_names=()
+  local skill
+  for skill in "${SKILLS[@]}"; do
+    managed_names+=("${skill%%|*}")
+  done
+
+  local unmanaged=()
+  if [[ -d "${SKILLS_DIR}" ]]; then
+    while IFS= read -r dir; do
+      [[ -z "${dir}" ]] && continue
+      local skill_name
+      skill_name=$(basename "${dir}")
+      local is_managed=false
+      for name in "${managed_names[@]}"; do
+        if [[ "${name}" == "${skill_name}" ]]; then
+          is_managed=true
+          break
+        fi
+      done
+      if [[ "${is_managed}" == "false" ]]; then
+        # Try to extract author from SKILL.md
+        local skill_source="local"
+        local skill_md="${dir}/SKILL.md"
+        if [[ -f "${skill_md}" ]]; then
+          local author
+          author=$(grep -E "^author:" "${skill_md}" | head -1 | sed 's/^author:[[:space:]]*//' || true)
+          if [[ -n "${author}" ]]; then
+            # Extract just the name part if it contains URL
+            skill_source="${author%% (*}"
+          fi
+        fi
+        unmanaged+=("${skill_name} (${skill_source})")
+      fi
+    done < <(find "${SKILLS_DIR}" -mindepth 1 -maxdepth 1 -type d)
+  fi
+
+  if [[ ${#unmanaged[@]} -gt 0 ]]; then
+    echo "Unmanaged skills:"
+    for s in "${unmanaged[@]}"; do
+      echo "  ${s}"
+    done
+    echo ""
+  fi
+
+  local installed_items=()
+  local available_items=()
+  for skill in "${SKILLS[@]}"; do
+    local name="${skill%%|*}"
+    local url="${skill#*|}"
+    local source
+    source=$(extract_source "${url}")
+    if [[ -d "${SKILLS_DIR}/${name}" ]]; then
+      installed_items+=("${name} (${source}) ✓")
+    else
+      available_items+=("${name} (${source})")
+    fi
+  done
+
+  local items=("${installed_items[@]}" "${available_items[@]}")
+
+  local selected
+  selected=$(gum choose --height 25  --header "Select skill to add" "${items[@]}") || true
+
+  if [[ -z "${selected}" ]]; then
+    return 0
+  fi
+
+  # Extract name (remove source and ✓ marker)
+  local selected_name="${selected%% (*}"
+
+  for skill in "${SKILLS[@]}"; do
+    local name="${skill%%|*}"
+    if [[ "${name}" == "${selected_name}" ]]; then
+      local source="${skill#*|}"
+      add_skill "${name}" "${source}"
+      break
+    fi
+  done
+}
+
+main() {
+  check_dependencies
+
+  while true; do
+    local type
+    type=$(gum choose --header "What do you want to add?" "MCP server" "Plugin" "Skill") || true
+
+    case "${type}" in
+      "MCP server")
+        select_and_add_mcp
+        ;;
+      "Plugin")
+        select_and_add_plugin
+        ;;
+      "Skill")
+        select_and_add_skill
+        ;;
+      *)
+        # ESC pressed in main menu - exit
+        exit 0
+        ;;
+    esac
+  done
+}
+
+main "$@"
