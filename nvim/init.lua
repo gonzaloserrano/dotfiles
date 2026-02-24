@@ -25,12 +25,12 @@ map('n', '<c-d>', ':DiffviewOpen<cr>', silent)
 map('n', '<c-f>', ':Telescope oldfiles<cr>', silent)
 map('n', '<c-s>', ':Telescope lsp_document_symbols symbols=function,method,struct<cr>', silent)
 map('n', '<c-n>', ':Telescope diagnostics sort_by=severity<cr>', silent)
-map('n', '<c-p>', ':Telescope git_files<cr>', silent)
+map('n', '<c-p>', ':Telescope find_files<cr>', silent)
 -- map('n', '<c-g>', ':Telescope live_grep<cr>', silent)
 map('n', '<c-g>', ':lua require("telescope").extensions.live_grep_args.live_grep_args()<CR>', silent)
-map('n', '<c-m>', ':Telescope resume<cr>', silent)
+map('n', '<c-l>', ':Telescope jumplist<cr>', silent)
 map('n', '<c-b>', ':Telescope buffers<cr>', silent)
-map('n', '<c-i>', ':Telescope jumplist<cr>', silent)
+map('n', '<c-i>', ':Telescope resume<cr>', silent)
 map('n', '<c-y>', ':Telescope adjacent<cr>', silent)
 
 ---- interestingwords
@@ -41,6 +41,7 @@ vim.g.interestingwords_colors = {
 }
 
 map('n', ',e', ':NvimTreeFindFileToggle!<cr>', silent)
+map('n', ',?', ':Telescope keymaps<cr>', silent)
 
 -- lsp maps
 map('n', '<c-e>', ':lua vim.lsp.buf.rename()<cr>', silent)
