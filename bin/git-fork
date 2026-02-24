@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-GH_USERNAME="gonzaloserrano"
+GH_USERNAME="${1:-gonzaloserrano}"
 
 # Ensure we are inside a git repo
 if [ ! -f ".git/config" ]; then
@@ -24,6 +24,7 @@ if git config --get remote.fork.url >/dev/null 2>&1; then
 fi
 
 origin_url="$(git config --get remote.origin.url)"
+origin_url="${origin_url%/}"  # strip trailing slash
 
 # Build fork URL based on origin URL
 case "$origin_url" in
@@ -44,6 +45,20 @@ case "$origin_url" in
     exit 1
     ;;
 esac
+
+# Check if fork exists on GitHub, create if not
+org_name="${repo_path%%/*}"
+repo_base="${repo_name%.git}"  # strip .git suffix if present
+if ! gh repo view "${GH_USERNAME}/${repo_base}" >/dev/null 2>&1; then
+  echo "Fork ${GH_USERNAME}/${repo_base} does not exist on GitHub."
+  read -rp "Create it? [y/N] " answer
+  if [[ "$answer" =~ ^[Yy]$ ]]; then
+    gh repo fork "${org_name}/${repo_base}" --remote=false
+  else
+    echo "Aborted."
+    exit 1
+  fi
+fi
 
 # Add the fork remote
 git remote add fork "$fork_url"
