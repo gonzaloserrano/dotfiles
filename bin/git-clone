@@ -1,0 +1,44 @@
+#!/bin/bash
+# Git clone wrapper that converts GitHub HTTPS URLs to SSH
+
+set -euo pipefail
+
+if [[ $# -lt 1 ]]; then
+  echo "Usage: git-clone <url>... [-- git-clone-options...]" >&2
+  exit 1
+fi
+
+urls=()
+opts=()
+parsing_urls=true
+
+for arg in "$@"; do
+  if [[ "$arg" == "--" ]]; then
+    parsing_urls=false
+  elif $parsing_urls; then
+    urls+=("$arg")
+  else
+    opts+=("$arg")
+  fi
+done
+
+if [[ ${#urls[@]} -eq 0 ]]; then
+  echo "Error: no URLs provided" >&2
+  exit 1
+fi
+
+convert_url() {
+  local url="$1"
+  if [[ "$url" =~ ^https://github\.com/([^/]+)/([^/]+)$ ]]; then
+    local owner="${BASH_REMATCH[1]}"
+    local repo="${BASH_REMATCH[2]%.git}"
+    echo "git@github.com:${owner}/${repo}.git"
+  else
+    echo "$url"
+  fi
+}
+
+for url in "${urls[@]}"; do
+  url=$(convert_url "$url")
+  git clone "$url" ${opts[@]+"${opts[@]}"}
+done
