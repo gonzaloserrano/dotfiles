@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# jqq - Interactive JSON log field selector
+# Reads first JSON line to discover fields, lets you pick with gum, then streams with jq
+
+set -euo pipefail
+
+# Read first line to discover fields
+read -r first_line
+
+# Pretty-print first entry so user can see the data
+echo "First log entry:"
+echo "$first_line" | jq .
+echo
+
+# Extract top-level field names
+fields=$(echo "$first_line" | jq -r 'keys_unsorted[]' 2>/dev/null)
+
+if [[ -z "$fields" ]]; then
+  echo "Error: Could not parse JSON fields from first line" >&2
+  exit 1
+fi
+
+# Let user select fields with gum (all selected by default)
+all_fields=$(echo "$fields" | paste -sd ',' -)
+selected=$(echo "$fields" | gum choose --no-limit --selected="$all_fields" --header "Select fields to display:")
+
+if [[ -z "$selected" ]]; then
+  echo "No fields selected" >&2
+  exit 1
+fi
+
+# Build jq filter: {field1, field2, ...}
+jq_filter=$(echo "$selected" | paste -sd ',' - | sed 's/^/{/;s/$/}/')
+
+# Process first line + continue streaming
+{
+  echo "$first_line"
+  cat
+} | jq "$jq_filter"
