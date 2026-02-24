@@ -163,3 +163,13 @@ keyboard_mapper.setup({
 
 vim.opt.undofile = true
 vim.opt.undodir = vim.fn.expand("~/.local/share/nvim/undo")
+
+--
+
+vim.keymap.set('n', 'K', function()
+  vim.lsp.buf.hover({
+    border = 'rounded',
+    max_width = 120,
+    -- max_height = 20,
+  })
+end, silent)
