@@ -82,13 +82,14 @@ KUBE_PS1_SYMBOL_ENABLE=true
 KUBE_PS1_PREFIX=""
 KUBE_PS1_SUFFIX=" "
 KUBE_PS1_DIVIDER="/"
-KUBE_PS1_SEPARATOR=""
+KUBE_PS1_SEPARATOR=" "
+KUBE_PS1_NS_ENABLE=false
 KUBE_PS1_CTX_COLOR="cyan"
 function get_cluster_short() {
   echo ${1##*_}
 }
 KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
-RPROMPT='$(kube_ps1)'$RPROMPT
+RPROMPT='$(kube_ps1) %F{yellow}${AWS_PROFILE:+☁ ${AWS_PROFILE#timescale-}}%f'$RPROMPT
 
 # User configuration
 

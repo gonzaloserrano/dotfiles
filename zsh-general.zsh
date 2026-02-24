@@ -14,7 +14,7 @@ alias g="rg"
 alias gi="rg -i"
 alias gv="rg -v"
 alias gvi="rg -vi"
-alias rgo="rg -tgo -F"
+alias rgo="rg -tgo -F -g '!vendor/'"
 alias rgoo="rg -tgo -l -F"
 alias rgp="rg -tprotobuf -F"
 alias rgy="rg -tyaml -F"
@@ -81,14 +81,21 @@ export PATH="/opt/homebrew/opt/python@3.9/libexec/bin:$PATH"
 export PATH="/opt/homebrew/opt/make/libexec/gnubin:$PATH"
 
 # java
-#export PATH="/usr/local/opt/openjdk/bin:$PATH"
-#export JAVA_HOME=$(/usr/libexec/java_home)
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+export CPPFLAGS="-I/opt/homebrew/opt/openjdk/include"
+eval "$(direnv hook zsh)"
 
-function cdgo {
-    cd "$GOPATH/src/$1"
+function cdgit {
+    local path="$1"
+    path="${path#https://}"
+    path="${path#http://}"
+    path="${path#git@}"
+    path="${path/://}"
+    path="${path%.git}"
+    local parts=("${(@s:/:)path}")
+    path="${parts[1]}/${parts[2]}/${parts[3]}"
+    cd "$GOPATH/src/$path"
 }
-
-eval "$(jump shell zsh)"
 
 stty -ixon
 
@@ -107,12 +114,9 @@ alias baty="bat -l yaml"
 alias by="bat -l yaml"
 source <(kubectl completion zsh)
 complete -F __start_kubectl k
-# if [ -f /Users/gonzalo/go/src/github.com/tetrateio/tetrate/tctl/build/debug/bin/tctl ]; then
-    # source <(/Users/gonzalo/go/src/github.com/tetrateio/tetrate/tctl/build/debug/bin/tctl completion zsh)
-# fi
 function kalpinepod () { kubectl run -it --rm --restart=Never --image=alpine handytools -n ${1:-default} -- /bin/ash }
 
-. $(brew --prefix asdf)/libexec/asdf.sh
+# . $(brew --prefix asdf)/libexec/asdf.sh
 
 export PATH="${PATH}:${HOME}/.krew/bin"
 
@@ -156,8 +160,12 @@ mkdircd ()
 alias codex-yolo="codex --dangerously-bypass-approvals-and-sandbox"
 alias claude-yolo="claude --dangerously-skip-permissions"
 alias cc="claude --dangerously-skip-permissions"
+alias ccdev="claude --dangerously-skip-permissions --plugin-dir /Users/gonzalo/go/src/github.com/timescale/td-aiguide"
+alias cca="asb npx @anthropic-ai/claude-code --dangerously-skip-permissions"
 alias gemini-yolo="gemini --yolo"
 alias copilot-yolo="copilot --allow-all-tools"
+
+alias pbpasta="pbpaste | tr -d '\n' | pbcopy"
 
 # source /Users/gonzalo/go/src/github.com/stepan-tikunov/zsh-notify/notify.plugin.zsh
 
