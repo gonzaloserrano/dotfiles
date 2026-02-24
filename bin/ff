@@ -5,7 +5,7 @@
 # detect if we're inside a git repo
 if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     # use git ls-files
-    FILELIST=$(git ls-files | grep -i "$1")
+    FILELIST=$(git ls-files | grep -i "$1" | grep -v vendor/)
 else
     # fallback to find
     FILELIST=$(find -L ./ -type f -iname "*$1*" 2>/dev/null | grep -v ".git/")
