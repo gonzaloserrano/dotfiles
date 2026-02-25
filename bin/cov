@@ -56,12 +56,6 @@ fi
 
 echo "You selected: $TEST_NAME"
 
-# Prompt for sqlite tag
-SQLITE_TAG_ARG=""
-if gum confirm "Use sqlite tag?"; then
-  SQLITE_TAG_ARG="-tags=sqlite"
-fi
-
 # Construct arguments for `go test` (to be passed via go-carpet -args)
 GO_TEST_RUN_ARG="" # This will hold the --run part, if any
 
@@ -80,25 +74,11 @@ else # TEST_NAME == "None"
   # GO_TEST_RUN_ARG remains empty for "Any"
 fi
 
-# Combine SQLITE_TAG_ARG and GO_TEST_RUN_ARG into a single string for -args
-CARPET_ARGS_STR=""
-if [[ -n "$SQLITE_TAG_ARG" ]]; then
-  CARPET_ARGS_STR="$SQLITE_TAG_ARG"
-fi
-
-if [[ -n "$GO_TEST_RUN_ARG" ]]; then
-  if [[ -n "$CARPET_ARGS_STR" ]]; then
-    CARPET_ARGS_STR="$CARPET_ARGS_STR $GO_TEST_RUN_ARG"
-  else
-    CARPET_ARGS_STR="$GO_TEST_RUN_ARG"
-  fi
-fi
-
 # Run go-carpet with the selected file and test arguments
 while true; do
-  if [[ -n "$CARPET_ARGS_STR" ]]; then
+  if [[ -n "$GO_TEST_RUN_ARG" ]]; then
     set -x
-    go-carpet -256colors -file "$GO_FILE" -args "$CARPET_ARGS_STR" | bat
+    go-carpet -256colors -file "$GO_FILE" -args "$GO_TEST_RUN_ARG" | bat
     set +x
   else
     set -x

@@ -2,4 +2,4 @@
 
 set -x
 
-go-carpet -256colors -args '-tags=sqlite' -summary | awk '{print $3, $1}' | grep '%' | sort -n
+go-carpet -256colors -summary | awk '{print $3, $1}' | grep '%' | sort -n
