@@ -133,19 +133,30 @@ if [ "$fast_mode" = "true" ]; then
 else
     line1=$(printf '\033[36m%b \033[2mslow\033[0m' "$model_str")
 fi
-line1="$line1 $(printf '\033[37m@\033[0m \033[94m%s/\033[0m' "$folder_name")"
+
+# Context percentage with color based on usage
+if [ -n "$ctx_pct" ]; then
+    if [ "$ctx_used" -gt 75 ] 2>/dev/null; then
+        ctx_color='\033[31m'  # Red
+    elif [ "$ctx_used" -gt 50 ] 2>/dev/null; then
+        ctx_color='\033[33m'  # Orange/yellow
+    else
+        ctx_color='\033[37m'  # White
+    fi
+    ctx_label=$(printf '%b%s\033[0m' "$ctx_color" "$ctx_pct")
+    if [ "$cache_pct" -gt 0 ] 2>/dev/null; then
+        ctx_label="${ctx_label} $(printf '\033[2m↻%s%%\033[0m' "$cache_pct")"
+    fi
+    line1="$line1 $(printf '%b %b' "$SEP" "$ctx_label")"
+fi
+
+# Folder and branch
+line1="$line1 $(printf '%b \033[94m%s/\033[0m' "$SEP" "$folder_name")"
 if [ -n "$git_branch" ]; then
     line1="$line1$(printf '\033[96m%s\033[0m' "$git_branch")"
 fi
 
-# Append context and session info to line1
-if [ -n "$ctx_pct" ]; then
-    ctx_label="$ctx_pct"
-    if [ "$cache_pct" -gt 0 ] 2>/dev/null; then
-        ctx_label="${ctx_label} $(printf '\033[2m↻%s%%\033[0m' "$cache_pct")"
-    fi
-    line1="$line1 $(printf '%b \033[37m%b\033[0m' "$SEP" "$ctx_label")"
-fi
+# Session time
 if [ -n "$session_time" ]; then
     line1="$line1 $(printf '%b \033[37m⏱ %s\033[0m' "$SEP" "$session_time")"
 fi
