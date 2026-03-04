@@ -12,6 +12,11 @@ I'm new at the company so I'm not proficient with PostgreSQL features or interna
 ### Git
 
 - Always ask for confirmation before staging, unstaging, committing, rebasing, pushing, checking out, or pulling.
+- NEVER commit directly to main. Always create a feature branch first.
+- Before creating a branch from main, pull to update it (only if there are no local changes).
+- Don't mark Linear tickets as Done until the PR is actually merged.
+- Before making any file changes, check `git status`. If the working tree is dirty, warn the user and do NOT proceed with edits until they confirm.
+- Never amend commits without asking the user first. Default to creating new commits.
 
 ### Go Guidelines
 
