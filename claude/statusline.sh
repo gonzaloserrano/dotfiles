@@ -120,8 +120,9 @@ SEP='\033[2m│\033[0m'
 short_model=$(echo "$model_name" | sed -E 's/Claude [0-9.]+ //; s/^Claude //; s/ *\(1M context\)//')
 has_1m=$(echo "$model_name" | grep -q '1M context' && echo true || echo false)
 
-# Check fast mode from settings
+# Check fast mode and effort from settings
 fast_mode=$(jq -r '.fastMode // false' ~/.claude/settings.json 2>/dev/null)
+effort_level=$(jq -r '.effortLevel // "high"' ~/.claude/settings.json 2>/dev/null)
 
 # Build status line
 model_str="$short_model"
@@ -132,6 +133,10 @@ if [ "$fast_mode" = "true" ]; then
     line1=$(printf '\033[36m%b \033[31mfast\033[0m' "$model_str")
 else
     line1=$(printf '\033[36m%b \033[2mslow\033[0m' "$model_str")
+fi
+# Append effort level (skip if "high" since that's the default)
+if [ -n "$effort_level" ] && [ "$effort_level" != "high" ]; then
+    line1="$line1 $(printf '\033[35m%s\033[0m' "$effort_level")"
 fi
 
 # Context percentage with color based on usage

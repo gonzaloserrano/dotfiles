@@ -48,5 +48,6 @@
       ],
       "command": "sc"
     }
-  }
+  },
+  "effortLevel": "high"
 }
