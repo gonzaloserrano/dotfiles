@@ -7,7 +7,6 @@ I'm new at the company so I'm not proficient with PostgreSQL features or interna
 ## Foundational Rules
 
 - In all interactions and commit messages, be highly concise. Prioritize brevity even at the expense of perfect grammar.
-- NEVER use em-dashes (—) or double hyphens (--). Restructure sentences to avoid dashes entirely.
 - Favor simple solutions; avoid over-engineering.
 
 ### GitHub
