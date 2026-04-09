@@ -15,29 +15,52 @@
     "command": "~/.claude/statusline.sh"
   },
   "enabledPlugins": {
-    "claude-stt@jarrodwatts-claude-stt": false,
     "code-simplifier@claude-plugins-official": true,
     "context7-plugin@context7-marketplace": true,
     "example-skills@anthropic-agent-skills": true,
     "gopls-lsp@claude-plugins-official": true,
-    "impeccable@impeccable": true,
     "lua-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
     "security-guidance@claude-plugins-official": true,
-    "ui-ux-pro-max@ui-ux-pro-max-skill": true,
-    "upgrading-expo@expo-plugins": true,
     "code-review@claude-code-plugins": true,
     "claude-md-management@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
     "github@claude-plugins-official": true,
-    "ralph-loop@claude-plugins-official": true,
     "pr-review-toolkit@claude-plugins-official": true,
     "plugin-dev@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
     "gopilot@gopilot": true,
-    "td-aiguide@td-aiguide": true
+    "swift-lsp@claude-plugins-official": true,
+    "telegram@claude-plugins-official": true,
+    "interface-design@interface-design": true,
+    "td-aiguide@td-aiguide": true,
+    "codex@openai-codex": true
+  },
+  "extraKnownMarketplaces": {
+    "interface-design": {
+      "source": {
+        "source": "github",
+        "repo": "Dammyjay93/interface-design"
+      },
+      "autoUpdate": true
+    },
+    "td-aiguide": {
+      "source": {
+        "source": "git",
+        "url": "git@github.com:timescale/td-aiguide.git"
+      }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
+    }
   },
   "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
+  "fastMode": true,
+  "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,
   "mcpServers": {
     "sc": {
@@ -48,6 +71,5 @@
       ],
       "command": "sc"
     }
-  },
-  "effortLevel": "high"
+  }
 }

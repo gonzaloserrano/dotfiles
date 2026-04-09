@@ -43,3 +43,10 @@ claude/skills/migrate-postgres-tables-to-hypertables/
 claude/skills/pdf/
 claude/skills/setup-timescaledb-hypertables/
 claude/skills/stop-slop/
+claude/skills/remotion
+claude/skills/using-uv
+claude/skills/hexagonal-architecture
+claude/skills/refinement-loop
+claude/skills/refactoring
+claude/skills/tdd
+claude/memory
