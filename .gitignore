@@ -25,28 +25,8 @@ bin/hermit-stable
 bin/secret-canary
 
 # Claude plugins (auto-generated state)
-claude/plugins/cache/
-claude/plugins/marketplaces/
-claude/plugins/blocklist.json
-claude/plugins/install-counts-cache.json
-claude/plugins/installed_plugins.json
-claude/plugins/known_marketplaces.json
-claude/plugins/claude-stt/
-claude/plugins/plugins
+claude/plugins/
 
-# Claude skills (installed from external sources)
-claude/skills/agent-browser/
-claude/skills/design-postgres-tables/
-claude/skills/excalidraw/
-claude/skills/find-hypertable-candidates/
-claude/skills/migrate-postgres-tables-to-hypertables/
-claude/skills/pdf/
-claude/skills/setup-timescaledb-hypertables/
-claude/skills/stop-slop/
-claude/skills/remotion
-claude/skills/using-uv
-claude/skills/hexagonal-architecture
-claude/skills/refinement-loop
-claude/skills/refactoring
-claude/skills/tdd
+# Claude skills and memory (installed/auto-generated)
+claude/skills/
 claude/memory
