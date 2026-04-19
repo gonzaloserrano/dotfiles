@@ -59,6 +59,16 @@ internals as they come up.
 - Never delete a test because it's broken.
 - Don't write tests that only verify mocked behavior.
 
+## Scope & Changes
+
+- When multiple interpretations of a request exist, list them and ask.
+  Don't pick silently.
+- Touch only code needed for the task. Don't "improve" adjacent code,
+  comments, or formatting.
+- Match existing style even if you'd write it differently.
+- Remove imports/vars/funcs YOUR changes orphaned. Flag pre-existing
+  dead code; don't delete it unless asked.
+
 ## Tools & Skills
 
 - Google Docs/Sheets/Slides: use the `gws` CLI.
