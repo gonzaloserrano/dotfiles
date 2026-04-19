@@ -1,7 +1,10 @@
 {
   "env": {
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "claude-sonnet-4-6[1m]",
-    "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-4-6[1m]"
+    "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",
+    "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
+    "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
+    "CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION": "1",
+    "CLAUDE_CODE_NO_FLICKER": "1"
   },
   "includeCoAuthoredBy": false,
   "permissions": {
@@ -10,31 +13,43 @@
     ],
     "defaultMode": "plan"
   },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/gonzalo/.claude/hooks/rtk-rewrite.sh"
+          }
+        ]
+      }
+    ]
+  },
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
   },
   "enabledPlugins": {
-    "code-simplifier@claude-plugins-official": true,
     "context7-plugin@context7-marketplace": true,
-    "example-skills@anthropic-agent-skills": true,
-    "gopls-lsp@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true,
-    "pyright-lsp@claude-plugins-official": true,
-    "security-guidance@claude-plugins-official": true,
     "code-review@claude-code-plugins": true,
-    "claude-md-management@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
-    "github@claude-plugins-official": true,
-    "pr-review-toolkit@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": true,
-    "claude-code-setup@claude-plugins-official": true,
     "gopilot@gopilot": true,
-    "swift-lsp@claude-plugins-official": true,
-    "telegram@claude-plugins-official": true,
     "interface-design@interface-design": true,
     "td-aiguide@td-aiguide": true,
-    "codex@openai-codex": true
+    "codex@openai-codex": true,
+    "claude-api@anthropic-agent-skills": true,
+    "explanatory-output-style@claude-code-plugins": true,
+    "code-review@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "chrome-devtools-mcp@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "interface-design": {
@@ -48,20 +63,28 @@
       "source": {
         "source": "git",
         "url": "git@github.com:timescale/td-aiguide.git"
-      }
+      },
+      "autoUpdate": true
     },
     "openai-codex": {
       "source": {
         "source": "github",
         "repo": "openai/codex-plugin-cc"
+      },
+      "autoUpdate": true
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/anthropics/claude-plugins-official.git"
       }
     }
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
+  "effortLevel": "xhigh",
   "fastMode": true,
-  "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,
+  "voiceEnabled": true,
   "mcpServers": {
     "sc": {
       "args": [

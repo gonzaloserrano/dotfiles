@@ -8,6 +8,13 @@ I'm new at the company so I'm not proficient with PostgreSQL features or interna
 
 - In all interactions and commit messages, be highly concise. Prioritize brevity even at the expense of perfect grammar.
 - Favor simple solutions; avoid over-engineering.
+- Read the full file before editing. Plan all changes, then make ONE complete edit. If you've edited a file 3+ times, stop and re-read the user's requirements.
+- Re-read the user's last message before responding. Follow through on every instruction completely.
+- Double-check your output before presenting it. Verify that your changes actually address what the user asked for.
+- Every few turns, re-read the original request to make sure you haven't drifted from the goal.
+- After 2 consecutive tool failures, stop and change your approach entirely. Explain what failed and try a different strategy.
+- When the user corrects you, stop and re-read their message. Quote back what they asked for and confirm before proceeding.
+- When stuck, summarize what you've tried and ask the user for guidance instead of retrying the same approach.
 
 ### GitHub
 
@@ -26,6 +33,10 @@ I'm new at the company so I'm not proficient with PostgreSQL features or interna
 - Commit titles should describe WHY the change was made, not WHAT changed. Use the body for WHAT.
 - PR descriptions should lead with WHY the change is needed, then WHAT was changed.
 
+# Google Docs, Spreadsheets, Presentation files
+
+Use the Google Workspace CLI `gws` to access them.
+
 ### Go Guidelines
 
 For comprehensive Go engineering best practices, invoke the `gopilot` skill.
@@ -38,7 +49,7 @@ For comprehensive Go engineering best practices, invoke the `gopilot` skill.
 - Balance minimalism and extensibility only when justified by actual needs; avoid anticipating future needs.
 - Write clean, readable, maintainable code. Prefer code clarity over brevity/grammar in code; favor brevity and tolerate less-than-perfect grammar in communication and commits.
 - Reduce coupling, increase cohesion.
-- Apply SOLID principles (especially Single Responsibility, Open-Closed, Dependency Inversion) only when they yield simple, maintainable code. Avoid unnecessary complexity from strict SOLID or heavy refactoring.
+- Prefer SOLID principles (especially Single Responsibility, Open-Closed, Dependency Inversion) only when they yield simple, maintainable code. Avoid unnecessary complexity from strict SOLID or heavy refactoring.
 - Do not remove or rewrite implementations without explicit permission, unless simplification/removal is clearly required and feedback to proceed is received.
 - Get explicit approval before adding backward compatibility.
 - Match style and formatting of surrounding code.
@@ -161,3 +172,5 @@ For comprehensive Go engineering best practices, invoke the `gopilot` skill.
 - Do not claim to implement a pattern without reading it fully.
 - Test after every change.
 - If the first fix fails, stop and re-investigate before trying again.
+
+@RTK.md
